@@ -107,6 +107,13 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .class-card:hover {
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
         }
 
         .class-card h3 {
@@ -125,6 +132,51 @@
             padding: 8px 16px;
             font-size: 14px;
             margin-top: 10px;
+        }
+
+        .class-card .btn-download {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-right: 10px;
+        }
+
+        .class-card-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .class-card-details.show {
+            display: block;
+        }
+
+        .student-group-detail {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .student-group-detail h4 {
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .student-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .student-tag {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #333;
+            border: 1px solid #ddd;
         }
 
         .message {
@@ -259,21 +311,21 @@
             <div class="upload-area">
                 <form id="uploadForm">
                     <div class="form-group">
-                        <label for="className">
-                            <span style="color:#667eea;">●</span> 班级名称
-                        </label>
-                        <input type="text" id="className" placeholder="例如：一年级100班、九年级八班" required>
-                        <small style="color:#999; display:block; margin-top:6px;">
-                            💡 请输入完整的班级名称
-                        </small>
-                    </div>
-                    <div class="form-group">
                         <label for="fileInput">
                             <span style="color:#667eea;">●</span> 体测数据文件
                         </label>
                         <input type="file" id="fileInput" accept=".xlsx,.xls" required>
                         <small style="color:#999; display:block; margin-top:6px;">
-                            📋 支持 .xlsx 和 .xls 格式
+                            📋 支持 .xlsx 和 .xls 格式，选择文件后将自动填充班级名称
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="className">
+                            <span style="color:#667eea;">●</span> 班级名称
+                        </label>
+                        <input type="text" id="className" placeholder="例如：一年级100班、九年级八班" required>
+                        <small style="color:#999; display:block; margin-top:6px;">
+                            💡 已自动从文件名提取，可手动修改
                         </small>
                     </div>
                     <button type="submit" id="uploadBtn">
@@ -360,14 +412,80 @@
                             `<span style="display:inline-block; background:#e3f2fd; color:#1976d2; padding:4px 10px; border-radius:12px; font-size:12px; margin:2px;">${w}</span>`
                         ).join('');
 
+                        // 新增：学生分组信息
+                        let studentGroupsHtml = '';
+                        if (profile.student_groups && Object.keys(profile.student_groups).length > 0) {
+                            const groupCount = Object.keys(profile.student_groups).length;
+                            const topGroups = Object.entries(profile.student_groups).slice(0, 3);
+
+                            studentGroupsHtml = `
+                                <p style="margin-top:10px; padding-top:10px; border-top:1px solid #eee;">
+                                    <strong>👥 学生分组：</strong>共${groupCount}个分组<br>
+                                    <span style="font-size:12px; color:#666; line-height:1.6;">
+                            `;
+
+                            topGroups.forEach(([groupKey, groupInfo]) => {
+                                studentGroupsHtml += `• ${groupKey}组(${groupInfo.count}人)<br>`;
+                            });
+
+                            if (groupCount > 3) {
+                                studentGroupsHtml += `• 等${groupCount}个分组...`;
+                            }
+
+                            studentGroupsHtml += `
+                                    </span>
+                                </p>
+                            `;
+                        }
+
+                        // 生成详细的学生分组信息
+                        let detailsHtml = '';
+                        if (profile.student_groups && Object.keys(profile.student_groups).length > 0) {
+                            detailsHtml = '<div class="class-card-details" id="details-' + className.replace(/\s/g, '_') + '">';
+                            detailsHtml += '<h4 style="color:#667eea; margin-bottom:10px;">📊 详细学生分组信息</h4>';
+
+                            Object.entries(profile.student_groups).forEach(([groupKey, groupInfo]) => {
+                                detailsHtml += `
+                                    <div class="student-group-detail">
+                                        <h4>📌 ${groupKey}薄弱组（${groupInfo.count}人）</h4>
+                                        <p style="font-size:12px; color:#666; margin-bottom:6px;">
+                                            <strong>薄弱项目：</strong>${groupInfo.weakness_items.join('、')}
+                                        </p>
+                                `;
+
+                                if (groupInfo.student_details && groupInfo.student_details.length > 0) {
+                                    detailsHtml += '<div class="student-list">';
+                                    groupInfo.student_details.forEach(student => {
+                                        const studentId = student['学号'] || student['学生编号'] || '';
+                                        const displayText = studentId ? `${student['姓名']}(${studentId})` : student['姓名'];
+                                        detailsHtml += `<span class="student-tag">${displayText}</span>`;
+                                    });
+                                    detailsHtml += '</div>';
+                                }
+
+                                detailsHtml += '</div>';
+                            });
+
+                            detailsHtml += '</div>';
+                        }
+
                         const card = document.createElement('div');
                         card.className = 'class-card';
+                        const cardId = 'card-' + className.replace(/\s/g, '_');
+                        card.id = cardId;
                         card.innerHTML = `
-                            <h3>${className}</h3>
-                            <p><strong>年级：</strong>${profile.grades_query}年级</p>
-                            <p><strong>薄弱项：</strong><br>${weaknessBadges}</p>
-                            <p style="font-size:13px; color:#666; margin-top:10px;">${profile.description}</p>
-                            <button onclick="deleteClass('${className}')">删除配置</button>
+                            <div onclick="toggleDetails('${className.replace(/\s/g, '_')}')">
+                                <h3>${className} <span style="font-size:14px; color:#999;">▼</span></h3>
+                                <p><strong>年级：</strong>${profile.grades_query}年级</p>
+                                <p><strong>薄弱项：</strong><br>${weaknessBadges}</p>
+                                <p style="font-size:13px; color:#666; margin-top:10px;">${profile.description}</p>
+                                ${studentGroupsHtml}
+                            </div>
+                            ${detailsHtml}
+                            <div style="margin-top:15px; padding-top:15px; border-top:1px solid #eee;">
+                                <button class="btn-download" onclick="event.stopPropagation(); downloadClassData('${className}')">📥 下载配置</button>
+                                <button onclick="event.stopPropagation(); deleteClass('${className}')">🗑️ 删除配置</button>
+                            </div>
                         `;
                         classList.appendChild(card);
                     });
@@ -502,6 +620,55 @@
                 }
             }
 
+            // 新增：学生分组信息
+            let studentGroupsHtml = '';
+            if (profile.student_groups && Object.keys(profile.student_groups).length > 0) {
+                studentGroupsHtml = `
+                    <div class="result-item">
+                        <strong>👥 学生分组情况</strong>
+                        <div style="font-size:13px; line-height:1.8; margin-top:8px;">
+                `;
+
+                for (const [groupKey, groupInfo] of Object.entries(profile.student_groups)) {
+                    const count = groupInfo.count || 0;
+                    const students = groupInfo.students || [];
+                    const studentDetails = groupInfo.student_details || [];
+                    const weaknessItems = groupInfo.weakness_items || [];
+
+                    studentGroupsHtml += `
+                        <div style="margin-bottom:10px; padding:8px; background:rgba(255,255,255,0.15); border-radius:6px;">
+                            <div style="font-weight:600; margin-bottom:4px;">
+                                📌 ${groupKey}薄弱组：${count}人
+                            </div>
+                            ${weaknessItems.length > 0 ? `
+                                <div style="font-size:12px; opacity:0.9; margin-bottom:4px;">
+                                    薄弱项目：${weaknessItems.slice(0, 3).join('、')}${weaknessItems.length > 3 ? '等' : ''}
+                                </div>
+                            ` : ''}
+                            ${studentDetails.length > 0 && studentDetails.length <= 10 ? `
+                                <div style="font-size:12px; opacity:0.85; margin-top:6px;">
+                                    <div style="font-weight:500; margin-bottom:4px;">学生名单：</div>
+                                    ${studentDetails.map(s => {
+                                        let info = s.姓名;
+                                        if (s.学号) info += ` (学号:${s.学号})`;
+                                        return `<div style="padding:2px 0;">• ${info}</div>`;
+                                    }).join('')}
+                                </div>
+                            ` : students.length > 0 && students.length <= 5 ? `
+                                <div style="font-size:12px; opacity:0.85;">
+                                    学生：${students.join('、')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+
+                studentGroupsHtml += `
+                        </div>
+                    </div>
+                `;
+            }
+
             resultCard.innerHTML = `
                 <div class="result-card fade-in">
                     <h3>🎉 ${className} 分析完成</h3>
@@ -514,8 +681,9 @@
                         <div>${weaknessBadges}</div>
                     </div>
                     ${detailsHtml}
+                    ${studentGroupsHtml}
                     <div style="margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.2); font-size:13px; opacity:0.9;">
-                        💡 该班级信息已保存，在问答时提到"${className}"将自动识别
+                        💡 该班级信息已保存，在问答时提到"${className}"将自动识别并为不同薄弱项的学生推荐差异化练习
                     </div>
                 </div>
             `;
@@ -638,6 +806,41 @@
             }
         });
 
+        // 切换详情显示
+        function toggleDetails(classId) {
+            const detailsEl = document.getElementById('details-' + classId);
+            if (detailsEl) {
+                detailsEl.classList.toggle('show');
+                // 更新箭头方向
+                const card = document.getElementById('card-' + classId);
+                const arrow = card.querySelector('h3 span');
+                if (arrow) {
+                    arrow.textContent = detailsEl.classList.contains('show') ? '▲' : '▼';
+                }
+            }
+        }
+
+        // 下载班级配置（Excel格式）
+        async function downloadClassData(className) {
+            try {
+                // 直接下载Excel文件
+                const downloadUrl = `${API_BASE}/api/class_data/download/${encodeURIComponent(className)}`;
+
+                // 创建隐藏的a标签进行下载
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${className}_配置.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showMessage(`${className} 配置已下载为Excel文件`, 'success');
+            } catch (error) {
+                console.error('下载失败:', error);
+                showMessage('下载失败', 'error');
+            }
+        }
+
         // 删除班级
         async function deleteClass(className) {
             if (!confirm(`确定要删除 ${className} 的配置吗？`)) {
@@ -662,6 +865,19 @@
                 showMessage('删除失败', 'error');
             }
         }
+
+        // 文件选择后自动填充班级名称
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // 提取文件名（去掉扩展名）
+                const fileName = file.name;
+                const className = fileName.replace(/\.(xlsx|xls)$/i, '');
+
+                // 自动填充到班级名称输入框
+                document.getElementById('className').value = className;
+            }
+        });
 
         // 页面加载时加载班级列表
         loadClassList();

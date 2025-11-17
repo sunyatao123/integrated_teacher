@@ -20,20 +20,150 @@ GRADE_MAPPING = {
 ALLOWED_WEAKNESSES = ["形态", "耐力", "力量", "柔韧", "速度", "机能"]
 
 # 体测项目到薄弱维度的映射（只能使用数据库规定的6个维度）
+# 注意：只关注体测数据中的"等级"列，如"体重等级"、"50米跑等级"等
+# 这里的项目名称必须与Excel中的列名前缀完全一致（去掉"等级"后缀）
 WEAKNESS_MAPPING = {
     "50米跑": "速度",
     "一分钟仰卧起坐": "力量",
     "引体向上": "力量",
     "坐位体前屈": "柔韧",
-    "一分钟跳绳": "速度",  # 跳绳归入速度
-    "立定跳远": "力量",    # 爆发力归入力量
+    "一分钟跳绳": "速度",
+    "立定跳远": "力量",
     "800米跑": "耐力",
     "1000米跑": "耐力",
-    "肺活量": "机能",      # 心肺功能归入机能
-    "身高": "形态",
-    "体重": "形态",
-    "BMI": "形态"
+    "50米×8往返跑": "耐力",
+    "肺活量": "机能",
+    "体重": "形态"
+    # 注意：不包含"身高"和"BMI"，因为标准体测数据中没有"身高等级"和"BMI等级"列
 }
+
+def analyze_student_weaknesses(df: pd.DataFrame) -> Dict[str, List[str]]:
+    """
+    分析每个学生的薄弱项
+
+    参数:
+        df: 体测数据DataFrame
+
+    返回:
+        字典，key为学生姓名，value为薄弱维度列表
+    """
+    student_weaknesses = {}
+
+    # 遍历每个学生
+    for idx, row in df.iterrows():
+        student_name = row.get('姓名', f'学生{idx+1}')
+        weaknesses = set()  # 使用集合避免重复
+
+        # 检查每个体测项目（使用全局WEAKNESS_MAPPING）
+        for item, dimension in WEAKNESS_MAPPING.items():
+            grade_col = f"{item}等级"
+            if grade_col in df.columns:
+                grade = row.get(grade_col)
+
+                # 体重等级使用特殊的分类系统
+                if item == "体重":
+                    # 体重等级：正常、超重、肥胖、低体重
+                    # 只有"正常"才不是薄弱项
+                    if grade in ["超重", "肥胖", "低体重"]:
+                        weaknesses.add(dimension)
+                else:
+                    # 其他项目使用标准分类：优秀、良好、及格、不及格
+                    # 如果成绩为"不及格"或"及格"，则该维度为薄弱项
+                    if grade in ["不及格", "及格"]:
+                        weaknesses.add(dimension)
+
+        # 只保存有薄弱项的学生
+        if weaknesses:
+            student_weaknesses[student_name] = sorted(list(weaknesses))
+
+    return student_weaknesses
+
+
+def group_students_by_weakness(student_weaknesses: Dict[str, List[str]], df: pd.DataFrame, class_weaknesses: List[str] = None) -> Dict[str, Dict]:
+    """
+    按班级薄弱项对学生进行分组
+
+    新逻辑：
+    1. 只针对班级的2-3个薄弱项进行分组
+    2. 每个学生只看这2-3个维度的表现
+    3. 分组结果如：力量薄弱组、速度薄弱组、力量+速度薄弱组等
+
+    参数:
+        student_weaknesses: 学生薄弱项字典（来自analyze_student_weaknesses）
+        df: 体测数据DataFrame（用于获取学生详细信息和体测项目信息）
+        class_weaknesses: 班级的薄弱项列表（如["力量", "速度"]），如果为None则使用所有薄弱项
+
+    返回:
+        分组信息字典，key为薄弱项组合（如"力量"、"速度"、"力量+速度"），value为该组的详细信息
+    """
+    groups = {}
+
+    # 如果没有指定班级薄弱项，使用所有薄弱项（兼容旧逻辑）
+    if class_weaknesses is None:
+        class_weaknesses = list(set([w for weaknesses in student_weaknesses.values() for w in weaknesses]))
+
+    # 遍历每个学生，只看班级薄弱项的表现
+    for idx, row in df.iterrows():
+        student_name = row.get('姓名', f'学生{idx+1}')
+
+        # 获取学生的详细信息
+        student_info = {
+            "姓名": student_name
+        }
+
+        # 尝试获取学号（如果存在）
+        if '学号' in df.columns:
+            student_info["学号"] = row.get('学号', '')
+
+        # 尝试获取其他可能的学生信息字段
+        for col in ['班级', '性别', '年龄']:
+            if col in df.columns:
+                student_info[col] = row.get(col, '')
+
+        # 只检查班级薄弱项对应的维度
+        student_class_weaknesses = []
+        if student_name in student_weaknesses:
+            # 获取该学生的所有薄弱项
+            all_weaknesses = student_weaknesses[student_name]
+            # 只保留属于班级薄弱项的部分
+            student_class_weaknesses = [w for w in all_weaknesses if w in class_weaknesses]
+
+        # 如果该学生在班级薄弱项上没有问题，跳过
+        if not student_class_weaknesses:
+            continue
+
+        # 生成分组key（如"力量"、"力量+速度"）
+        group_key = "+".join(sorted(student_class_weaknesses))
+
+        if group_key not in groups:
+            groups[group_key] = {
+                "count": 0,
+                "students": [],
+                "student_details": [],  # 新增：学生详细信息列表
+                "weakness_items": []
+            }
+
+        groups[group_key]["count"] += 1
+        groups[group_key]["students"].append(student_name)
+        groups[group_key]["student_details"].append(student_info)
+
+    # 为每个分组找出对应的体测项目（使用全局WEAKNESS_MAPPING）
+    for group_key, group_info in groups.items():
+        weakness_dims = group_key.split("+")
+        items = []
+        for item, dimension in WEAKNESS_MAPPING.items():
+            if dimension in weakness_dims:
+                grade_col = f"{item}等级"
+                if grade_col in df.columns:
+                    items.append(item)
+        # 去重
+        group_info["weakness_items"] = list(set(items))
+
+    # 按人数降序排序
+    sorted_groups = dict(sorted(groups.items(), key=lambda x: x[1]["count"], reverse=True))
+
+    return sorted_groups
+
 
 def analyze_class_weakness(df: pd.DataFrame, class_name: str) -> Tuple[List[str], Dict[str, str], Dict[str, str]]:
     """
@@ -45,61 +175,78 @@ def analyze_class_weakness(df: pd.DataFrame, class_name: str) -> Tuple[List[str]
     weakness_details = {}
     weakness_items = {}  # 记录每个薄弱维度对应的体测项目
 
-    # 分析各项体测数据的等级分布（只使用数据库规定的6个维度）
-    test_items = {
-        "50米跑": "速度",
-        "一分钟仰卧起坐": "力量",
-        "坐位体前屈": "柔韧",
-        "一分钟跳绳": "速度",
-        "立定跳远": "力量",
-        "800米跑": "耐力",
-        "1000米跑": "耐力",
-        "肺活量": "机能",
-        "身高": "形态",
-        "体重": "形态"
-    }
-
     weakness_scores = {}
-    
-    for item, dimension in test_items.items():
+
+    # 分析各项体测数据的等级分布（使用全局WEAKNESS_MAPPING）
+    for item, dimension in WEAKNESS_MAPPING.items():
         grade_col = f"{item}等级"
         if grade_col not in df.columns:
             continue
-            
+
         # 统计等级分布
         grade_counts = df[grade_col].value_counts()
         total = len(df[df[grade_col].notna()])
-        
+
         if total == 0:
             continue
-        
-        # 计算优秀率和及格率
-        excellent_count = grade_counts.get("优秀", 0)
-        good_count = grade_counts.get("良好", 0)
-        pass_count = grade_counts.get("及格", 0)
-        fail_count = grade_counts.get("不及格", 0)
-        
-        excellent_rate = excellent_count / total * 100
-        good_rate = good_count / total * 100
-        pass_rate = pass_count / total * 100
-        fail_rate = fail_count / total * 100
-        
-        # 计算薄弱分数（优秀率越低、及格率越高，分数越高表示越薄弱）
-        weakness_score = (100 - excellent_rate) + pass_rate + fail_rate * 2
-        weakness_scores[dimension] = {
-            "score": weakness_score,
-            "item": item,
-            "excellent_rate": excellent_rate,
-            "good_rate": good_rate,
-            "pass_rate": pass_rate,
-            "fail_rate": fail_rate,
-            "excellent_count": excellent_count,
-            "good_count": good_count,
-            "pass_count": pass_count,
-            "fail_count": fail_count,
-            "total": total
-        }
-    
+
+        # 体重等级使用特殊的分类系统
+        if item == "体重":
+            # 体重等级：正常、超重、肥胖、低体重
+            normal_count = grade_counts.get("正常", 0)
+            overweight_count = grade_counts.get("超重", 0)
+            obese_count = grade_counts.get("肥胖", 0)
+            underweight_count = grade_counts.get("低体重", 0)
+
+            normal_rate = normal_count / total * 100
+            overweight_rate = overweight_count / total * 100
+            obese_rate = obese_count / total * 100
+            underweight_rate = underweight_count / total * 100
+
+            # 计算薄弱分数（正常率越低，分数越高表示越薄弱）
+            weakness_score = (100 - normal_rate) + obese_rate * 2 + overweight_rate * 1.5 + underweight_rate * 1.5
+
+            # 为了统一接口，将体重等级映射到标准等级
+            excellent_count = normal_count
+            good_count = 0
+            pass_count = overweight_count + underweight_count
+            fail_count = obese_count
+
+            excellent_rate = normal_rate
+            good_rate = 0
+            pass_rate = overweight_rate + underweight_rate
+            fail_rate = obese_rate
+        else:
+            # 其他项目使用标准分类：优秀、良好、及格、不及格
+            excellent_count = grade_counts.get("优秀", 0)
+            good_count = grade_counts.get("良好", 0)
+            pass_count = grade_counts.get("及格", 0)
+            fail_count = grade_counts.get("不及格", 0)
+
+            excellent_rate = excellent_count / total * 100
+            good_rate = good_count / total * 100
+            pass_rate = pass_count / total * 100
+            fail_rate = fail_count / total * 100
+
+            # 计算薄弱分数（优秀率越低、及格率越高，分数越高表示越薄弱）
+            weakness_score = (100 - excellent_rate) + pass_rate + fail_rate * 2
+
+        # 修复：对于同一维度的多个项目，选择最薄弱的那个
+        if dimension not in weakness_scores or weakness_score > weakness_scores[dimension]["score"]:
+            weakness_scores[dimension] = {
+                "score": weakness_score,
+                "item": item,
+                "excellent_rate": excellent_rate,
+                "good_rate": good_rate,
+                "pass_rate": pass_rate,
+                "fail_rate": fail_rate,
+                "excellent_count": excellent_count,
+                "good_count": good_count,
+                "pass_count": pass_count,
+                "fail_count": fail_count,
+                "total": total
+            }
+
     # 找出最薄弱的2个维度
     sorted_weaknesses = sorted(weakness_scores.items(), key=lambda x: x[1]["score"], reverse=True)
 
@@ -139,8 +286,14 @@ def analyze_class_file(file_path: Path) -> Dict:
     grade_code = df['年级编号'].iloc[0] if len(df) > 0 else 14
     grade_query = GRADE_MAPPING.get(grade_code, "1")
 
-    # 分析薄弱项
+    # 分析班级整体薄弱项
     weaknesses, weakness_details, weakness_test_items = analyze_class_weakness(df, class_name)
+
+    # 分析学生个体薄弱项
+    student_weaknesses = analyze_student_weaknesses(df)
+
+    # 按班级薄弱项分组（只针对班级的2-3个薄弱项）
+    student_groups = group_students_by_weakness(student_weaknesses, df, class_weaknesses=weaknesses)
 
     # 构建班级配置
     # 生成简洁的描述
@@ -160,7 +313,8 @@ def analyze_class_file(file_path: Path) -> Dict:
         "count_query": "",
         "semantic_query": "",
         "description": description,
-        "weakness_details": weakness_details
+        "weakness_details": weakness_details,
+        "student_groups": student_groups  # 新增：学生分组信息
     }
 
     return class_name, profile
@@ -230,27 +384,19 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
         # 统计各项体测数据
         yield "📈 正在统计各项体测指标...\n\n"
 
-        test_items = {
-            "50米跑": "速度",
-            "一分钟仰卧起坐": "力量",
-            "坐位体前屈": "柔韧",
-            "一分钟跳绳": "速度",
-            "立定跳远": "力量",
-            "800米跑": "耐力",
-            "1000米跑": "耐力",
-            "肺活量": "机能",
-            "身高": "形态",
-            "体重": "形态"
-        }
-
+        # 使用全局WEAKNESS_MAPPING统计所有项目
         stats_text = ""
-        for item, dimension in test_items.items():
+        for item, dimension in WEAKNESS_MAPPING.items():
             grade_col = f"{item}等级"
             if grade_col in df.columns:
                 grade_counts = df[grade_col].value_counts()
                 total = len(df[df[grade_col].notna()])
                 if total > 0:
-                    stats_text += f"- {item}（{dimension}）：优秀{grade_counts.get('优秀', 0)}人，良好{grade_counts.get('良好', 0)}人，及格{grade_counts.get('及格', 0)}人，不及格{grade_counts.get('不及格', 0)}人\n"
+                    # 体重等级使用特殊的分类系统
+                    if item == "体重":
+                        stats_text += f"- {item}（{dimension}）：正常{grade_counts.get('正常', 0)}人，超重{grade_counts.get('超重', 0)}人，肥胖{grade_counts.get('肥胖', 0)}人，低体重{grade_counts.get('低体重', 0)}人\n"
+                    else:
+                        stats_text += f"- {item}（{dimension}）：优秀{grade_counts.get('优秀', 0)}人，良好{grade_counts.get('良好', 0)}人，及格{grade_counts.get('及格', 0)}人，不及格{grade_counts.get('不及格', 0)}人\n"
 
         yield stats_text + "\n"
 
@@ -316,6 +462,15 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
 
         yield f"✅ 识别到薄弱项：{', '.join(weaknesses)}\n\n"
 
+        # 分析学生个体薄弱项和分组
+        yield "👥 正在分析学生个体薄弱项...\n"
+        student_weaknesses = analyze_student_weaknesses(df)
+        yield f"✅ 已分析 {len(student_weaknesses)} 名学生的薄弱项\n\n"
+
+        yield f"📊 正在按班级薄弱项（{', '.join(weaknesses)}）对学生分组...\n"
+        student_groups = group_students_by_weakness(student_weaknesses, df, class_weaknesses=weaknesses)
+        yield f"✅ 已生成 {len(student_groups)} 个学生分组\n\n"
+
         # 构建描述
         description = f"{class_name}体质监测核心薄弱维度：" + "、".join(weaknesses) if weaknesses else f"{class_name}体质监测数据"
 
@@ -325,7 +480,8 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
             "count_query": "",
             "semantic_query": "",
             "description": description,
-            "weakness_details": weakness_details
+            "weakness_details": weakness_details,
+            "student_groups": student_groups
         }
 
         yield "💾 正在保存配置...\n"
@@ -358,8 +514,14 @@ def analyze_uploaded_file(file_content: bytes, class_name: str, output_file: str
         grade_code = df['年级编号'].iloc[0] if len(df) > 0 else 14
         grade_query = GRADE_MAPPING.get(grade_code, "1")
 
-        # 分析薄弱项
+        # 分析班级整体薄弱项
         weaknesses, weakness_details, weakness_test_items = analyze_class_weakness(df, class_name)
+
+        # 分析学生个体薄弱项
+        student_weaknesses = analyze_student_weaknesses(df)
+
+        # 按班级薄弱项分组（只针对班级的2-3个薄弱项）
+        student_groups = group_students_by_weakness(student_weaknesses, df, class_weaknesses=weaknesses)
 
         # 构建班级配置
         weakness_desc_items = []
@@ -378,7 +540,8 @@ def analyze_uploaded_file(file_content: bytes, class_name: str, output_file: str
             "count_query": "",
             "semantic_query": "",
             "description": description,
-            "weakness_details": weakness_details
+            "weakness_details": weakness_details,
+            "student_groups": student_groups  # 新增：学生分组信息
         }
 
         # 更新JSON文件

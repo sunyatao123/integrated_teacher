@@ -4,12 +4,14 @@
 教师端AI备课助手Web应用（整合版本）
 """
 
-from flask import Flask, render_template, request, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, send_file
 from flask_cors import CORS
 import os
 import json
 from typing import List
 from pathlib import Path
+import pandas as pd
+from io import BytesIO
 
 # 导入教师端备课模块
 from teacher_planner import (
@@ -713,6 +715,100 @@ def delete_class_profile_api(class_name):
         return jsonify({
             "success": False,
             "message": f"删除失败: {str(e)}"
+        }), 500
+
+
+@app.route('/api/class_data/download/<class_name>', methods=['GET'])
+def download_class_excel(class_name):
+    """
+    下载班级配置的Excel文件
+
+    参数:
+        class_name: 班级名称
+
+    返回:
+        Excel文件
+    """
+    try:
+        # 获取班级配置
+        profiles = get_all_class_profiles()
+
+        if class_name not in profiles:
+            return jsonify({
+                "success": False,
+                "message": f"班级配置不存在: {class_name}"
+            }), 404
+
+        profile = profiles[class_name]
+
+        # 创建Excel文件
+        output = BytesIO()
+
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            # Sheet 1: 班级基本信息
+            basic_info = {
+                '班级名称': [class_name],
+                '年级': [f"{profile.get('grades_query', '')}年级"],
+                '薄弱项': [', '.join(profile.get('weaknesses', []))],
+                '描述': [profile.get('description', '')]
+            }
+            df_basic = pd.DataFrame(basic_info)
+            df_basic.to_excel(writer, sheet_name='班级信息', index=False)
+
+            # Sheet 2: 学生分组详情
+            if 'student_groups' in profile and profile['student_groups']:
+                all_students = []
+
+                for group_key, group_info in profile['student_groups'].items():
+                    weakness_items = ', '.join(group_info.get('weakness_items', []))
+
+                    if 'student_details' in group_info and group_info['student_details']:
+                        for student in group_info['student_details']:
+                            student_row = {
+                                '分组': group_key,
+                                '薄弱项目': weakness_items,
+                                '姓名': student.get('姓名', ''),
+                                '学号': student.get('学号', student.get('学生编号', '')),
+                                '性别': student.get('性别', '')
+                            }
+                            all_students.append(student_row)
+
+                if all_students:
+                    df_students = pd.DataFrame(all_students)
+                    df_students.to_excel(writer, sheet_name='学生分组', index=False)
+
+            # Sheet 3: 各项体测统计（如果有的话）
+            if 'test_stats' in profile and profile['test_stats']:
+                stats_data = []
+                for item, stats in profile['test_stats'].items():
+                    stats_row = {
+                        '体测项目': item,
+                        '维度': stats.get('dimension', ''),
+                        '优秀人数': stats.get('excellent', 0),
+                        '良好人数': stats.get('good', 0),
+                        '及格人数': stats.get('pass', 0),
+                        '不及格人数': stats.get('fail', 0)
+                    }
+                    stats_data.append(stats_row)
+
+                if stats_data:
+                    df_stats = pd.DataFrame(stats_data)
+                    df_stats.to_excel(writer, sheet_name='体测统计', index=False)
+
+        output.seek(0)
+
+        # 返回Excel文件
+        return send_file(
+            output,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            as_attachment=True,
+            download_name=f'{class_name}_配置.xlsx'
+        )
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": f"下载失败: {str(e)}"
         }), 500
 
 

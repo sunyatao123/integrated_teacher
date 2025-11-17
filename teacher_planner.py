@@ -412,11 +412,32 @@ def build_plan_messages(
             for class_name, profile in class_profiles.items():
                 if grades_query in class_name or class_name.startswith(f"{grades_query}年级"):
                     weakness_details = profile.get("weakness_details", {})
+                    student_groups = profile.get("student_groups", {})
+
                     if weakness_details:
                         class_analysis_text = f"   - 如果是{class_name}，描述："
                         for weakness, detail in weakness_details.items():
                             class_analysis_text += f"{weakness}：{detail[:200]}... "
                         class_analysis_text += "\n"
+
+                    # 新增：添加学生分组信息
+                    if student_groups:
+                        class_analysis_text += f"\n   - {class_name}学生分组情况：\n"
+                        for group_key, group_info in student_groups.items():
+                            count = group_info.get("count", 0)
+                            weakness_items = group_info.get("weakness_items", [])
+                            students = group_info.get("students", [])
+
+                            # 生成分组描述
+                            group_desc = f"     * {group_key}薄弱组：{count}人"
+                            if weakness_items:
+                                group_desc += f"（薄弱项目：{', '.join(weakness_items[:3])}）"
+                            if students and len(students) <= 5:
+                                # 如果学生人数不多，可以列出姓名
+                                group_desc += f" - {', '.join(students)}"
+                            class_analysis_text += group_desc + "\n"
+
+                        class_analysis_text += "\n   - **重要**：请根据上述学生分组，为不同薄弱项的学生推荐不同的练习！\n"
 
         if not class_analysis_text:
             class_analysis_text = "   - 对于其他年级和班级，先不用描述班级体测情况。"
