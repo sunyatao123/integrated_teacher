@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班级体测数据管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .class-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .class-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .class-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .class-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .class-card button {
+            background: #dc3545;
+            padding: 8px 16px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-card h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .result-item strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .weakness-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin: 4px;
+            font-weight: 600;
+        }
+
+        .progress-log {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+            color: #555;
+            border: 1px solid #e0e0e0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-header">
+            <h1>📊 班级体测数据管理系统</h1>
+            <a href="/" class="nav-link">← 返回主页</a>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <!-- 功能说明 -->
+        <div class="section" style="background:#e8f4fd; border-left:4px solid #2196F3;">
+            <h2 style="color:#2196F3;">💡 系统功能</h2>
+            <ul style="margin:10px 0; padding-left:20px; color:#555; line-height:1.8;">
+                <li>📤 <strong>智能分析</strong>：上传体测数据，AI自动分析薄弱项</li>
+                <li>🎯 <strong>六大维度</strong>：形态、耐力、力量、柔韧、速度、机能</li>
+                <li>💾 <strong>自动保存</strong>：分析结果自动存储，无需手动操作</li>
+                <li>🤖 <strong>智能识别</strong>：问答时自动识别班级，无需重复输入</li>
+            </ul>
+        </div>
+
+        <!-- 上传体测数据 -->
+        <div class="section">
+            <h2>📤 上传体测数据</h2>
+            <div class="upload-area">
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="className">
+                            <span style="color:#667eea;">●</span> 班级名称
+                        </label>
+                        <input type="text" id="className" placeholder="例如：一年级100班、九年级八班" required>
+                        <small style="color:#999; display:block; margin-top:6px;">
+                            💡 请输入完整的班级名称
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileInput">
+                            <span style="color:#667eea;">●</span> 体测数据文件
+                        </label>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls" required>
+                        <small style="color:#999; display:block; margin-top:6px;">
+                            📋 支持 .xlsx 和 .xls 格式
+                        </small>
+                    </div>
+                    <button type="submit" id="uploadBtn">
+                        <span id="uploadBtnText">🚀 开始分析</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 分析结果和进度 -->
+        <div id="analysisSection" class="section" style="display:none;">
+            <h2>🔍 分析结果</h2>
+
+            <!-- 分析进度日志 -->
+            <div id="progressLog" class="progress-log" style="margin-bottom:20px;">
+                <div style="color:#667eea; font-weight:bold; margin-bottom:10px;">📊 分析日志</div>
+            </div>
+
+            <!-- 分析结果卡片 -->
+            <div id="resultCard" style="display:none;"></div>
+        </div>
+
+        <!-- 批量分析 -->
+        <div class="section" style="background:#f0f4ff;">
+            <h2>🔄 批量分析</h2>
+            <p style="margin-bottom: 15px; color:#666; line-height:1.6;">
+                选择包含体测数据的文件夹,自动分析文件夹内所有Excel文件
+            </p>
+            <div class="form-group">
+                <label for="batchFolderInput">
+                    <span style="color:#4caf50;">●</span> 选择体测数据文件夹
+                </label>
+                <input type="file" id="batchFolderInput" webkitdirectory directory multiple>
+                <small style="color:#999; display:block; margin-top:6px;">
+                    📁 选择文件夹后,系统会自动识别并分析其中的所有Excel文件(.xlsx/.xls),文件名将作为班级名称
+                </small>
+            </div>
+            <button id="batchAnalyzeBtn" style="background:#4caf50;">
+                ⚡ 开始批量分析
+            </button>
+            <div id="batchProgress" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:8px; border-left:4px solid #4caf50;">
+                <div style="font-weight:600; margin-bottom:10px;">📊 批量分析进度</div>
+                <div id="batchProgressText" style="color:#666; line-height:1.8;"></div>
+            </div>
+        </div>
+
+        <!-- 班级列表 -->
+        <div class="section">
+            <h2>📋 已配置班级列表</h2>
+            <div id="classList" class="class-list">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+
+        // 显示消息
+        function showMessage(text, type = 'success') {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        // 加载班级列表
+        async function loadClassList() {
+            try {
+                const response = await fetch(`${API_BASE}/api/class_data/profiles`);
+                const result = await response.json();
+
+                const classList = document.getElementById('classList');
+
+                if (result.success && result.count > 0) {
+                    classList.innerHTML = '';
+                    Object.entries(result.data).forEach(([className, profile]) => {
+                        const weaknesses = profile.trained_weaknesses || '无';
+                        const weaknessArray = weaknesses.split('、');
+                        const weaknessBadges = weaknessArray.map(w =>
+                            `<span style="display:inline-block; background:#e3f2fd; color:#1976d2; padding:4px 10px; border-radius:12px; font-size:12px; margin:2px;">${w}</span>`
+                        ).join('');
+
+                        const card = document.createElement('div');
+                        card.className = 'class-card';
+                        card.innerHTML = `
+                            <h3>${className}</h3>
+                            <p><strong>年级：</strong>${profile.grades_query}年级</p>
+                            <p><strong>薄弱项：</strong><br>${weaknessBadges}</p>
+                            <p style="font-size:13px; color:#666; margin-top:10px;">${profile.description}</p>
+                            <button onclick="deleteClass('${className}')">删除配置</button>
+                        `;
+                        classList.appendChild(card);
+                    });
+                } else {
+                    classList.innerHTML = '<p style="text-align: center; color: #999;">暂无班级配置</p>';
+                }
+            } catch (error) {
+                console.error('加载班级列表失败:', error);
+                showMessage('加载班级列表失败', 'error');
+            }
+        }
+
+        // 上传文件（使用流式API）
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const className = document.getElementById('className').value;
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                showMessage('请选择文件', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('class_name', className);
+
+            // 显示分析区域
+            const analysisSection = document.getElementById('analysisSection');
+            const progressLog = document.getElementById('progressLog');
+            const resultCard = document.getElementById('resultCard');
+
+            analysisSection.style.display = 'block';
+            progressLog.innerHTML = '<div style="color:#667eea; font-weight:bold; margin-bottom:10px;">📊 分析日志</div>';
+            resultCard.style.display = 'none';
+            resultCard.innerHTML = '';
+
+            // 滚动到分析区域
+            analysisSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // 禁用上传按钮
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadBtnText = document.getElementById('uploadBtnText');
+            uploadBtn.disabled = true;
+            uploadBtnText.textContent = '⏳ 分析中...';
+
+            let analysisResult = null;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/class_data/upload_stream`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data === '[DONE]') {
+                                // 显示结果卡片
+                                if (analysisResult) {
+                                    showResultCard(analysisResult, className);
+                                }
+                                showMessage('✅ 分析完成！', 'success');
+                                document.getElementById('uploadForm').reset();
+                                loadClassList();
+                                break;
+                            }
+
+                            try {
+                                const json = JSON.parse(data);
+                                if (json.type === 'progress') {
+                                    // 只显示关键信息，不显示原始数据
+                                    const content = json.content;
+                                    if (!content.includes('```') && !content.includes('{') && !content.includes('}')) {
+                                        progressLog.innerHTML += content;
+                                        progressLog.scrollTop = progressLog.scrollHeight;
+                                    }
+                                } else if (json.type === 'success') {
+                                    analysisResult = json.profile;
+                                    progressLog.innerHTML += '\n<div style="color:#4caf50; font-weight:bold; margin-top:10px;">✅ ' + json.message + '</div>\n';
+                                    progressLog.scrollTop = progressLog.scrollHeight;
+                                } else if (json.type === 'error') {
+                                    progressLog.innerHTML += '\n<div style="color:#f44336; font-weight:bold;">❌ ' + json.message + '</div>\n';
+                                    showMessage(json.message, 'error');
+                                }
+                            } catch (e) {
+                                console.error('解析JSON失败:', e, data);
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('上传失败:', error);
+                showMessage('上传失败: ' + error.message, 'error');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtnText.textContent = '🚀 开始分析';
+            }
+        });
+
+        // 显示结果卡片
+        function showResultCard(profile, className) {
+            const resultCard = document.getElementById('resultCard');
+            const weaknesses = profile.trained_weaknesses.split('、');
+            const weaknessBadges = weaknesses.map(w =>
+                `<span class="weakness-badge">${w}</span>`
+            ).join('');
+
+            let detailsHtml = '';
+            if (profile.weakness_details) {
+                for (const [dimension, detail] of Object.entries(profile.weakness_details)) {
+                    detailsHtml += `
+                        <div class="result-item">
+                            <strong>🎯 ${dimension}</strong>
+                            <div style="font-size:13px; line-height:1.6;">${detail}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            resultCard.innerHTML = `
+                <div class="result-card fade-in">
+                    <h3>🎉 ${className} 分析完成</h3>
+                    <div class="result-item">
+                        <strong>📚 年级</strong>
+                        <div>${profile.grades_query}年级</div>
+                    </div>
+                    <div class="result-item">
+                        <strong>⚠️ 薄弱项维度</strong>
+                        <div>${weaknessBadges}</div>
+                    </div>
+                    ${detailsHtml}
+                    <div style="margin-top:15px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.2); font-size:13px; opacity:0.9;">
+                        💡 该班级信息已保存，在问答时提到"${className}"将自动识别
+                    </div>
+                </div>
+            `;
+            resultCard.style.display = 'block';
+
+            // 滚动到结果卡片
+            setTimeout(() => {
+                resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+
+        // 批量分析
+        document.getElementById('batchAnalyzeBtn').addEventListener('click', async () => {
+            const folderInput = document.getElementById('batchFolderInput');
+            const allFiles = folderInput.files;
+
+            if (allFiles.length === 0) {
+                showMessage('请先选择包含体测数据的文件夹', 'error');
+                return;
+            }
+
+            // 过滤出Excel文件
+            const excelFiles = Array.from(allFiles).filter(file => {
+                return file.name.match(/\.(xlsx|xls)$/i);
+            });
+
+            if (excelFiles.length === 0) {
+                showMessage('所选文件夹中没有找到Excel文件(.xlsx/.xls)', 'error');
+                return;
+            }
+
+            if (!confirm(`在所选文件夹中找到 ${excelFiles.length} 个Excel文件，确定要批量分析吗？这可能需要一些时间。`)) {
+                return;
+            }
+
+            const btn = document.getElementById('batchAnalyzeBtn');
+            const progressDiv = document.getElementById('batchProgress');
+            const progressText = document.getElementById('batchProgressText');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ 分析中...';
+            progressDiv.style.display = 'block';
+            progressText.innerHTML = `📁 找到 ${excelFiles.length} 个Excel文件，准备开始批量分析...`;
+
+            let successCount = 0;
+            let failCount = 0;
+            const results = [];
+
+            try {
+                for (let i = 0; i < excelFiles.length; i++) {
+                    const file = excelFiles[i];
+                    // 从文件名提取班级名称(去掉扩展名)
+                    const className = file.name.replace(/\.(xlsx|xls)$/i, '');
+
+                    progressText.innerHTML = `
+                        📊 正在分析: <strong>${className}</strong> (${i + 1}/${excelFiles.length})<br>
+                        ✅ 成功: ${successCount} | ❌ 失败: ${failCount}
+                    `;
+
+                    try {
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('class_name', className);
+
+                        const response = await fetch(`${API_BASE}/api/class_data/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            successCount++;
+                            results.push({ className, success: true });
+                        } else {
+                            failCount++;
+                            results.push({ className, success: false, error: result.message });
+                        }
+                    } catch (error) {
+                        failCount++;
+                        results.push({ className, success: false, error: error.message });
+                    }
+                }
+
+                // 显示最终结果
+                progressText.innerHTML = `
+                    <div style="font-size:16px; margin-bottom:10px;">
+                        🎉 批量分析完成！
+                    </div>
+                    <div style="display:flex; gap:20px; margin-bottom:15px;">
+                        <div style="color:#4caf50;">✅ 成功: <strong>${successCount}</strong></div>
+                        <div style="color:#f44336;">❌ 失败: <strong>${failCount}</strong></div>
+                        <div style="color:#666;">📊 总计: <strong>${excelFiles.length}</strong></div>
+                    </div>
+                    ${failCount > 0 ? `
+                        <div style="margin-top:10px; padding:10px; background:#fff3cd; border-radius:4px; font-size:13px;">
+                            <strong>失败的班级:</strong><br>
+                            ${results.filter(r => !r.success).map(r => `• ${r.className}: ${r.error}`).join('<br>')}
+                        </div>
+                    ` : ''}
+                `;
+
+                showMessage(`批量分析完成！成功 ${successCount} 个，失败 ${failCount} 个`, successCount > 0 ? 'success' : 'error');
+
+                // 刷新班级列表
+                if (successCount > 0) {
+                    loadClassList();
+                }
+
+                // 清空文件夹选择
+                folderInput.value = '';
+
+            } catch (error) {
+                console.error('批量分析失败:', error);
+                showMessage('批量分析失败: ' + error.message, 'error');
+                progressText.innerHTML = `❌ 批量分析失败: ${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⚡ 开始批量分析';
+            }
+        });
+
+        // 删除班级
+        async function deleteClass(className) {
+            if (!confirm(`确定要删除 ${className} 的配置吗？`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/class_data/profile/${encodeURIComponent(className)}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage(result.message, 'success');
+                    loadClassList();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                console.error('删除失败:', error);
+                showMessage('删除失败', 'error');
+            }
+        }
+
+        // 页面加载时加载班级列表
+        loadClassList();
+    </script>
+</body>
+</html>
+

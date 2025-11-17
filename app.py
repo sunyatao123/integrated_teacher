@@ -1,0 +1,798 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+教师端AI备课助手Web应用（整合版本）
+"""
+
+from flask import Flask, render_template, request, jsonify, Response
+from flask_cors import CORS
+import os
+import json
+from typing import List
+from pathlib import Path
+
+# 导入教师端备课模块
+from teacher_planner import (
+    collect_entities_llm,
+    detect_intent_llm,
+    call_hybrid_search,
+    call_sports_meeting_search,
+    generate_plan,
+    generate_plan_stream,
+    load_class_profiles,
+)
+
+# 导入班级数据分析模块
+from analyze_class_data import (
+    analyze_class_file,
+    analyze_with_llm,
+    analyze_uploaded_file,
+    get_all_class_profiles,
+    delete_class_profile,
+    update_class_profile,
+)
+
+app = Flask(__name__)
+CORS(app)
+
+# 配置
+SEARCH_BASE_URL = os.getenv("SEARCH_BASE_URL", "http://127.0.0.1:8001")
+
+
+def gather_user_text(user_text: str, conversation_history: List[dict]) -> str:
+    """收集用户输入和对话历史中的所有用户文本"""
+    pieces: List[str] = []
+    for msg in conversation_history or []:
+        if msg.get("role") == "user":
+            content = (msg.get("content") or "").strip()
+            if content:
+                pieces.append(content)
+    if user_text:
+        pieces.append(user_text.strip())
+    return " ".join(pieces)
+
+
+def detect_plan_type(current_text: str, conversation_history: List[dict]) -> str:
+    """
+    使用大模型进行意图识别，判断是全员运动会、课课练还是闲聊
+    返回: "sports_meeting" | "lesson_plan" | "chat" | ""
+    """
+    try:
+        intent = detect_intent_llm(current_text, conversation_history)
+        # 如果是chat，返回空字符串（表示不是方案生成意图）
+        if intent == "chat":
+            return ""
+        return intent
+    except Exception as e:
+        if os.getenv('DEBUG_AI','1')=='1':
+            print(f"[TEACHER] 意图识别失败: {e}")
+        return ""
+
+
+def get_local_ip():
+    """获取本机IP地址"""
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except:
+        return "127.0.0.1"
+
+
+# ==================== 页面路由 ====================
+
+@app.route('/')
+def index():
+    """主页：重定向到教师端"""
+    return render_template('teacher.html')
+
+
+@app.route('/teacher')
+def teacher():
+    """教师端AI备课助手页面"""
+    return render_template('teacher.html')
+
+
+@app.route('/class_data_manager')
+def class_data_manager():
+    """班级体测数据管理页面"""
+    return render_template('class_data_manager.html')
+
+
+# ==================== 教师端备课API ====================
+
+@app.route('/api/teacher/plan', methods=['POST'])
+def teacher_plan():
+    """
+    教师端AI备课助手：实体收集 -> 外部检索 -> 方案生成（非流式）
+    
+    入参：
+      - message: 用户自然语言输入
+      - conversation_history: 可选，对话历史记录
+      - override_params: 可选，显式指定参数
+    
+    返回：
+      - 如果缺少关键信息，返回 need_more_info=True 和 ask 提示语
+      - 否则返回生成的方案
+    """
+    try:
+        data = request.get_json() or {}
+        user_text = (data.get('message') or '').strip()
+        conversation_history = data.get('conversation_history') or []
+        override_params = data.get('override_params') or {}
+        
+        if not user_text and not override_params:
+            return jsonify({'success': False, 'message': '请提供message或override_params'}), 400
+
+        if os.getenv('DEBUG_AI','1')=='1':
+            print(f"[TEACHER] 收到请求: user_text={user_text}, history_len={len(conversation_history)}")
+
+        # 使用大模型进行意图识别
+        plan_type = detect_plan_type(user_text, conversation_history)
+        is_sports_meeting = plan_type == "sports_meeting"
+        is_lesson_plan = plan_type == "lesson_plan"
+        is_chat = not plan_type
+        
+        if os.getenv('DEBUG_AI','1')=='1':
+            print(f"[TEACHER] 意图识别: plan_type={plan_type}")
+
+        # 实体抽取
+        try:
+            params, missing = collect_entities_llm(user_text, conversation_history)
+            if os.getenv('DEBUG_AI','1')=='1':
+                print(f"[TEACHER] 实体抽取: params={params}, missing={missing}")
+        except Exception as e:
+            if os.getenv('DEBUG_AI','1')=='1':
+                print(f"[TEACHER] 实体抽取失败: {e}")
+            return jsonify({'success': False, 'message': f'实体抽取失败: {e}'}), 500
+
+        # 应用显式覆盖
+        for k in ['semantic_query', 'count_query', 'grades_query', 'trained_weaknesses', 'top_k']:
+            if k in override_params and override_params[k] not in (None, ''):
+                params[k] = override_params[k]
+                if k in missing:
+                    missing.remove(k)
+
+        # 添加意图类型到参数中
+        params["plan_type"] = plan_type or ""
+        params["conversation_history"] = conversation_history
+
+        # 如果是闲聊，直接生成回复
+        if is_chat:
+            if os.getenv('DEBUG_AI','1')=='1':
+                print("[TEACHER] 识别为闲聊，直接生成回复")
+            response_text = generate_plan([], params, user_text, need_guidance=False)
+            conversation_history.append({"role": "user", "content": user_text})
+            conversation_history.append({"role": "assistant", "content": response_text})
+            return jsonify({
+                'success': True,
+                'response': response_text,
+                'conversation_history': conversation_history,
+                'is_chat': True
+            })
+
+        # 判断是否需要引导
+        need_guidance = False
+        missing_fields = []
+
+        if is_sports_meeting:
+            # 全员运动会：需要操场条件信息
+            if not params.get("semantic_query"):
+                need_guidance = True
+                missing_fields.append("semantic_query")
+        elif is_lesson_plan:
+            # 课课练：需要班级或薄弱项，满足任一即可
+            has_grades = bool(params.get("grades_query"))
+            has_weaknesses = bool(params.get("trained_weaknesses"))
+            if not has_grades and not has_weaknesses:
+                need_guidance = True
+                missing_fields.extend(["grades_query", "trained_weaknesses"])
+
+        # 如果需要引导，生成引导语
+        if need_guidance:
+            if os.getenv('DEBUG_AI','1')=='1':
+                print(f"[TEACHER] 需要引导，缺失字段: {missing_fields}")
+            guidance_text = generate_plan([], params, user_text, need_guidance=True)
+            conversation_history.append({"role": "user", "content": user_text})
+            conversation_history.append({"role": "assistant", "content": guidance_text})
+            return jsonify({
+                'success': True,
+                'need_more_info': True,
+                'ask': guidance_text,
+                'conversation_history': conversation_history,
+                'collected_params': params
+            })
+
+        # 调用检索接口
+        try:
+            if is_sports_meeting:
+                # 全员运动会检索
+                semantic_with_text = f"{params.get('semantic_query', '')} {user_text}".strip()
+                payload = {
+                    "semantic_query": semantic_with_text,
+                    "count_query": str(params.get("count_query") or ""),
+                    "grades_query": str(params.get("grades_query") or ""),
+                    "top_k": int(params.get("top_k") or 5),
+                }
+                results = call_sports_meeting_search(SEARCH_BASE_URL, payload)
+            else:
+                # 课课练检索
+                payload = {
+                    "semantic_query": params.get("semantic_query") or "",
+                    "count_query": str(params.get("count_query") or ""),
+                    "grades_query": str(params.get("grades_query") or ""),
+                    "trained_weaknesses": params.get("trained_weaknesses") or "",
+                    "top_k": int(params.get("top_k") or 5),
+                }
+                results = call_hybrid_search(SEARCH_BASE_URL, payload)
+
+            if os.getenv('DEBUG_AI','1')=='1':
+                print(f"[TEACHER] 检索结果数量: {len(results)}")
+                print("====== 检索结果原始数据 ======")
+                print(json.dumps(results, ensure_ascii=False, indent=2))
+                print("====== 检索结果结束 ======")
+        except Exception as e:
+            if os.getenv('DEBUG_AI','1')=='1':
+                print(f"[TEACHER] 检索失败: {e}")
+            results = []
+
+        # 生成方案
+        response_text = generate_plan(results, params, user_text, need_guidance=False)
+
+        # 更新对话历史
+        conversation_history.append({"role": "user", "content": user_text})
+        conversation_history.append({"role": "assistant", "content": response_text})
+
+        return jsonify({
+            'success': True,
+            'response': response_text,
+            'conversation_history': conversation_history,
+            'params': params,
+            'results_count': len(results)
+        })
+
+    except Exception as e:
+        if os.getenv('DEBUG_AI','1')=='1':
+            print(f"[TEACHER] 教师端备课失败: {e}")
+        return jsonify({'success': False, 'message': f'教师端备课失败: {str(e)}'}), 500
+
+
+@app.route('/api/teacher/plan/stream', methods=['POST'])
+def teacher_plan_stream():
+    """
+    教师端AI备课助手：流式输出方案
+
+    入参：
+      - message: 用户自然语言输入
+      - conversation_history: 可选，对话历史记录
+      - override_params: 可选，显式指定参数
+    """
+    try:
+        data = request.get_json() or {}
+        user_text = (data.get('message') or '').strip()
+        conversation_history = data.get('conversation_history') or []
+        override_params = data.get('override_params') or {}
+
+        if not user_text and not override_params:
+            return jsonify({'success': False, 'message': '请提供message或override_params'}), 400
+
+        if os.getenv('DEBUG_AI','1')=='1':
+            print(f"[TEACHER] 流式接口收到请求: user_text={user_text}")
+
+        # 使用大模型进行意图识别
+        plan_type = detect_plan_type(user_text, conversation_history)
+        is_sports_meeting = plan_type == "sports_meeting"
+        is_lesson_plan = plan_type == "lesson_plan"
+        is_chat = not plan_type
+
+        # 实体抽取
+        params, missing = collect_entities_llm(user_text, conversation_history)
+
+        # 应用显式覆盖
+        for k in ['semantic_query', 'count_query', 'grades_query', 'trained_weaknesses', 'top_k']:
+            if k in override_params and override_params[k] not in (None, ''):
+                params[k] = override_params[k]
+
+        # 添加意图类型到参数中
+        params["plan_type"] = plan_type or ""
+        params["conversation_history"] = conversation_history
+
+        # 如果是闲聊，直接生成友好回复（流式）
+        if is_chat:
+            if os.getenv('DEBUG_AI','1')=='1':
+                print("[TEACHER] 流式接口：识别为闲聊，直接生成回复")
+            need_guidance = False
+            missing_fields = []
+        else:
+            # 关键检查：根据场景判断是否需要更多信息
+            count_query = params.get('count_query')
+            grades_query = params.get('grades_query')
+            semantic_query = params.get('semantic_query')
+            trained_weaknesses_value = params.get('trained_weaknesses')
+
+            missing_fields = []
+            if is_sports_meeting:
+                # 全员运动会：需要操场跑道规模等信息（semantic_query）
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}")
+                if not semantic_query:
+                    missing_fields.append('semantic_query')
+                if missing_fields and os.getenv('DEBUG_AI','1')=='1':
+                    print("[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失=", missing_fields)
+            elif is_lesson_plan:
+                # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
+                has_grades = bool(grades_query)
+                has_weaknesses = bool(trained_weaknesses_value)
+                if not has_grades and not has_weaknesses:
+                    # 两个都没有，需要引导
+                    missing_fields.append('grades_query_or_trained_weaknesses')
+                if missing_fields and os.getenv('DEBUG_AI','1')=='1':
+                    print("[TEACHER] 流式接口：⚠️ 课课练场景信息不全（缺少班级或弱项），进入引导流程")
+
+            need_guidance = bool(missing_fields)
+
+        # 如果是闲聊，直接生成友好回复（流式）
+        if is_chat:
+            def chat_stream():
+                try:
+                    model = OptimizedAIModel()
+                    chat_messages = [
+                        {"role": "system", "content": TEACHER_SYSTEM_PROMPT},
+                        {"role": "user", "content": f"用户说：{user_text}\n\n请用友好、简洁的方式回复用户。如果是询问功能，可以介绍你可以帮助生成课课练备课方案和全员运动会方案。"}
+                    ]
+                    stream = model.client.chat.completions.create(
+                        model=model.model,
+                        messages=chat_messages,
+                        max_tokens=200,
+                        temperature=0.7,
+                        stream=True,
+                    )
+                    for event in stream:
+                        try:
+                            delta = event.choices[0].delta
+                            content = getattr(delta, "content", None)
+                            if content:
+                                yield content
+                        except Exception:
+                            chunk = None
+                            try:
+                                chunk = event["choices"][0]["delta"].get("content")
+                            except Exception:
+                                pass
+                            if chunk:
+                                yield chunk
+                except Exception as e:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        print(f"[TEACHER] 流式接口：闲聊回复生成失败: {e}")
+                    yield "您好！我是AI备课助理。我可以帮您生成课课练备课方案和全员运动会方案。请告诉我您的需求。"
+
+            return Response(chat_stream(), mimetype='text/plain; charset=utf-8')
+
+        if need_guidance:
+            # 信息不全，使用generate_plan_stream生成引导语
+            collected_so_far = {
+                'semantic_query': params.get('semantic_query') or '',
+                'count_query': params.get('count_query') or '',
+                'grades_query': params.get('grades_query') or '',
+                'trained_weaknesses': params.get('trained_weaknesses') or '',
+                'plan_type': params.get('plan_type') or '',
+                'top_k': int(params.get('top_k') or 5),
+            }
+
+            try:
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print("[TEACHER] 流式接口：信息不全，调用generate_plan_stream生成引导语(流式)...")
+
+                def guidance_stream():
+                    ask_chunks = []
+                    try:
+                        for chunk in generate_plan_stream([], params, user_text, need_guidance=True):
+                            ask_chunks.append(chunk)
+                            yield chunk
+
+                        final_ask = "".join(ask_chunks).strip()
+
+                        if os.getenv('DEBUG_AI','1')=='1':
+                            print("[TEACHER] 流式接口：引导语推送完成，长度=", len(final_ask))
+                    except Exception as stream_err:
+                        if os.getenv('DEBUG_AI','1')=='1':
+                            print("[TEACHER] 流式接口：引导语流式推送异常:", stream_err)
+                        yield f"[引导流错误] {stream_err}"
+
+                resp = Response(guidance_stream(), mimetype='text/plain; charset=utf-8')
+                resp.headers['X-Need-More-Info'] = '1'
+                # HTTP响应头只能使用ASCII字符，需要将中文转义为\uXXXX格式
+                resp.headers['X-Collected-Params'] = json.dumps(collected_so_far, ensure_ascii=True)
+                return resp
+            except Exception as e:
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：引导语流式生成失败，使用兜底提示。错误: {e}")
+
+                def fallback_stream():
+                    yield "请说明需要重点提升的薄弱项（如：速度/力量/柔韧/灵敏/耐力/核心稳定/协调/平衡）"
+
+                resp = Response(fallback_stream(), mimetype='text/plain; charset=utf-8')
+                resp.headers['X-Need-More-Info'] = '1'
+                # HTTP响应头只能使用ASCII字符，需要将中文转义为\uXXXX格式
+                resp.headers['X-Collected-Params'] = json.dumps(collected_so_far, ensure_ascii=True)
+                return resp
+
+        # 调用检索接口
+        try:
+            if is_sports_meeting:
+                # 全员运动会检索
+                semantic_with_text = f"{params.get('semantic_query', '')} {user_text}".strip()
+                payload = {
+                    "semantic_query": semantic_with_text,
+                    "count_query": str(params.get("count_query") or ""),
+                    "grades_query": str(params.get("grades_query") or ""),
+                    "top_k": int(params.get("top_k") or 5),
+                }
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：使用全员运动会检索 payload={payload}")
+                results = call_sports_meeting_search(SEARCH_BASE_URL, payload)
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：✅ 全员运动会检索成功，返回 {len(results)} 条")
+                    print("====== 检索结果原始数据 ======")
+                    print(json.dumps(results, ensure_ascii=False, indent=2))
+                    print("====== 检索结果结束 ======")
+            elif is_lesson_plan:
+                # 课课练检索
+                payload = {
+                    "semantic_query": params.get("semantic_query") or "",
+                    "count_query": str(params.get("count_query") or ""),
+                    "grades_query": str(params.get("grades_query") or ""),
+                    "trained_weaknesses": params.get("trained_weaknesses") or "",
+                    "top_k": int(params.get("top_k") or 5),
+                }
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：调用检索 payload={payload}")
+                    print(f"[TEACHER] 流式接口：🚀 开始调用检索接口 {SEARCH_BASE_URL}/extended-search/hybrid")
+                results = call_hybrid_search(SEARCH_BASE_URL, payload)
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式接口：✅ 检索接口调用成功，返回 {len(results)} 条")
+                    print("====== 检索结果原始数据 ======")
+                    print(json.dumps(results, ensure_ascii=False, indent=2))
+                    print("====== 检索结果结束 ======")
+            else:
+                results = []
+        except Exception as e:
+            if os.getenv('DEBUG_AI','1')=='1':
+                print(f"[TEACHER] 流式接口：检索失败，使用空结果兜底: {e}")
+            results = []
+
+        # 流式生成方案
+        def generate():
+            try:
+                for chunk in generate_plan_stream(results, params, user_text, need_guidance=False):
+                    yield chunk
+            except Exception as e:
+                if os.getenv('DEBUG_AI','1')=='1':
+                    print(f"[TEACHER] 流式生成失败: {e}")
+                yield f"\n\n生成失败: {str(e)}"
+
+        return Response(generate(), mimetype='text/plain; charset=utf-8')
+
+    except Exception as e:
+        if os.getenv('DEBUG_AI','1')=='1':
+            print(f"[TEACHER] 流式生成失败: {e}")
+        return jsonify({'success': False, 'message': f'流式生成失败: {str(e)}'}), 500
+
+
+# ==================== 班级数据管理API ====================
+
+@app.route('/api/class_data/upload', methods=['POST'])
+def upload_class_data():
+    """
+    上传班级体测数据并分析（非流式）
+
+    请求参数:
+        - file: Excel文件
+        - class_name: 班级名称
+
+    返回:
+        分析结果
+    """
+    try:
+        # 检查是否有文件
+        if 'file' not in request.files:
+            return jsonify({
+                'success': False,
+                'message': '请上传文件'
+            }), 400
+
+        file = request.files['file']
+        class_name = request.form.get('class_name', '').strip()
+
+        if not class_name:
+            return jsonify({
+                'success': False,
+                'message': '请提供班级名称'
+            }), 400
+
+        if file.filename == '':
+            return jsonify({
+                'success': False,
+                'message': '请选择文件'
+            }), 400
+
+        # 读取文件内容
+        file_content = file.read()
+
+        # 分析数据
+        result = analyze_uploaded_file(file_content, class_name)
+
+        if result.get('success'):
+            return jsonify({
+                'success': True,
+                'data': result
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': result.get('error', '分析失败')
+            }), 500
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'分析失败: {str(e)}'
+        }), 500
+
+
+@app.route('/api/class_data/upload_stream', methods=['POST'])
+def upload_class_data_stream():
+    """
+    上传班级体测数据并流式分析（使用大模型）
+
+    请求参数:
+        - file: Excel文件
+        - class_name: 班级名称
+
+    返回:
+        流式分析过程
+    """
+    try:
+        # 检查是否有文件
+        if 'file' not in request.files:
+            return jsonify({
+                'success': False,
+                'message': '请上传文件'
+            }), 400
+
+        file = request.files['file']
+        class_name = request.form.get('class_name', '').strip()
+
+        if not class_name:
+            return jsonify({
+                'success': False,
+                'message': '请提供班级名称'
+            }), 400
+
+        if file.filename == '':
+            return jsonify({
+                'success': False,
+                'message': '请选择文件'
+            }), 400
+
+        # 读取文件内容
+        file_content = file.read()
+
+        def generate():
+            try:
+                import pandas as pd
+                import io
+
+                # 读取Excel文件
+                df = pd.read_excel(io.BytesIO(file_content))
+
+                # 使用大模型流式分析
+                profile = None
+                for chunk in analyze_with_llm(df, class_name):
+                    # 检查是否是最终的profile结果
+                    if isinstance(chunk, tuple) and len(chunk) == 2 and chunk[0] == "__PROFILE__":
+                        # 这是最终的profile字典
+                        profile = chunk[1]
+                    elif isinstance(chunk, str):
+                        # 流式输出分析过程
+                        yield f"data: {json.dumps({'type': 'progress', 'content': chunk}, ensure_ascii=False)}\n\n"
+
+                # 保存配置
+                if profile:
+                    update_class_profile(class_name, profile)
+                    yield f"data: {json.dumps({'type': 'success', 'profile': profile, 'message': '✅ 分析完成并已保存！'}, ensure_ascii=False)}\n\n"
+                else:
+                    yield f"data: {json.dumps({'type': 'error', 'message': '❌ 分析失败：未获取到分析结果'}, ensure_ascii=False)}\n\n"
+
+                yield "data: [DONE]\n\n"
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                yield f"data: {json.dumps({'type': 'error', 'message': f'❌ 分析失败: {str(e)}'}, ensure_ascii=False)}\n\n"
+                yield "data: [DONE]\n\n"
+
+        return Response(generate(), mimetype='text/event-stream')
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'分析失败: {str(e)}'
+        }), 500
+
+
+@app.route('/api/class_data/analyze/<path:filename>', methods=['POST'])
+def analyze_existing_class_data(filename):
+    """
+    分析class_data文件夹中已有的体测数据文件
+
+    参数:
+        filename: 文件名（例如：一年级1班.xlsx）
+
+    返回:
+        分析结果
+    """
+    try:
+        # 构建文件路径
+        file_path = Path("class_data") / filename
+
+        if not file_path.exists():
+            return jsonify({
+                'success': False,
+                'message': f'文件不存在: {filename}'
+            }), 404
+
+        # 分析数据
+        result = analyze_class_file(file_path)
+
+        return jsonify({
+            'success': True,
+            'data': result
+        })
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'分析失败: {str(e)}'
+        }), 500
+
+
+@app.route('/api/class_data/profiles', methods=['GET'])
+def get_class_profiles_api():
+    """
+    获取所有班级配置
+
+    返回:
+        所有班级配置
+    """
+    try:
+        profiles = get_all_class_profiles()
+        return jsonify({
+            "success": True,
+            "data": profiles,
+            "count": len(profiles)
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": f"获取班级配置失败: {str(e)}"
+        }), 500
+
+
+@app.route('/api/class_data/profile/<class_name>', methods=['DELETE'])
+def delete_class_profile_api(class_name):
+    """
+    删除班级配置
+
+    参数:
+        class_name: 班级名称
+
+    返回:
+        删除结果
+    """
+    try:
+        success = delete_class_profile(class_name)
+
+        if success:
+            return jsonify({
+                "success": True,
+                "message": f"已删除班级配置: {class_name}"
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "message": f"班级配置不存在: {class_name}"
+            }), 404
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": f"删除失败: {str(e)}"
+        }), 500
+
+
+@app.route('/api/class_data/batch_analyze', methods=['POST'])
+def batch_analyze_class_data():
+    """
+    批量分析class_data文件夹中的所有体测数据
+
+    请求参数:
+        - max_count: 最多分析多少个班级（可选）
+
+    返回:
+        批量分析结果
+    """
+    try:
+        data = request.get_json() or {}
+        max_count = data.get('max_count', None)
+
+        # 获取class_data文件夹中的所有Excel文件
+        class_data_dir = Path("class_data")
+        if not class_data_dir.exists():
+            return jsonify({
+                'success': False,
+                'message': 'class_data文件夹不存在'
+            }), 404
+
+        excel_files = list(class_data_dir.glob("*.xlsx")) + list(class_data_dir.glob("*.xls"))
+
+        if max_count:
+            excel_files = excel_files[:max_count]
+
+        results = []
+        for file_path in excel_files:
+            try:
+                result = analyze_class_file(file_path)
+                results.append({
+                    'class_name': file_path.stem,
+                    'success': True,
+                    'data': result
+                })
+            except Exception as e:
+                results.append({
+                    'class_name': file_path.stem,
+                    'success': False,
+                    'error': str(e)
+                })
+
+        return jsonify({
+            'success': True,
+            'total': len(excel_files),
+            'results': results
+        })
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'批量分析失败: {str(e)}'
+        }), 500
+
+
+# ==================== 主程序入口 ====================
+
+if __name__ == '__main__':
+    local_ip = get_local_ip()
+    port = int(os.getenv('PORT', 5000))
+
+    print("=" * 60)
+    print("教师端AI备课助手（整合版本）")
+    print("=" * 60)
+    print(f"本地访问: http://127.0.0.1:{port}")
+    print(f"局域网访问: http://{local_ip}:{port}")
+    print("=" * 60)
+    print("\n可用页面:")
+    print(f"  - 教师端备课助手: http://127.0.0.1:{port}/teacher")
+    print(f"  - 班级数据管理: http://127.0.0.1:{port}/class_data_manager")
+    print("=" * 60)
+
+    app.run(
+        host='0.0.0.0',
+        port=port,
+        debug=True
+    )
+
