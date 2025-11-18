@@ -205,7 +205,6 @@
     .hint {
       color:#415a9a;
       background:#eef3ff;
-      border:1px solid #dbe5ff;
       padding:10px 12px;
       border-radius:8px;
       font-size:13px;
@@ -1111,7 +1110,7 @@
         if (!data.success) throw new Error(data.message || '请求失败');
         if (data.need_more_info) {
           const ask = data.ask || '为更好生成方案，请补充缺失信息。';
-          addMsg('assistant', `<div class="hint">${ask}</div><div class="ask small">已收集：<code>${JSON.stringify(data.collected_so_far)}</code></div>`);
+          addMsg('assistant', `<div class="hint">${ask}</div>`);
           return;
         }
         // 优先显示模型Markdown方案
@@ -1149,7 +1148,7 @@
             console.log('解析到JSON数据:', data);
             if (data.need_more_info) {
               const ask = data.ask || '为更好生成方案，请补充缺失信息。';
-              addMsg('assistant', `<div class="hint">${ask}</div><div class="ask small">已收集：<code>${JSON.stringify(data.collected_so_far || {})}</code></div>`, false);
+              addMsg('assistant', `<div class="hint">${ask}</div>`, false);
               // 更新对话历史
               if (data.conversation_history) {
                 conversationHistory = data.conversation_history;
@@ -1228,17 +1227,8 @@
           // 检查是否是引导语（需要更多信息）
           if (needMoreInfo === '1') {
             console.log('✅ 收到引导语，需要更多信息');
-            // 显示引导语和已收集的参数
-            let collectedDisplay = '';
-            if (collectedParams) {
-              try {
-                const params = JSON.parse(collectedParams);
-                collectedDisplay = `<div class="ask small">已收集：<code>${JSON.stringify(params, null, 2)}</code></div>`;
-              } catch (e) {
-                console.warn('解析X-Collected-Params失败:', e);
-              }
-            }
-            bubble.innerHTML = `<div class="hint">${renderMarkdown(buf)}</div>${collectedDisplay}`;
+            // 显示引导语
+            bubble.innerHTML = `<div class="hint">${renderMarkdown(buf)}</div>`;
           }
 
           // 成功生成方案，更新对话历史

@@ -38,40 +38,34 @@
 
 示例1（用户输入："明天天气晴,帮我给一年级一班生成一个备课方案"，且一年级一班在班级配置中）：
 {{
-  "semantic_query": "",
+  "semantic_query": "明天天气晴,帮我给一年级一班生成一个备课方案",
   "count_query": "",
   "grades_query": "1",
-  "trained_weaknesses": "速度",
   "top_k": 10
 }}
-注意：示例1中的trained_weaknesses="速度"是因为一年级一班在班级配置中，且配置中明确了薄弱项为"速度"。如果班级不在配置中，或用户没有明确提到薄弱项，trained_weaknesses应该返回空字符串""。
 
 示例2（用户输入："一年级二班，球类运动，双人"，且一年级二班在班级配置中）：
 {{
-  "semantic_query": "球类运动",
+  "semantic_query": "一年级二班，球类运动，双人",
   "count_query": "2",
   "grades_query": "1",
-  "trained_weaknesses": "速度、机能",
   "top_k": 10
 }}
-注意：示例2中的trained_weaknesses="速度、机能"是因为一年级二班在班级配置中，且配置中明确了薄弱项为"速度、机能"。如果班级不在配置中，或用户没有明确提到薄弱项，trained_weaknesses应该返回空字符串""。
 
 示例3（用户输入："为一年级设计课课练方案，需要加强学生的速度"）：
 {{
-  "semantic_query": "",
+  "semantic_query": "为一年级设计课课练方案，需要加强学生的速度",
   "count_query": "",
   "grades_query": "1",
-  "trained_weaknesses": "速度",
   "top_k": 10
 }}
-注意：示例3中的trained_weaknesses="速度"是因为用户明确提到了"需要加强学生的速度"，即使没有提到具体班级。
+
 
 示例4（用户输入："生成课课练方案"）：
 {{
   "semantic_query": "",
   "count_query": "",
   "grades_query": "",
-  "trained_weaknesses": "",
   "top_k": 10
 }}
 注意：示例4中所有字段都返回空字符串，因为用户没有明确提到任何信息。

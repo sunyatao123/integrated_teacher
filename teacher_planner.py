@@ -36,6 +36,24 @@ def load_class_profiles() -> Dict[str, Any]:
 # 加载系统提示词
 TEACHER_SYSTEM_PROMPT = load_prompt_template("teacher_system_prompt")
 
+def _normalize_class_name(text: str) -> str:
+    """
+    规范化班级名称，将中文数字转换为阿拉伯数字
+    例如："三年级五班" -> "三年级5班"
+    """
+    # 中文数字到阿拉伯数字的映射
+    cn_num_map = {
+        '一': '1', '二': '2', '三': '3', '四': '4', '五': '5',
+        '六': '6', '七': '7', '八': '8', '九': '9', '十': '10'
+    }
+
+    result = text
+    for cn, num in cn_num_map.items():
+        result = result.replace(cn, num)
+
+    return result
+
+
 def detect_class_and_fill_params(user_text: str, intent: str = "lesson_plan") -> Tuple[bool, Dict[str, Any]]:
     """
     检测用户输入是否包含班级名称，如果包含则自动填充参数
@@ -62,21 +80,26 @@ def detect_class_and_fill_params(user_text: str, intent: str = "lesson_plan") ->
     if not class_profiles:
         return False, {}
 
+    # 规范化用户输入（将中文数字转换为阿拉伯数字）
+    normalized_user_text = _normalize_class_name(user_text)
+
     # 【改进】使用更精确的匹配逻辑
     # 按班级名称长度从长到短排序，优先匹配更长的班级名称（避免"一年级一班"匹配到"一年级"）
     sorted_classes = sorted(class_profiles.items(), key=lambda x: len(x[0]), reverse=True)
 
     # 检测用户输入中是否包含班级名称（完全匹配）
     for class_name, class_info in sorted_classes:
-        if class_name in user_text:
+        # 同时规范化班级名称，确保匹配一致性
+        normalized_class_name = _normalize_class_name(class_name)
+        if normalized_class_name in normalized_user_text:
             # 【新增】验证匹配的有效性：确保不是部分匹配
             # 例如："一年级一班" 不应该匹配 "一年级三班"
             # 通过检查班级名称前后的字符来验证
-            idx = user_text.find(class_name)
+            idx = normalized_user_text.find(normalized_class_name)
             if idx != -1:
                 # 检查前后字符，确保是完整的班级名称
-                before_char = user_text[idx - 1] if idx > 0 else " "
-                after_char = user_text[idx + len(class_name)] if idx + len(class_name) < len(user_text) else " "
+                before_char = normalized_user_text[idx - 1] if idx > 0 else " "
+                after_char = normalized_user_text[idx + len(normalized_class_name)] if idx + len(normalized_class_name) < len(normalized_user_text) else " "
 
                 # 【修复】改进匹配逻辑：
                 # 1. 如果班级名称本身包含"班"（如"一年级一班"），后面不应该再有数字或"班"
@@ -89,11 +112,11 @@ def detect_class_and_fill_params(user_text: str, intent: str = "lesson_plan") ->
                     is_valid_match = False
 
                 # 如果班级名称包含"班"，后面不应该再有数字或"班"
-                if "班" in class_name and (after_char.isdigit() or after_char == "班"):
+                if "班" in normalized_class_name and (after_char.isdigit() or after_char == "班"):
                     is_valid_match = False
 
                 # 如果班级名称不包含"班"，后面不应该有数字（但可以有"班"）
-                if "班" not in class_name and after_char.isdigit():
+                if "班" not in normalized_class_name and after_char.isdigit():
                     is_valid_match = False
 
                 if is_valid_match:
@@ -414,7 +437,9 @@ def build_plan_messages(
             class_profiles = load_class_profiles()
             # 查找匹配的班级配置
             for class_name, profile in class_profiles.items():
-                if grades_query in class_name or class_name.startswith(f"{grades_query}年级"):
+                # 修复匹配逻辑：使用 profile 中的 grades_query 进行匹配
+                profile_grades = profile.get("grades_query", "")
+                if profile_grades == str(grades_query):
                     weakness_details = profile.get("weakness_details", {})
                     student_groups = profile.get("student_groups", {})
 
@@ -430,18 +455,35 @@ def build_plan_messages(
                         for group_key, group_info in student_groups.items():
                             count = group_info.get("count", 0)
                             weakness_items = group_info.get("weakness_items", [])
-                            students = group_info.get("students", [])
+                            student_details = group_info.get("student_details", [])
 
                             # 生成分组描述
-                            group_desc = f"     * {group_key}薄弱组：{count}人"
-                            if weakness_items:
-                                group_desc += f"（薄弱项目：{', '.join(weakness_items[:3])}）"
-                            if students and len(students) <= 5:
-                                # 如果学生人数不多，可以列出姓名
-                                group_desc += f" - {', '.join(students)}"
-                            class_analysis_text += group_desc + "\n"
+                            class_analysis_text += f"     * {group_key}薄弱组：{count}人\n"
 
-                        class_analysis_text += "\n   - **重要**：请根据上述学生分组，为不同薄弱项的学生推荐不同的练习！\n"
+                            # 添加薄弱项目列表
+                            if weakness_items:
+                                class_analysis_text += f"       薄弱项目：{', '.join(weakness_items)}\n"
+
+                            # 添加学生名单（包含序号和学号）
+                            if student_details:
+                                class_analysis_text += f"       学生名单：\n"
+                                for student in student_details:
+                                    student_num = student.get("序号", "")
+                                    student_id = student.get("学生编号", "")
+                                    student_name = student.get("姓名", "")
+                                    gender = student.get("性别", "")
+
+                                    # 构建学生信息字符串
+                                    if student_name:
+                                        student_info = f"{student_name}"
+                                    else:
+                                        student_info = f"学生{student_num}"
+
+                                    class_analysis_text += f"         • {student_info} [{student_id}]\n"
+
+                            class_analysis_text += "\n"
+
+                        class_analysis_text += "   - **重要**：请在方案开头展示上述学生分组情况，并根据分组为不同薄弱项的学生推荐不同的练习！\n"
 
         if not class_analysis_text:
             class_analysis_text = "   - 对于其他年级和班级，先不用描述班级体测情况。"
