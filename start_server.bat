@@ -54,17 +54,23 @@ if not exist ".env" (
     echo [警告] 未找到.env文件，请创建.env文件并配置以下环境变量：
     echo   - SILICONFLOW_API_KEY=你的API密钥
     echo   - SEARCH_BASE_URL=检索服务地址（可选，默认http://127.0.0.1:8001）
+    echo   - HOST=监听地址（可选，默认0.0.0.0，允许所有IP访问）
     echo   - PORT=端口号（可选，默认5000）
     echo   - DEBUG_AI=是否开启调试（可选，默认1）
     echo.
     echo 示例.env文件内容：
     echo SILICONFLOW_API_KEY=sk-xxxxxxxxxxxxxxxx
     echo SEARCH_BASE_URL=http://127.0.0.1:8001
+    echo HOST=0.0.0.0
     echo PORT=5000
     echo DEBUG_AI=1
     echo.
     pause
 )
+
+REM 设置默认环境变量（如果.env文件中没有设置）
+if not defined HOST set HOST=0.0.0.0
+if not defined PORT set PORT=5000
 
 REM 启动服务器
 echo [提示] 启动服务器...

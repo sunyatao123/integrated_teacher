@@ -8,6 +8,7 @@ from flask import Flask, render_template, request, jsonify, Response, send_file
 from flask_cors import CORS
 import os
 import json
+import argparse
 from typing import List
 from pathlib import Path
 import pandas as pd
@@ -185,10 +186,15 @@ def teacher_plan():
         missing_fields = []
 
         if is_sports_meeting:
-            # 全员运动会：需要操场条件信息
-            if not params.get("semantic_query"):
+            # 全员运动会：需要操场条件、年级、人数等信息
+            if not params.get("semantic_query") or not params.get("grades_query") or not params.get("count_query"):
                 need_guidance = True
-                missing_fields.append("semantic_query")
+                if not params.get("semantic_query"):
+                    missing_fields.append("semantic_query")
+                if not params.get("grades_query"):
+                    missing_fields.append("grades_query")
+                if not params.get("count_query"):
+                    missing_fields.append("count_query")
         elif is_lesson_plan:
             # 课课练：需要班级或薄弱项，满足任一即可
             has_grades = bool(params.get("grades_query"))
@@ -321,11 +327,15 @@ def teacher_plan_stream():
 
             missing_fields = []
             if is_sports_meeting:
-                # 全员运动会：需要操场跑道规模等信息（semantic_query）
+                # 全员运动会：需要操场条件、年级、人数等信息
                 if os.getenv('DEBUG_AI','1')=='1':
-                    print(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}")
+                    print(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}, grades={grades_query}, count={count_query}")
                 if not semantic_query:
                     missing_fields.append('semantic_query')
+                if not grades_query:
+                    missing_fields.append('grades_query')
+                if not count_query:
+                    missing_fields.append('count_query')
                 if missing_fields and os.getenv('DEBUG_AI','1')=='1':
                     print("[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失=", missing_fields)
             elif is_lesson_plan:
@@ -1095,14 +1105,40 @@ def batch_analyze_class_data():
 # ==================== 主程序入口 ====================
 
 if __name__ == '__main__':
+    # 解析命令行参数
+    parser = argparse.ArgumentParser(description='教师端AI备课助手Web应用')
+    parser.add_argument('--host', '-H', type=str, default=None,
+                        help='监听地址 (默认: 0.0.0.0，允许所有IP访问)')
+    parser.add_argument('--port', '-p', type=int, default=None,
+                        help='端口号 (默认: 5000)')
+    parser.add_argument('--debug', action='store_true',
+                        help='开启调试模式')
+    parser.add_argument('--no-debug', dest='debug', action='store_false',
+                        help='关闭调试模式')
+    parser.set_defaults(debug=None)  # 默认不设置，使用环境变量或默认值
+    
+    args = parser.parse_args()
+    
+    # 优先级：命令行参数 > 环境变量 > 默认值
+    host = args.host if args.host is not None else os.getenv('HOST', '0.0.0.0')
+    port = args.port if args.port is not None else int(os.getenv('PORT', 5000))
+    
+    # 调试模式：命令行参数 > 环境变量 > 默认值
+    if args.debug is not None:
+        debug = args.debug
+    else:
+        debug_env = os.getenv('DEBUG', 'True')
+        debug = debug_env.lower() == 'true'
+
     local_ip = get_local_ip()
-    port = int(os.getenv('PORT', 5000))
 
     print("=" * 60)
     print("教师端AI备课助手（整合版本）")
     print("=" * 60)
+    print(f"监听地址: {host}:{port}")
     print(f"本地访问: http://127.0.0.1:{port}")
     print(f"局域网访问: http://{local_ip}:{port}")
+    print(f"调试模式: {'开启' if debug else '关闭'}")
     print("=" * 60)
     print("\n可用页面:")
     print(f"  - 教师端备课助手: http://127.0.0.1:{port}/teacher")
@@ -1110,8 +1146,8 @@ if __name__ == '__main__':
     print("=" * 60)
 
     app.run(
-        host='0.0.0.0',
+        host=host,
         port=port,
-        debug=True
+        debug=debug
     )
 

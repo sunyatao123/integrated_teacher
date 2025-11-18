@@ -326,9 +326,13 @@ def build_plan_messages(
         # 判断缺失字段
         missing_info = []
         if is_sports_meeting:
-            # 全员运动会：需要操场跑道规模等信息（semantic_query）
+            # 全员运动会：需要操场条件、年级、人数等信息
             if not params.get("semantic_query"):
-                missing_info.append("操场条件、跑道数量、场地规模等信息")
+                missing_info.append("操场条件、跑道数量、场地规模")
+            if not params.get("grades_query"):
+                missing_info.append("参与年级")
+            if not params.get("count_query"):
+                missing_info.append("参与学生人数")
         elif is_lesson_plan:
             # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
             has_grades = bool(params.get("grades_query"))
