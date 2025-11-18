@@ -756,6 +756,34 @@
     const sendBtn = document.getElementById('send');
     // 对话历史记录
     let conversationHistory = [];
+    let chatRestored = false; // 标记是否恢复了对话
+
+    // 检查是否从班级管理系统返回
+    const returnFromClassManager = sessionStorage.getItem('returnFromClassManager');
+    if (returnFromClassManager === 'true') {
+      // 恢复对话历史
+      const savedHistory = sessionStorage.getItem('conversationHistory');
+      if (savedHistory) {
+        try {
+          conversationHistory = JSON.parse(savedHistory);
+          chatRestored = true;
+          console.log('✅ 已恢复对话历史，共', conversationHistory.length, '条记录');
+        } catch (e) {
+          console.error('恢复对话历史失败:', e);
+        }
+      }
+
+      // 恢复聊天界面
+      const savedChat = sessionStorage.getItem('chatHTML');
+      if (savedChat) {
+        chatEl.innerHTML = savedChat;
+        chatEl.scrollTop = chatEl.scrollHeight;
+        console.log('✅ 已恢复聊天界面');
+      }
+
+      // 清除标记
+      sessionStorage.removeItem('returnFromClassManager');
+    }
 
     // 配置 marked.js
     marked.setOptions({
@@ -1033,8 +1061,10 @@
       chatEl.scrollTop = chatEl.scrollHeight;
     }
 
-    // 初始系统提示
-    addMsg('assistant', '您好！我是AI备课助理 🎓\n\n我可以帮您生成：\n- **课课练方案**：日常体育课训练计划\n- **全员运动会方案**：学校运动会组织方案\n\n请告诉我您的需求，我会引导您补充必要信息。');
+    // 初始系统提示（只在没有恢复对话时显示）
+    if (!chatRestored) {
+      addMsg('assistant', '您好！我是AI备课助理 🎓\n\n我可以帮您生成：\n- **课课练方案**：日常体育课训练计划\n- **全员运动会方案**：学校运动会组织方案\n\n请告诉我您的需求，我会引导您补充必要信息。');
+    }
 
     document.getElementById('btnInit').onclick = () => {
       const text = '你好，我想了解一下你能做什么？';
@@ -1043,13 +1073,13 @@
     };
 
     document.getElementById('btnDemo1').onclick = () => {
-      const text = '一年级一班，球类运动，双人配合，需要提升速度';
+      const text = '帮我生成一份课课练方案，一年级一班，球类运动，双人配合，需要提升速度';
       addMsg('user', text);
       handlePlanStream(text);
     };
 
     document.getElementById('btnDemo2').onclick = () => {
-      const text = '三年级，想要组织一个运动会，球类项目，40人参加';
+      const text = '帮我生成一个全员运动会方案，三年级，球类项目，100人参加';
       addMsg('user', text);
       handlePlanStream(text);
     };
@@ -1218,6 +1248,10 @@
           if (conversationHistory.length > 10) {
             conversationHistory = conversationHistory.slice(-10);
           }
+
+          // 保存对话历史和聊天界面到sessionStorage（用于从班级管理系统返回时恢复）
+          sessionStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+          sessionStorage.setItem('chatHTML', chatEl.innerHTML);
         }
       } catch (e) {
         console.error('流式生成异常:', e);
