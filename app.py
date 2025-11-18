@@ -12,6 +12,10 @@ from typing import List
 from pathlib import Path
 import pandas as pd
 from io import BytesIO
+from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml.ns import qn
 
 # 导入教师端备课模块
 from teacher_planner import (
@@ -764,11 +768,20 @@ def download_class_excel(class_name):
 
                     if 'student_details' in group_info and group_info['student_details']:
                         for student in group_info['student_details']:
+                            # 优先获取学生编号，尝试多个可能的字段
+                            student_id = student.get('学生编号', '') or student.get('学号', '') or student.get('编号', '')
+                            student_name = student.get('姓名', '')
+                            student_index = student.get('序号', '')
+
+                            # 如果没有姓名，使用"学生X"
+                            if not student_name and student_index:
+                                student_name = f'学生{student_index}'
+
                             student_row = {
                                 '分组': group_key,
                                 '薄弱项目': weakness_items,
-                                '姓名': student.get('姓名', ''),
-                                '学号': student.get('学号', student.get('学生编号', '')),
+                                '学生编号': str(student_id) if student_id else '',
+                                '姓名': student_name,
                                 '性别': student.get('性别', '')
                             }
                             all_students.append(student_row)
@@ -803,6 +816,216 @@ def download_class_excel(class_name):
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             as_attachment=True,
             download_name=f'{class_name}_配置.xlsx'
+        )
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": f"下载失败: {str(e)}"
+        }), 500
+
+
+@app.route('/api/class_data/download_word/<class_name>', methods=['GET'])
+def download_class_word(class_name):
+    """
+    下载班级配置的Word文档（美化版）
+
+    参数:
+        class_name: 班级名称
+
+    返回:
+        Word文件
+    """
+    try:
+        # 获取班级配置
+        profiles = get_all_class_profiles()
+
+        if class_name not in profiles:
+            return jsonify({
+                "success": False,
+                "message": f"班级配置不存在: {class_name}"
+            }), 404
+
+        profile = profiles[class_name]
+
+        # 创建Word文档
+        doc = Document()
+
+        # 设置默认字体为中文字体（解决乱码问题）
+        style = doc.styles['Normal']
+        style.font.name = '宋体'
+        style._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+        # 添加标题
+        title = doc.add_heading(f'{class_name} 体测数据分析报告', 0)
+        title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        if title.runs:
+            title.runs[0].font.size = Pt(20)
+            title.runs[0].font.name = '宋体'
+            title.runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+        # 添加空行
+        doc.add_paragraph()
+
+        # 1. 班级基本信息
+        heading1 = doc.add_heading('一、班级基本信息', 1)
+        for run in heading1.runs:
+            run.font.name = '宋体'
+            run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+        # 创建基本信息表格
+        table1 = doc.add_table(rows=4, cols=2)
+        table1.style = 'Light Grid Accent 1'
+
+        # 设置表头
+        cells = table1.rows[0].cells
+        cells[0].text = '班级名称'
+        cells[1].text = class_name
+
+        cells = table1.rows[1].cells
+        cells[0].text = '年级'
+        cells[1].text = f"{profile.get('grades_query', '')}年级"
+
+        cells = table1.rows[2].cells
+        cells[0].text = '薄弱项'
+        cells[1].text = ', '.join(profile.get('weaknesses', []))
+
+        cells = table1.rows[3].cells
+        cells[0].text = '分析描述'
+        cells[1].text = profile.get('description', '')
+
+        # 设置表格样式（添加字体设置）
+        for row in table1.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    for run in paragraph.runs:
+                        run.font.name = '宋体'
+                        run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+            # 第一列加粗
+            if row.cells[0].paragraphs and row.cells[0].paragraphs[0].runs:
+                row.cells[0].paragraphs[0].runs[0].font.bold = True
+
+        doc.add_paragraph()
+
+        # 2. 学生分组详情
+        if 'student_groups' in profile and profile['student_groups']:
+            heading2 = doc.add_heading('二、学生分组详情', 1)
+            for run in heading2.runs:
+                run.font.name = '宋体'
+                run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+            for group_key, group_info in profile['student_groups'].items():
+                # 分组标题
+                group_heading = doc.add_heading(f'{group_key}薄弱组（{group_info["count"]}人）', 2)
+                for run in group_heading.runs:
+                    run.font.name = '宋体'
+                    run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+                # 薄弱项目
+                weakness_items = ', '.join(group_info.get('weakness_items', []))
+                p = doc.add_paragraph(f'体测不及格项目：{weakness_items}')
+                for run in p.runs:
+                    run.font.name = '宋体'
+                    run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+                # 学生列表表格
+                if 'student_details' in group_info and group_info['student_details']:
+                    students = group_info['student_details']
+
+                    # 创建表格（表头 + 学生行）
+                    table2 = doc.add_table(rows=len(students) + 1, cols=3)
+                    table2.style = 'Light List Accent 1'
+
+                    # 表头
+                    header_cells = table2.rows[0].cells
+                    header_cells[0].text = '学生编号'
+                    header_cells[1].text = '姓名'
+                    header_cells[2].text = '性别'
+
+                    # 表头样式
+                    for cell in header_cells:
+                        if cell.paragraphs and cell.paragraphs[0].runs:
+                            cell.paragraphs[0].runs[0].font.bold = True
+                            cell.paragraphs[0].runs[0].font.size = Pt(11)
+                            cell.paragraphs[0].runs[0].font.name = '宋体'
+                            cell.paragraphs[0].runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+                    # 填充学生数据
+                    for i, student in enumerate(students, start=1):
+                        row_cells = table2.rows[i].cells
+                        # 优先获取学生编号，尝试多个可能的字段
+                        student_id = student.get('学生编号', '') or student.get('学号', '') or student.get('编号', '')
+                        student_name = student.get('姓名', '')
+                        student_index = student.get('序号', '')
+
+                        # 如果没有姓名，使用"学生X"
+                        if not student_name and student_index:
+                            student_name = f'学生{student_index}'
+
+                        row_cells[0].text = str(student_id) if student_id else ''
+                        row_cells[1].text = student_name
+                        row_cells[2].text = student.get('性别', '')
+
+                        # 设置字体
+                        for cell in row_cells:
+                            for paragraph in cell.paragraphs:
+                                for run in paragraph.runs:
+                                    run.font.name = '宋体'
+                                    run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+                doc.add_paragraph()
+
+        # 3. 体测统计
+        if 'test_stats' in profile and profile['test_stats']:
+            heading3 = doc.add_heading('三、体测统计', 1)
+            for run in heading3.runs:
+                run.font.name = '宋体'
+                run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+            stats = profile['test_stats']
+
+            # 创建统计表格
+            table3 = doc.add_table(rows=len(stats) + 1, cols=6)
+            table3.style = 'Light Grid Accent 1'
+
+            # 表头
+            header_cells = table3.rows[0].cells
+            headers = ['体测项目', '维度', '优秀人数', '良好人数', '及格人数', '不及格人数']
+            for i, header in enumerate(headers):
+                header_cells[i].text = header
+                if header_cells[i].paragraphs and header_cells[i].paragraphs[0].runs:
+                    header_cells[i].paragraphs[0].runs[0].font.bold = True
+                    header_cells[i].paragraphs[0].runs[0].font.name = '宋体'
+                    header_cells[i].paragraphs[0].runs[0]._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+            # 填充数据
+            for i, (item, stat) in enumerate(stats.items(), start=1):
+                row_cells = table3.rows[i].cells
+                row_cells[0].text = item
+                row_cells[1].text = stat.get('dimension', '')
+                row_cells[2].text = str(stat.get('excellent', 0))
+                row_cells[3].text = str(stat.get('good', 0))
+                row_cells[4].text = str(stat.get('pass', 0))
+                row_cells[5].text = str(stat.get('fail', 0))
+
+                # 设置字体
+                for cell in row_cells:
+                    for paragraph in cell.paragraphs:
+                        for run in paragraph.runs:
+                            run.font.name = '宋体'
+                            run._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+
+        # 保存到BytesIO
+        output = BytesIO()
+        doc.save(output)
+        output.seek(0)
+
+        # 返回Word文件
+        return send_file(
+            output,
+            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            as_attachment=True,
+            download_name=f'{class_name}_配置.docx'
         )
 
     except Exception as e:

@@ -383,9 +383,15 @@
       background:#fafbfe;
     }
 
+    /* 图片容器 */
+    .bubble .img-container {
+      text-align: center;
+      margin: 16px 0;
+    }
+
     .bubble img {
       display:block;
-      margin:16px auto;
+      margin:8px auto;
       max-width:260px;
       width:auto;
       height:auto;
@@ -400,6 +406,15 @@
       display:none;
     }
 
+    /* 图片名称 */
+    .bubble .img-name {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+      text-align: center;
+      font-style: italic;
+    }
+
     /* 图片加载失败占位符 */
     .img-placeholder {
       padding: 12px;
@@ -410,6 +425,13 @@
       font-size: 12px;
       text-align: center;
       margin: 12px 0;
+    }
+
+    /* 优化横线样式 */
+    .bubble hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 16px 0;
     }
 
     /* JSON渲染专用样式 */
@@ -718,7 +740,6 @@
         <button class="chip" id="btnInit">💬 开始对话</button>
         <button class="chip" id="btnDemo1">📝 示例：课课练</button>
         <button class="chip" id="btnDemo2">🏃 示例：全员运动会</button>
-        <button class="chip" id="btnClear" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🗑️ 清空对话</button>
       </div>
       <div class="chat" id="chat"></div>
       <div class="inputbar">
@@ -733,71 +754,8 @@
     const chatEl = document.getElementById('chat');
     const inputEl = document.getElementById('input');
     const sendBtn = document.getElementById('send');
-
-    // 对话历史记录 - 从localStorage恢复
+    // 对话历史记录
     let conversationHistory = [];
-
-    // 从localStorage加载对话历史
-    function loadChatHistory() {
-      try {
-        const savedHistory = localStorage.getItem('conversationHistory');
-        const savedMessages = localStorage.getItem('chatMessages');
-
-        if (savedHistory) {
-          conversationHistory = JSON.parse(savedHistory);
-        }
-
-        if (savedMessages) {
-          const messages = JSON.parse(savedMessages);
-          // 恢复聊天消息到界面
-          messages.forEach(msg => {
-            addMsg(msg.role, msg.content, false); // false表示不保存到localStorage（避免重复）
-          });
-        }
-      } catch (e) {
-        console.error('加载对话历史失败:', e);
-      }
-    }
-
-    // 保存对话历史到localStorage
-    function saveChatHistory() {
-      try {
-        localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
-      } catch (e) {
-        console.error('保存对话历史失败:', e);
-      }
-    }
-
-    // 保存聊天消息到localStorage
-    function saveChatMessages() {
-      try {
-        const messages = [];
-        const chatWraps = chatEl.querySelectorAll('.chat-wrap');
-        chatWraps.forEach(wrap => {
-          const role = wrap.classList.contains('user') ? 'user' : 'assistant';
-          const bubble = wrap.querySelector('.bubble');
-          if (bubble) {
-            messages.push({
-              role: role,
-              content: bubble.getAttribute('data-raw-content') || bubble.innerHTML
-            });
-          }
-        });
-        localStorage.setItem('chatMessages', JSON.stringify(messages));
-      } catch (e) {
-        console.error('保存聊天消息失败:', e);
-      }
-    }
-
-    // 清空对话历史
-    function clearChatHistory() {
-      conversationHistory = [];
-      localStorage.removeItem('conversationHistory');
-      localStorage.removeItem('chatMessages');
-      chatEl.innerHTML = '';
-      // 重新显示初始系统提示
-      addMsg('assistant', '您好！我是AI备课助理 🎓\n\n我可以帮您生成：\n- **课课练方案**：日常体育课训练计划\n- **全员运动会方案**：学校运动会组织方案\n\n请告诉我您的需求，我会引导您补充必要信息。', false);
-    }
 
     // 配置 marked.js
     marked.setOptions({
@@ -917,14 +875,38 @@
         const fixedMd = fixImageMarkdown(md);
 
         // 直接使用marked.parse
-        const html = marked.parse(fixedMd);
+        let html = marked.parse(fixedMd);
 
         // 使用DOMPurify清理HTML
-        const sanitized = DOMPurify.sanitize(html, {
+        let sanitized = DOMPurify.sanitize(html, {
           ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'b', 'i',
                          'ul', 'ol', 'li', 'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
                          'blockquote', 'code', 'pre', 'hr', 'div', 'span', 'del', 's'],
           ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel']
+        });
+
+        // 处理图片：识别图片后面紧跟的文字作为图片名称
+        // 匹配模式：<p><img...></p> 后面紧跟 <p>图X ...</p>
+        sanitized = sanitized.replace(/<p><img([^>]+)><\/p>\s*<p>(图\d+[^<]+)<\/p>/g, (match, attrs, caption) => {
+          return `<div class="img-container">
+            <img${attrs}>
+            <div class="img-name">${caption.trim()}</div>
+          </div>`;
+        });
+
+        // 处理没有图注的图片（兜底）
+        // 只处理还在<p>标签中的图片
+        sanitized = sanitized.replace(/<p><img([^>]+)><\/p>/g, (match, attrs) => {
+          const altMatch = attrs.match(/alt="([^"]+)"/);
+          if (altMatch && altMatch[1]) {
+            return `<div class="img-container">
+              <img${attrs}>
+              <div class="img-name">${altMatch[1]}</div>
+            </div>`;
+          }
+          return `<div class="img-container">
+            <img${attrs}>
+          </div>`;
         });
 
         return sanitized;
@@ -1025,15 +1007,12 @@
       }
     }
 
-    function addMsg(role, text, isMarkdown = (role === 'assistant'), saveToStorage = true) {
+    function addMsg(role, text, isMarkdown = (role === 'assistant')) {
       const wrap = document.createElement('div');
-      wrap.className = 'chat-wrap ' + (role === 'assistant' ? 'assistant' : 'user');
+      wrap.className = 'msg ' + (role === 'assistant' ? 'assistant' : 'user');
       const bubble = document.createElement('div');
       bubble.className = 'bubble';
       bubble.innerHTML = isMarkdown ? renderMarkdown(text) : (text || '').replace(/\n/g, '<br/>');
-
-      // 保存原始内容用于localStorage
-      bubble.setAttribute('data-raw-content', text);
 
       // 为所有图片添加加载错误处理
       if (isMarkdown) {
@@ -1052,20 +1031,10 @@
       wrap.appendChild(bubble);
       chatEl.appendChild(wrap);
       chatEl.scrollTop = chatEl.scrollHeight;
-
-      // 保存到localStorage
-      if (saveToStorage) {
-        saveChatMessages();
-      }
     }
 
-    // 页面加载时恢复对话历史
-    loadChatHistory();
-
-    // 如果没有历史消息，显示初始系统提示
-    if (chatEl.children.length === 0) {
-      addMsg('assistant', '您好！我是AI备课助理 🎓\n\n我可以帮您生成：\n- **课课练方案**：日常体育课训练计划\n- **全员运动会方案**：学校运动会组织方案\n\n请告诉我您的需求，我会引导您补充必要信息。', true, false);
-    }
+    // 初始系统提示
+    addMsg('assistant', '您好！我是AI备课助理 🎓\n\n我可以帮您生成：\n- **课课练方案**：日常体育课训练计划\n- **全员运动会方案**：学校运动会组织方案\n\n请告诉我您的需求，我会引导您补充必要信息。');
 
     document.getElementById('btnInit').onclick = () => {
       const text = '你好，我想了解一下你能做什么？';
@@ -1083,12 +1052,6 @@
       const text = '三年级，想要组织一个运动会，球类项目，40人参加';
       addMsg('user', text);
       handlePlanStream(text);
-    };
-
-    document.getElementById('btnClear').onclick = () => {
-      if (confirm('确定要清空所有对话记录吗？')) {
-        clearChatHistory();
-      }
     };
 
     sendBtn.onclick = async () => {
@@ -1255,8 +1218,6 @@
           if (conversationHistory.length > 10) {
             conversationHistory = conversationHistory.slice(-10);
           }
-          // 保存到localStorage
-          saveChatHistory();
         }
       } catch (e) {
         console.error('流式生成异常:', e);

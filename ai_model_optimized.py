@@ -22,8 +22,8 @@ class OptimizedAIModel:
             "https://api.siliconflow.cn/v1"
         )
         self.model = os.getenv(
-            "SILICONFLOW_MODEL", 
-            "deepseek-ai/DeepSeek-V3.1"
+            "SILICONFLOW_MODEL",
+            "deepseek-ai/DeepSeek-V3"
         )
         
         # 初始化OpenAI客户端

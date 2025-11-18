@@ -51,7 +51,18 @@ def analyze_student_weaknesses(df: pd.DataFrame) -> Dict[str, List[str]]:
 
     # 遍历每个学生
     for idx, row in df.iterrows():
-        student_name = row.get('姓名', f'学生{idx+1}')
+        # 优先使用学生编号作为标识，其次是姓名，最后才是序号
+        # 尝试从多个可能的列获取学生编号
+        student_id = row.get('学生编号', '') or row.get('学号', '') or row.get('编号', '')
+        student_name = row.get('姓名', '')
+
+        if student_id:
+            student_key = str(student_id)  # 使用学生编号作为主键
+        elif student_name:
+            student_key = student_name  # 使用姓名作为主键
+        else:
+            student_key = f'学生{idx+1}'  # 最后才使用序号
+
         weaknesses = set()  # 使用集合避免重复
 
         # 检查每个体测项目（使用全局WEAKNESS_MAPPING）
@@ -74,7 +85,7 @@ def analyze_student_weaknesses(df: pd.DataFrame) -> Dict[str, List[str]]:
 
         # 只保存有薄弱项的学生
         if weaknesses:
-            student_weaknesses[student_name] = sorted(list(weaknesses))
+            student_weaknesses[student_key] = sorted(list(weaknesses))
 
     return student_weaknesses
 
@@ -104,27 +115,40 @@ def group_students_by_weakness(student_weaknesses: Dict[str, List[str]], df: pd.
 
     # 遍历每个学生，只看班级薄弱项的表现
     for idx, row in df.iterrows():
-        student_name = row.get('姓名', f'学生{idx+1}')
+        # 优先使用学生编号作为标识，其次是姓名，最后才是序号
+        # 尝试从多个可能的列获取学生编号
+        student_id = row.get('学生编号', '') or row.get('学号', '') or row.get('编号', '')
+        student_name = row.get('姓名', '')
+
+        if student_id:
+            student_key = str(student_id)  # 使用学生编号作为主键
+        elif student_name:
+            student_key = student_name  # 使用姓名作为主键
+        else:
+            student_key = f'学生{idx+1}'  # 最后才使用序号
 
         # 获取学生的详细信息
         student_info = {
-            "姓名": student_name
+            "序号": idx + 1,  # 添加序号字段，从1开始
+            "学生编号": str(student_id) if student_id else '',
+            "姓名": student_name if student_name else ''  # 如果没有姓名，保持为空
         }
 
-        # 尝试获取学号（如果存在）
+        # 尝试获取学号（如果存在，与学生编号不同）
         if '学号' in df.columns:
-            student_info["学号"] = row.get('学号', '')
+            student_info["学号"] = str(row.get('学号', '')) if row.get('学号', '') else ''
 
         # 尝试获取其他可能的学生信息字段
         for col in ['班级', '性别', '年龄']:
             if col in df.columns:
-                student_info[col] = row.get(col, '')
+                val = row.get(col, '')
+                student_info[col] = str(val) if val else ''
 
         # 只检查班级薄弱项对应的维度
         student_class_weaknesses = []
-        if student_name in student_weaknesses:
+        if student_key in student_weaknesses:
             # 获取该学生的所有薄弱项
-            all_weaknesses = student_weaknesses[student_name]
+            all_weaknesses = student_weaknesses[student_key]
             # 只保留属于班级薄弱项的部分
             student_class_weaknesses = [w for w in all_weaknesses if w in class_weaknesses]
 
@@ -144,7 +168,7 @@ def group_students_by_weakness(student_weaknesses: Dict[str, List[str]], df: pd.
             }
 
         groups[group_key]["count"] += 1
-        groups[group_key]["students"].append(student_name)
+        groups[group_key]["students"].append(student_key)
         groups[group_key]["student_details"].append(student_info)
 
     # 为每个分组找出对应的体测项目（使用全局WEAKNESS_MAPPING）

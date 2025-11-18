@@ -289,7 +289,7 @@
     <div class="container">
         <div class="nav-header">
             <h1>📊 班级体测数据管理系统</h1>
-            <a href="/" class="nav-link">← 返回主页</a>
+            <a href="/" class="nav-link" onclick="sessionStorage.setItem('returnFromClassManager', 'true')">← 返回主页</a>
         </div>
 
         <div id="message" class="message"></div>
@@ -456,8 +456,28 @@
                                 if (groupInfo.student_details && groupInfo.student_details.length > 0) {
                                     detailsHtml += '<div class="student-list">';
                                     groupInfo.student_details.forEach(student => {
-                                        const studentId = student['学号'] || student['学生编号'] || '';
-                                        const displayText = studentId ? `${student['姓名']}(${studentId})` : student['姓名'];
+                                        const studentId = student['学生编号'] || student['学号'] || '';
+                                        const studentName = student['姓名'] || '';
+                                        const studentIndex = student['序号'] || '';
+
+                                        // 优化显示：学生X（学生编号）或 姓名（学生编号）
+                                        let displayText = '';
+                                        if (studentName) {
+                                            // 有姓名：显示"姓名 [学生编号]"
+                                            if (studentId) {
+                                                displayText = `${studentName} <span style="color:#666; font-size:11px;">[${studentId}]</span>`;
+                                            } else {
+                                                displayText = studentName;
+                                            }
+                                        } else {
+                                            // 没有姓名：显示"学生X [学生编号]"
+                                            const indexText = studentIndex ? `学生${studentIndex}` : '学生';
+                                            if (studentId) {
+                                                displayText = `${indexText} <span style="color:#666; font-size:11px;">[${studentId}]</span>`;
+                                            } else {
+                                                displayText = indexText;
+                                            }
+                                        }
                                         detailsHtml += `<span class="student-tag">${displayText}</span>`;
                                     });
                                     detailsHtml += '</div>';
@@ -483,7 +503,8 @@
                             </div>
                             ${detailsHtml}
                             <div style="margin-top:15px; padding-top:15px; border-top:1px solid #eee;">
-                                <button class="btn-download" onclick="event.stopPropagation(); downloadClassData('${className}')">📥 下载配置</button>
+                                <button class="btn-download" onclick="event.stopPropagation(); downloadClassWord('${className}')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">📄 下载Word</button>
+                                <button class="btn-download" onclick="event.stopPropagation(); downloadClassExcel('${className}')" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">📊 下载Excel</button>
                                 <button onclick="event.stopPropagation(); deleteClass('${className}')">🗑️ 删除配置</button>
                             </div>
                         `;
@@ -649,8 +670,27 @@
                                 <div style="font-size:12px; opacity:0.85; margin-top:6px;">
                                     <div style="font-weight:500; margin-bottom:4px;">学生名单：</div>
                                     ${studentDetails.map(s => {
-                                        let info = s.姓名;
-                                        if (s.学号) info += ` (学号:${s.学号})`;
+                                        const studentName = s.姓名 || '';
+                                        const studentId = s.学生编号 || s.学号 || '';
+                                        const studentIndex = s.序号 || '';
+
+                                        let info = '';
+                                        if (studentName) {
+                                            // 有姓名：显示"姓名 [学生编号]"
+                                            if (studentId) {
+                                                info = `${studentName} <span style="color:#999; font-size:11px;">[${studentId}]</span>`;
+                                            } else {
+                                                info = studentName;
+                                            }
+                                        } else {
+                                            // 没有姓名：显示"学生X [学生编号]"
+                                            const indexText = studentIndex ? `学生${studentIndex}` : '学生';
+                                            if (studentId) {
+                                                info = `${indexText} <span style="color:#999; font-size:11px;">[${studentId}]</span>`;
+                                            } else {
+                                                info = indexText;
+                                            }
+                                        }
                                         return `<div style="padding:2px 0;">• ${info}</div>`;
                                     }).join('')}
                                 </div>
@@ -820,13 +860,30 @@
             }
         }
 
-        // 下载班级配置（Excel格式）
-        async function downloadClassData(className) {
+        // 下载班级配置（Word格式）
+        async function downloadClassWord(className) {
             try {
-                // 直接下载Excel文件
+                const downloadUrl = `${API_BASE}/api/class_data/download_word/${encodeURIComponent(className)}`;
+
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${className}_配置.docx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showMessage(`${className} 配置已下载为Word文档`, 'success');
+            } catch (error) {
+                console.error('下载失败:', error);
+                showMessage('下载失败', 'error');
+            }
+        }
+
+        // 下载班级配置（Excel格式）
+        async function downloadClassExcel(className) {
+            try {
                 const downloadUrl = `${API_BASE}/api/class_data/download/${encodeURIComponent(className)}`;
 
-                // 创建隐藏的a标签进行下载
                 const link = document.createElement('a');
                 link.href = downloadUrl;
                 link.download = `${className}_配置.xlsx`;
