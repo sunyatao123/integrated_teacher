@@ -6,9 +6,49 @@
 import pandas as pd
 import json
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Generator
 import io
+
+# 配置日志
+def setup_analyzer_logger():
+    """配置分析器日志系统"""
+    log_dir = Path(__file__).parent / "logs"
+    log_dir.mkdir(exist_ok=True)
+
+    logger = logging.getLogger("analyzer")
+    logger.setLevel(logging.DEBUG if os.getenv('DEBUG_AI', '1') == '1' else logging.INFO)
+
+    if logger.handlers:
+        return logger
+
+    log_file = log_dir / "analyzer.log"
+    file_handler = RotatingFileHandler(
+        log_file,
+        maxBytes=10*1024*1024,
+        backupCount=5,
+        encoding='utf-8'
+    )
+    file_handler.setLevel(logging.DEBUG)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+logger = setup_analyzer_logger()
 
 # 年级编号到年级名称的映射
 GRADE_MAPPING = {
@@ -27,7 +67,7 @@ WEAKNESS_MAPPING = {
     "一分钟仰卧起坐": "力量",
     "引体向上": "力量",
     "坐位体前屈": "柔韧",
-    "一分钟跳绳": "速度",
+    "一分钟跳绳": "机能",
     "立定跳远": "力量",
     "800米跑": "耐力",
     "1000米跑": "耐力",
@@ -362,15 +402,15 @@ def generate_class_profiles(class_data_dir="class_data", output_file="prompts/cl
     if max_classes:
         class_files = class_files[:max_classes]
     
-    print(f"开始分析 {len(class_files)} 个班级...")
+    logger.info(f"开始分析 {len(class_files)} 个班级...")
     
     for idx, file_path in enumerate(class_files, 1):
         try:
             class_name, profile = analyze_class_file(file_path)
             profiles[class_name] = profile
-            print(f"[{idx}/{len(class_files)}] 分析完成: {class_name}")
+            logger.info(f"[{idx}/{len(class_files)}] 分析完成: {class_name}")
         except Exception as e:
-            print(f"[{idx}/{len(class_files)}] 分析失败: {file_path.name}, 错误: {e}")
+            logger.error(f"[{idx}/{len(class_files)}] 分析失败: {file_path.name}, 错误: {e}")
     
     # 保存到JSON文件
     output_path = Path(output_file)
@@ -379,7 +419,7 @@ def generate_class_profiles(class_data_dir="class_data", output_file="prompts/cl
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(profiles, f, ensure_ascii=False, indent=2)
     
-    print(f"\n生成完成！共分析 {len(profiles)} 个班级，保存到 {output_file}")
+    logger.info(f"\n生成完成！共分析 {len(profiles)} 个班级，保存到 {output_file}")
     return profiles
 
 
@@ -459,15 +499,50 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
             {"role": "user", "content": prompt}
         ]
 
-        response = model.client.chat.completions.create(
-            model=model.model,
-            messages=messages,
-            max_tokens=1000,
-            temperature=0.3
-        )
+        try:
+            response = model.client.chat.completions.create(
+                model=model.model,
+                messages=messages,
+                max_tokens=1000,
+                temperature=0.3
+            )
+            response_text = response.choices[0].message.content.strip()
+            yield f"AI分析结果：\n{response_text}\n\n"
+        except Exception as api_error:
+            # 记录详细的API错误信息
+            logger.error(f"AI模型API调用失败: {api_error}")
+            yield f"⚠️ AI分析失败（{str(api_error)}），使用传统方法分析...\n\n"
+            # 使用传统方法分析
+            weaknesses, weakness_details, _ = analyze_class_weakness(df, class_name)
+            weaknesses = [w for w in weaknesses if w in ALLOWED_WEAKNESSES][:2]
 
-        response_text = response.choices[0].message.content.strip()
-        yield f"AI分析结果：\n{response_text}\n\n"
+            yield f"✅ 识别到薄弱项：{', '.join(weaknesses)}\n\n"
+
+            # 分析学生个体薄弱项和分组
+            yield "👥 正在分析学生个体薄弱项...\n"
+            student_weaknesses = analyze_student_weaknesses(df)
+            yield f"✅ 已分析 {len(student_weaknesses)} 名学生的薄弱项\n\n"
+
+            yield f"📊 正在按班级薄弱项（{', '.join(weaknesses)}）对学生分组...\n"
+            student_groups = group_students_by_weakness(student_weaknesses, df, class_weaknesses=weaknesses)
+            yield f"✅ 已生成 {len(student_groups)} 个学生分组\n\n"
+
+            # 构建描述
+            description = f"{class_name}体质监测核心薄弱维度：" + "、".join(weaknesses) if weaknesses else f"{class_name}体质监测数据"
+
+            profile = {
+                "grades_query": grade_query,
+                "trained_weaknesses": "、".join(weaknesses) if weaknesses else "",
+                "count_query": "",
+                "semantic_query": "",
+                "description": description,
+                "weakness_details": weakness_details,
+                "student_groups": student_groups
+            }
+
+            yield "💾 正在保存配置...\n"
+            yield ("__PROFILE__", profile)
+            return
 
         # 解析JSON结果
         import re
@@ -514,6 +589,7 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
         yield ("__PROFILE__", profile)
 
     except Exception as e:
+        logger.error(f"分析失败: {e}", exc_info=True)
         yield f"❌ 分析失败：{str(e)}\n"
         raise e
 

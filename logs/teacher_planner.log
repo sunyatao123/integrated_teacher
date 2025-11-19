@@ -1,0 +1,57 @@
+2025-11-19 13:41:46 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 13:41:50 - teacher_planner - ERROR - [TEACHER] 流式生成失败: Error code: 400 - {'error': {'message': 'Invalid max_tokens value, the valid range of max_tokens is [1, 8192]', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_request_error'}}
+2025-11-19 13:52:27 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 13:53:34 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 13:54:16 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 13:59:50 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:00:35 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:01:23 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:01:45 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:02:17 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:06:42 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:07:47 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:16:17 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:19:20 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:20:00 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:22:03 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:22:03 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:22:54 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:22:54 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:24:12 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:24:12 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:24:43 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:25:06 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:25:06 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:27:21 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:27:31 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级5班
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级5班
+2025-11-19 14:29:50 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10}
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级1班"}
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级1班"}
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级5班
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级5班"}
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级5班
+2025-11-19 14:32:09 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级5班"}
+2025-11-19 14:33:04 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:33:04 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级1班"}
+2025-11-19 14:33:04 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级5班
+2025-11-19 14:33:04 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级5班"}
+2025-11-19 14:33:05 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:34:23 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级1班
+2025-11-19 14:34:23 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级1班"}
+2025-11-19 14:35:58 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 14:50:48 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 15:03:19 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-19 15:03:55 - teacher_planner - INFO - [班级检测] 识别到班级: 三年级5班
+2025-11-19 15:03:55 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "3", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "三年级5班"}
+2025-11-19 15:19:13 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级

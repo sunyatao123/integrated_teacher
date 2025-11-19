@@ -5,11 +5,59 @@ from __future__ import annotations
 import json
 import os
 import re
+import logging
+from logging.handlers import RotatingFileHandler
 from typing import Dict, List, Tuple, Any
 from pathlib import Path
 
 import requests
 from ai_model_optimized import OptimizedAIModel
+
+# 配置日志
+def setup_logger():
+    """配置日志系统"""
+    # 创建logs目录
+    log_dir = Path(__file__).parent / "logs"
+    log_dir.mkdir(exist_ok=True)
+
+    # 创建logger
+    logger = logging.getLogger("teacher_planner")
+    logger.setLevel(logging.DEBUG if os.getenv('DEBUG_AI', '1') == '1' else logging.INFO)
+
+    # 避免重复添加handler
+    if logger.handlers:
+        return logger
+
+    # 创建文件handler（带轮转）
+    log_file = log_dir / "teacher_planner.log"
+    file_handler = RotatingFileHandler(
+        log_file,
+        maxBytes=10*1024*1024,  # 10MB
+        backupCount=5,
+        encoding='utf-8'
+    )
+    file_handler.setLevel(logging.DEBUG)
+
+    # 创建控制台handler（可选，用于开发调试）
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    # 设置日志格式
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+
+    # 添加handler
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+# 初始化logger
+logger = setup_logger()
 
 # 提示词模板加载函数
 def load_prompt_template(template_name: str) -> str:
@@ -19,7 +67,7 @@ def load_prompt_template(template_name: str) -> str:
         with open(template_path, "r", encoding="utf-8") as f:
             return f.read().strip()
     except FileNotFoundError:
-        print(f"警告：提示词模板 {template_name}.txt 未找到")
+        logger.warning(f"提示词模板 {template_name}.txt 未找到")
         return ""
 
 # 加载班级配置
@@ -30,7 +78,7 @@ def load_class_profiles() -> Dict[str, Any]:
         with open(profiles_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        print("警告：班级配置文件 class_profiles.json 未找到")
+        logger.warning("班级配置文件 class_profiles.json 未找到")
         return {}
 
 # 加载系统提示词
@@ -126,14 +174,15 @@ def detect_class_and_fill_params(user_text: str, intent: str = "lesson_plan") ->
                         "count_query": class_info.get("count_query", ""),
                         "grades_query": class_info.get("grades_query", ""),
                         "trained_weaknesses": class_info.get("trained_weaknesses", ""),
-                        "top_k": 10
+                        "top_k": 10,
+                        "detected_class_name": class_name  # 【新增】记录检测到的班级名称
                     }
-                    print(f"[班级检测] 识别到班级: {class_name}")
-                    print(f"[班级检测] 自动填充参数: {json.dumps(params, ensure_ascii=False)}")
+                    logger.info(f"[班级检测] 识别到班级: {class_name}")
+                    logger.info(f"[班级检测] 自动填充参数: {json.dumps(params, ensure_ascii=False)}")
                     return True, params
 
     # 没有检测到班级
-    print(f"[班级检测] 未识别到配置文件中的班级")
+    logger.info("[班级检测] 未识别到配置文件中的班级")
     return False, {}
 
 def detect_intent_llm(user_text: str, conversation_history: List[Dict[str, str]] = None, timeout: float = 15.0) -> str:
@@ -255,7 +304,7 @@ def collect_entities_llm(
 
     resp = model.client.chat.completions.create(
         model=model.model,
-        messages=[{"role": "system", "content": model.system_prompt}, {"role": "system", "content": system}, {"role": "user", "content": user}],
+        messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
         max_tokens=400,
         temperature=0.2,
     )
@@ -284,21 +333,43 @@ def collect_entities_llm(
 
 
 def _post_json(url: str, payload: Dict[str, Any], timeout: float = 8.0) -> List[Dict[str, Any]]:
+    # 记录请求信息
+    if os.getenv('DEBUG_AI','1')=='1':
+        logger.info(f"[TEACHER] 🚀 检索接口请求")
+        logger.info(f"   URL: {url}")
+        logger.info(f"   Timeout: {timeout}秒")
+        logger.info(f"   Payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+
     resp = requests.post(url, json=payload, timeout=timeout)
+
+    # 记录响应信息
+    if os.getenv('DEBUG_AI','1')=='1':
+        logger.info(f"[TEACHER] ✅ 检索接口响应: status_code={resp.status_code}")
+
     if resp.status_code != 200:
-        # 打印详细的错误信息
+        # 记录详细的错误信息
         try:
             error_detail = resp.text
             if os.getenv('DEBUG_AI','1')=='1':
-                print(f"[TEACHER] 检索接口错误详情: status_code={resp.status_code}, response={error_detail}")
+                logger.error(f"[TEACHER] 检索接口错误详情: status_code={resp.status_code}, response={error_detail}")
         except:
             pass
     resp.raise_for_status()
     data = resp.json()
+
+    # 记录返回结果数量
     if isinstance(data, dict) and "results" in data:
-        return data["results"]
+        results = data["results"]
+        if os.getenv('DEBUG_AI','1')=='1':
+            logger.info(f"[TEACHER] 📊 检索返回 {len(results)} 条结果")
+        return results
     if isinstance(data, list):
+        if os.getenv('DEBUG_AI','1')=='1':
+            logger.info(f"[TEACHER] 📊 检索返回 {len(data)} 条结果")
         return data
+
+    if os.getenv('DEBUG_AI','1')=='1':
+        logger.warning(f"[TEACHER] ⚠️ 检索返回空结果")
     return []
 
 
@@ -432,61 +503,61 @@ def build_plan_messages(
         # 生成班级分析文本
         class_analysis_text = ""
         grades_query = params.get("grades_query")
-        if grades_query:
-            # 尝试从班级配置中获取班级分析
-            class_profiles = load_class_profiles()
-            # 查找匹配的班级配置
-            for class_name, profile in class_profiles.items():
-                # 修复匹配逻辑：使用 profile 中的 grades_query 进行匹配
-                profile_grades = profile.get("grades_query", "")
-                if profile_grades == str(grades_query):
-                    weakness_details = profile.get("weakness_details", {})
-                    student_groups = profile.get("student_groups", {})
+        detected_class_name = params.get("detected_class_name")  # 【新增】获取检测到的班级名称
 
-                    if weakness_details:
-                        class_analysis_text = f"   - 如果是{class_name}，描述："
-                        for weakness, detail in weakness_details.items():
-                            class_analysis_text += f"{weakness}：{detail[:200]}... "
+        # 【修复】优先使用检测到的班级名称进行精确匹配
+        if detected_class_name:
+            class_profiles = load_class_profiles()
+            if detected_class_name in class_profiles:
+                profile = class_profiles[detected_class_name]
+                weakness_details = profile.get("weakness_details", {})
+                student_groups = profile.get("student_groups", {})
+
+                if weakness_details:
+                    class_analysis_text = f"   - 班级：{detected_class_name}\n   - 班级薄弱项描述：\n"
+                    for weakness, detail in weakness_details.items():
+                        class_analysis_text += f"     * {weakness}：{detail}\n"
+                    class_analysis_text += "\n"
+
+                # 新增：添加学生分组信息
+                if student_groups:
+                    class_analysis_text += f"   - {detected_class_name}学生分组情况：\n"
+                    for group_key, group_info in student_groups.items():
+                        count = group_info.get("count", 0)
+                        weakness_items = group_info.get("weakness_items", [])
+                        student_details = group_info.get("student_details", [])
+
+                        # 生成分组描述
+                        class_analysis_text += f"     * {group_key}薄弱组：{count}人\n"
+
+                        # 添加薄弱项目列表
+                        if weakness_items:
+                            class_analysis_text += f"       薄弱项目：{', '.join(weakness_items)}\n"
+
+                        # 添加学生名单（包含序号和学号）
+                        if student_details:
+                            class_analysis_text += f"       学生名单：\n"
+                            for student in student_details:
+                                student_num = student.get("序号", "")
+                                student_id = student.get("学生编号", "")
+                                student_name = student.get("姓名", "")
+                                gender = student.get("性别", "")
+
+                                # 构建学生信息字符串
+                                if student_name:
+                                    student_info = f"{student_name}"
+                                else:
+                                    student_info = f"学生{student_num}"
+
+                                class_analysis_text += f"         • {student_info} [{student_id}]\n"
+
                         class_analysis_text += "\n"
 
-                    # 新增：添加学生分组信息
-                    if student_groups:
-                        class_analysis_text += f"\n   - {class_name}学生分组情况：\n"
-                        for group_key, group_info in student_groups.items():
-                            count = group_info.get("count", 0)
-                            weakness_items = group_info.get("weakness_items", [])
-                            student_details = group_info.get("student_details", [])
+                    class_analysis_text += "   - **重要**：请在方案开头展示上述学生分组情况，并根据分组为不同薄弱项的学生推荐不同的练习！\n"
 
-                            # 生成分组描述
-                            class_analysis_text += f"     * {group_key}薄弱组：{count}人\n"
-
-                            # 添加薄弱项目列表
-                            if weakness_items:
-                                class_analysis_text += f"       薄弱项目：{', '.join(weakness_items)}\n"
-
-                            # 添加学生名单（包含序号和学号）
-                            if student_details:
-                                class_analysis_text += f"       学生名单：\n"
-                                for student in student_details:
-                                    student_num = student.get("序号", "")
-                                    student_id = student.get("学生编号", "")
-                                    student_name = student.get("姓名", "")
-                                    gender = student.get("性别", "")
-
-                                    # 构建学生信息字符串
-                                    if student_name:
-                                        student_info = f"{student_name}"
-                                    else:
-                                        student_info = f"学生{student_num}"
-
-                                    class_analysis_text += f"         • {student_info} [{student_id}]\n"
-
-                            class_analysis_text += "\n"
-
-                        class_analysis_text += "   - **重要**：请在方案开头展示上述学生分组情况，并根据分组为不同薄弱项的学生推荐不同的练习！\n"
-
-        if not class_analysis_text:
-            class_analysis_text = "   - 对于其他年级和班级，先不用描述班级体测情况。"
+        # 如果没有找到班级配置，生成提示信息
+        if not class_analysis_text and grades_query:
+            class_analysis_text = f"   - 由于配置中没有该班级的详细信息，本方案将基于{grades_query}年级的一般特点提供通用的练习推荐。\n   - **重要**：请在方案开头展示这个提示信息！\n"
 
         template = load_prompt_template("plan_generation_lesson_plan")
         user_prompt = template.format(
@@ -570,7 +641,7 @@ def generate_plan_stream(
                     yield chunk
     except Exception as e:
         if os.getenv('DEBUG_AI','1')=='1':
-            print(f"[TEACHER] 流式生成失败: {e}")
+            logger.error(f"[TEACHER] 流式生成失败: {e}")
         yield f"生成失败: {str(e)}"
 
 
@@ -604,6 +675,6 @@ def generate_plan(
         )
         return resp.choices[0].message.content.strip()
     except Exception as e:
-        print(f"生成失败: {e}")
+        logger.error(f"生成失败: {e}")
         return f"生成失败: {str(e)}"
 

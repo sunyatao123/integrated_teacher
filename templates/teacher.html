@@ -352,34 +352,34 @@
 
 
     .bubble table {
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      margin:12px 0;
-      font-size:12px;
-      border:1px solid #eef2f7;
-      border-radius:8px;
-      overflow:hidden;
-      background:#fff;
+      width: fit-content;
+      max-width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13px;
+      background: white;
+      border: 1px solid #ddd;
     }
 
     .bubble th {
-      background:#fafbfc;
-      padding:10px 12px;
-      text-align:left;
-      font-weight:600;
-      border-bottom:1px solid #eef2f7;
-      font-size:12px;
+      background: #f5f5f5;
+      color: #333;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #ddd;
+      font-size: 13px;
     }
 
     .bubble td {
-      padding:10px 12px;
-      border-top:1px solid #f2f4f8;
-      font-size:12px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      color: #333;
     }
 
-    .bubble tbody tr:nth-child(odd) {
-      background:#fafbfe;
+    .bubble tbody tr:nth-child(even) {
+      background: #fafafa;
     }
 
     /* 图片容器 */
@@ -894,12 +894,54 @@
       return fixed;
     }
 
+    // 修复表格格式
+    function fixTableMarkdown(text) {
+      if (!text) return text;
+
+      // 修复表格中的换行问题
+      // 匹配模式：| 内容\n| 内容 | 内容 |
+      // 将其修复为：| 内容 | 内容 | 内容 |
+      let fixed = text;
+
+      // 查找所有可能的表格区域（以 | 开头的连续行）
+      const lines = fixed.split('\n');
+      const result = [];
+      let i = 0;
+
+      while (i < lines.length) {
+        const line = lines[i];
+
+        // 检查是否是表格行（以 | 开头或结尾）
+        if (line.trim().startsWith('|') || line.trim().endsWith('|')) {
+          // 检查下一行是否也是表格行但缺少开头的 |
+          if (i + 1 < lines.length) {
+            const nextLine = lines[i + 1].trim();
+            // 如果下一行以 | 开头，说明当前行可能不完整
+            if (nextLine.startsWith('|') && !line.includes('|', 1)) {
+              // 合并当前行和下一行
+              result.push(line.trim() + ' ' + nextLine);
+              i += 2;
+              continue;
+            }
+          }
+        }
+
+        result.push(line);
+        i++;
+      }
+
+      return result.join('\n');
+    }
+
     function renderMarkdown(md) {
       try {
         if (!md) return '';
 
         // 【关键】先修复图片格式
-        const fixedMd = fixImageMarkdown(md);
+        let fixedMd = fixImageMarkdown(md);
+
+        // 修复表格格式
+        fixedMd = fixTableMarkdown(fixedMd);
 
         // 直接使用marked.parse
         let html = marked.parse(fixedMd);
