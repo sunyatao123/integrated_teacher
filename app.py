@@ -351,7 +351,7 @@ def teacher_plan_stream():
         # 记录收集到的信息
         logger.info(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
 
-        # 应用显式覆盖
+        # 应用显式覆盖（可能没啥用？）
         for k in ['semantic_query', 'count_query', 'grades_query', 'trained_weaknesses', 'top_k']:
             if k in override_params and override_params[k] not in (None, ''):
                 params[k] = override_params[k]
@@ -368,7 +368,7 @@ def teacher_plan_stream():
             missing_fields = []
         else:
             # 关键检查：根据场景判断是否需要更多信息
-            count_query = params.get('count_query')
+            count_query = params.get('count_query')     #没用到
             grades_query = params.get('grades_query')
             semantic_query = params.get('semantic_query')
             trained_weaknesses_value = params.get('trained_weaknesses')
@@ -387,11 +387,10 @@ def teacher_plan_stream():
                 # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.debug(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
-                has_grades = bool(grades_query)
-                has_weaknesses = bool(trained_weaknesses_value)
-                if not has_grades or not has_weaknesses:
-                    # 两个都没有，需要引导
+                
+                if not grades_query or not trained_weaknesses_value:
                     missing_fields.append('grades_query_or_trained_weaknesses')
+
                 if missing_fields and os.getenv('DEBUG_AI','1')=='1':
                     logger.debug("[TEACHER] 流式接口：⚠️ 课课练场景信息不全（缺少班级或弱项），进入引导流程")
 
@@ -440,10 +439,12 @@ def teacher_plan_stream():
                 'semantic_query': params.get('semantic_query') or '',
                 'count_query': params.get('count_query') or '',
                 'grades_query': params.get('grades_query') or '',
-                'trained_weaknesses': params.get('trained_weaknesses') or '',
                 'plan_type': params.get('plan_type') or '',
                 'top_k': int(params.get('top_k') or 5),
             }
+                    # 只有课课练才需要薄弱项字段
+            if plan_type == "lesson_plan":
+                collected_so_far['trained_weaknesses'] = params.get('trained_weaknesses') or ''
 
             try:
                 if os.getenv('DEBUG_AI','1')=='1':
