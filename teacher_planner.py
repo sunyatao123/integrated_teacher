@@ -248,10 +248,16 @@ def detect_intent_llm(user_text: str, conversation_history: List[Dict[str, str]]
 
 
 def collect_entities_llm(
-    user_text: str, conversation_history: List[Dict[str, str]] = None, timeout: float = 15.0
+    user_text: str, conversation_history: List[Dict[str, str]] = None, plan_type: str = "", timeout: float = 15.0
 ) -> Tuple[Dict[str, Any], List[str]]:
     """
     使用大模型进行实体抽取，从用户输入和对话历史中提取参数
+
+    参数：
+        user_text: 用户输入文本
+        conversation_history: 对话历史
+        plan_type: 意图类型 ("sports_meeting" | "lesson_plan" | "chat")
+        timeout: 超时时间
 
     返回：(提取的参数字典, 缺失的字段列表)
     """
@@ -318,17 +324,40 @@ def collect_entities_llm(
             parsed = json.loads(content[start : end + 1])
         except Exception:
             parsed = {}
-    out = {
-        "semantic_query": parsed.get("semantic_query") or None,
-        "count_query": str(parsed.get("count_query")) if parsed.get("count_query") not in (None, "") else None,
-        "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") not in (None, "") else None,
-        "trained_weaknesses": parsed.get("trained_weaknesses") or None,
-        "top_k": int(parsed.get("top_k") or 5),
-    }
-    missing: List[str] = []
-    for key in ["semantic_query", "count_query", "grades_query", "trained_weaknesses"]:
-        if not out.get(key):
-            missing.append(key)
+
+    # 根据意图类型决定提取哪些字段
+    if plan_type == "sports_meeting":
+        # 全员运动会：提取操场条件、年级、人数
+        out = {
+            "semantic_query": parsed.get("semantic_query") or "",
+            "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
+            "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
+            "top_k": int(parsed.get("top_k") or 5),
+        }
+        missing: List[str] = []
+        for key in ["semantic_query", "count_query", "grades_query"]:
+            if not out.get(key):
+                missing.append(key)
+    elif plan_type == "lesson_plan":
+        # 课课练：提取所有字段
+        out = {
+            "semantic_query": parsed.get("semantic_query") or "",
+            "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
+            "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
+            "trained_weaknesses": parsed.get("trained_weaknesses") or "",
+            "top_k": int(parsed.get("top_k") or 5),
+        }
+        missing: List[str] = []
+        for key in ["semantic_query", "count_query", "grades_query", "trained_weaknesses"]:
+            if not out.get(key):
+                missing.append(key)
+    else:
+        # 闲聊模式：不需要提取业务字段，不检查缺失
+        out = {
+            "top_k": int(parsed.get("top_k") or 5),
+        }
+        missing: List[str] = []
+
     return out, missing
 
 
@@ -420,13 +449,10 @@ def build_plan_messages(
         # 判断缺失字段
         missing_info = []
         if is_sports_meeting:
+            semantic_query = bool(params.get("semantic_query"))
             # 全员运动会：需要操场条件、年级、人数等信息
             if not params.get("semantic_query"):
-                missing_info.append("操场条件、跑道数量、场地规模")
-            if not params.get("grades_query"):
-                missing_info.append("参与年级")
-            if not params.get("count_query"):
-                missing_info.append("参与学生人数")
+                missing_info.append("semantic_query")
         elif is_lesson_plan:
             # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
             has_grades = bool(params.get("grades_query"))
@@ -485,7 +511,7 @@ def build_plan_messages(
     plan_type = params.get("plan_type")
     is_sports_meeting = plan_type == "sports_meeting"
     is_lesson_plan = plan_type == "lesson_plan"
-    is_chat = plan_type == "chat" or plan_type == ""
+    is_chat = plan_type == "chat"
 
     if is_sports_meeting:
         # 全员运动会方案生成提示词
@@ -566,8 +592,8 @@ def build_plan_messages(
             results_text=results_text,
             class_analysis_text=class_analysis_text
         )
-    elif plan_type == "chat" or plan_type == "":
-        # 闲聊或未识别意图：仅返回系统提示与原始输入
+    elif plan_type == "chat":
+        # 闲聊：仅返回系统提示与原始输入
         messages = [{"role": "system", "content": TEACHER_SYSTEM_PROMPT}]
         if conversation_history := params.get("conversation_history"):
             for msg in conversation_history[-6:]:

@@ -71,7 +71,11 @@ from teacher_planner import (
     generate_plan,
     generate_plan_stream,
     load_class_profiles,
+    TEACHER_SYSTEM_PROMPT,
 )
+
+# 导入AI模型
+from ai_model_optimized import OptimizedAIModel
 
 # 导入班级数据分析模块
 from analyze_class_data import (
@@ -106,18 +110,15 @@ def gather_user_text(user_text: str, conversation_history: List[dict]) -> str:
 def detect_plan_type(current_text: str, conversation_history: List[dict]) -> str:
     """
     使用大模型进行意图识别，判断是全员运动会、课课练还是闲聊
-    返回: "sports_meeting" | "lesson_plan" | "chat" | ""
+    返回: "sports_meeting" | "lesson_plan" | "chat"
     """
     try:
         intent = detect_intent_llm(current_text, conversation_history)
-        # 如果是chat，返回空字符串（表示不是方案生成意图）
-        if intent == "chat":
-            return ""
         return intent
     except Exception as e:
         if os.getenv('DEBUG_AI','1')=='1':
             logger.error(f"[TEACHER] 意图识别失败: {e}")
-        return ""
+        return "chat"
 
 
 def get_local_ip():
@@ -178,23 +179,24 @@ def teacher_plan():
         if not user_text and not override_params:
             return jsonify({'success': False, 'message': '请提供message或override_params'}), 400
 
+        # 记录用户输入
+        logger.info(f"[用户输入] {user_text}")
         if os.getenv('DEBUG_AI','1')=='1':
             logger.debug(f"[TEACHER] 收到请求: user_text={user_text}, history_len={len(conversation_history)}")
 
         # 使用大模型进行意图识别
         plan_type = detect_plan_type(user_text, conversation_history)
-        is_sports_meeting = plan_type == "sports_meeting"
-        is_lesson_plan = plan_type == "lesson_plan"
-        is_chat = not plan_type
-        
-        if os.getenv('DEBUG_AI','1')=='1':
-            logger.debug(f"[TEACHER] 意图识别: plan_type={plan_type}")
 
-        # 实体抽取
+        if os.getenv('DEBUG_AI','1')=='1':
+            logger.info(f"[TEACHER] 意图识别: plan_type={plan_type}")
+
+        # 实体抽取（内部会进行班级检测）
         try:
-            params, missing = collect_entities_llm(user_text, conversation_history)
+            params, missing = collect_entities_llm(user_text, conversation_history, plan_type)
+            # 记录收集到的信息
+            logger.info(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
             if os.getenv('DEBUG_AI','1')=='1':
-                logger.debug(f"[TEACHER] 实体抽取: params={params}, missing={missing}")
+                logger.info(f"[TEACHER] 实体抽取: params={params}, missing={missing}")
         except Exception as e:
             if os.getenv('DEBUG_AI','1')=='1':
                 logger.error(f"[TEACHER] 实体抽取失败: {e}")
@@ -208,13 +210,13 @@ def teacher_plan():
                     missing.remove(k)
 
         # 添加意图类型到参数中
-        params["plan_type"] = plan_type or ""
+        params["plan_type"] = plan_type
         params["conversation_history"] = conversation_history
 
         # 如果是闲聊，直接生成回复
-        if is_chat:
+        if plan_type == "chat":
             if os.getenv('DEBUG_AI','1')=='1':
-                logger.debug("[TEACHER] 识别为闲聊，直接生成回复")
+                logger.info("[TEACHER] 识别为闲聊，直接生成回复")
             response_text = generate_plan([], params, user_text, need_guidance=False)
             conversation_history.append({"role": "user", "content": user_text})
             conversation_history.append({"role": "assistant", "content": response_text})
@@ -229,17 +231,14 @@ def teacher_plan():
         need_guidance = False
         missing_fields = []
 
-        if is_sports_meeting:
+        if plan_type == "sports_meeting":
             # 全员运动会：需要操场条件、年级、人数等信息
-            if not params.get("semantic_query") or not params.get("grades_query") or not params.get("count_query"):
+            semantic_query = params.get("semantic_query")
+
+            if not params.get("semantic_query"):
                 need_guidance = True
-                if not params.get("semantic_query"):
-                    missing_fields.append("semantic_query")
-                if not params.get("grades_query"):
-                    missing_fields.append("grades_query")
-                if not params.get("count_query"):
-                    missing_fields.append("count_query")
-        elif is_lesson_plan:
+                missing_fields.append("semantic_query")
+        elif plan_type == "lesson_plan":
             # 课课练：需要班级或薄弱项，满足任一即可
             has_grades = bool(params.get("grades_query"))
             has_weaknesses = bool(params.get("trained_weaknesses"))
@@ -250,7 +249,7 @@ def teacher_plan():
         # 如果需要引导，生成引导语
         if need_guidance:
             if os.getenv('DEBUG_AI','1')=='1':
-                logger.debug(f"[TEACHER] 需要引导，缺失字段: {missing_fields}")
+                logger.info(f"[TEACHER] 需要引导，缺失字段: {missing_fields}")
             guidance_text = generate_plan([], params, user_text, need_guidance=True)
             conversation_history.append({"role": "user", "content": user_text})
             conversation_history.append({"role": "assistant", "content": guidance_text})
@@ -264,7 +263,7 @@ def teacher_plan():
 
         # 调用检索接口
         try:
-            if is_sports_meeting:
+            if plan_type == "sports_meeting":
                 # 全员运动会检索
                 semantic_with_text = f"{params.get('semantic_query', '')} {user_text}".strip()
                 payload = {
@@ -335,17 +334,22 @@ def teacher_plan_stream():
         if not user_text and not override_params:
             return jsonify({'success': False, 'message': '请提供message或override_params'}), 400
 
+        # 记录用户输入
+        logger.info(f"[用户输入] {user_text}")
         if os.getenv('DEBUG_AI','1')=='1':
             logger.debug(f"[TEACHER] 流式接口收到请求: user_text={user_text}")
 
         # 使用大模型进行意图识别
         plan_type = detect_plan_type(user_text, conversation_history)
-        is_sports_meeting = plan_type == "sports_meeting"
-        is_lesson_plan = plan_type == "lesson_plan"
-        is_chat = not plan_type
 
-        # 实体抽取
-        params, missing = collect_entities_llm(user_text, conversation_history)
+        if os.getenv('DEBUG_AI','1')=='1':
+            logger.info(f"[TEACHER] 流式接口：意图识别: plan_type={plan_type}")
+
+        # 实体抽取（内部会进行班级检测）
+        params, missing = collect_entities_llm(user_text, conversation_history, plan_type)
+
+        # 记录收集到的信息
+        logger.info(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
 
         # 应用显式覆盖
         for k in ['semantic_query', 'count_query', 'grades_query', 'trained_weaknesses', 'top_k']:
@@ -353,11 +357,11 @@ def teacher_plan_stream():
                 params[k] = override_params[k]
 
         # 添加意图类型到参数中
-        params["plan_type"] = plan_type or ""
+        params["plan_type"] = plan_type
         params["conversation_history"] = conversation_history
 
         # 如果是闲聊，直接生成友好回复（流式）
-        if is_chat:
+        if plan_type == "chat":
             if os.getenv('DEBUG_AI','1')=='1':
                 logger.debug("[TEACHER] 流式接口：识别为闲聊，直接生成回复")
             need_guidance = False
@@ -370,19 +374,16 @@ def teacher_plan_stream():
             trained_weaknesses_value = params.get('trained_weaknesses')
 
             missing_fields = []
-            if is_sports_meeting:
+            if plan_type == "sports_meeting":
                 # 全员运动会：需要操场条件、年级、人数等信息
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.debug(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}, grades={grades_query}, count={count_query}")
                 if not semantic_query:
                     missing_fields.append('semantic_query')
-                if not grades_query:
-                    missing_fields.append('grades_query')
-                if not count_query:
-                    missing_fields.append('count_query')
+
                 if missing_fields and os.getenv('DEBUG_AI','1')=='1':
-                    logger.debug("[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失=", missing_fields)
-            elif is_lesson_plan:
+                    logger.debug(f"[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失={missing_fields}")
+            elif plan_type == "lesson_plan":
                 # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.debug(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
@@ -397,7 +398,7 @@ def teacher_plan_stream():
             need_guidance = bool(missing_fields)
 
         # 如果是闲聊，直接生成友好回复（流式）
-        if is_chat:
+        if plan_type == "chat":
             def chat_stream():
                 try:
                     model = OptimizedAIModel()
@@ -458,10 +459,10 @@ def teacher_plan_stream():
                         final_ask = "".join(ask_chunks).strip()
 
                         if os.getenv('DEBUG_AI','1')=='1':
-                            logger.debug("[TEACHER] 流式接口：引导语推送完成，长度=", len(final_ask))
+                            logger.debug(f"[TEACHER] 流式接口：引导语推送完成，长度={len(final_ask)}")
                     except Exception as stream_err:
                         if os.getenv('DEBUG_AI','1')=='1':
-                            logger.debug("[TEACHER] 流式接口：引导语流式推送异常:", stream_err)
+                            logger.debug(f"[TEACHER] 流式接口：引导语流式推送异常: {stream_err}")
                         yield f"[引导流错误] {stream_err}"
 
                 resp = Response(guidance_stream(), mimetype='text/plain; charset=utf-8')
@@ -484,7 +485,7 @@ def teacher_plan_stream():
 
         # 调用检索接口
         try:
-            if is_sports_meeting:
+            if plan_type == "sports_meeting":
                 # 全员运动会检索
                 semantic_with_text = f"{params.get('semantic_query', '')} {user_text}".strip()
                 payload = {
@@ -501,7 +502,7 @@ def teacher_plan_stream():
                     logger.info("====== 检索结果原始数据 ======")
                     logger.info(json.dumps(results, ensure_ascii=False, indent=2))
                     logger.info("====== 检索结果结束 ======")
-            elif is_lesson_plan:
+            elif plan_type == "lesson_plan":
                 # 课课练检索
                 payload = {
                     "semantic_query": params.get("semantic_query") or "",

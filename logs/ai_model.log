@@ -234,3 +234,1407 @@
 2025-11-19 15:19:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
 2025-11-19 15:19:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
 2025-11-19 15:19:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:42:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:42:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:42:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:42:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:42:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:42:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:42:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:42:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:49:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:49:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:49:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:49:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:15 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:15 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:15 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:15 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:33 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:33 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:33 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:33 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:46 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:46 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:46 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:46 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:51:46 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:51:46 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:51:46 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:51:46 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:52:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:52:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:52:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:52:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:52:59 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:52:59 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:52:59 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:52:59 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:53:05 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:53:05 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:53:05 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:53:05 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:53:05 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:53:05 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:53:05 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:53:05 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:13 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:13 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:13 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:13 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:29 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:29 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:29 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:29 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:55:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:55:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:55:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:55:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:57:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:57:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:57:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:57:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:57:15 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:57:15 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:57:15 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:57:15 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:57:15 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:57:15 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:57:15 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:57:15 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:59:51 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:59:51 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:59:51 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:59:51 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 15:59:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 15:59:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 15:59:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 15:59:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:00:00 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:00:00 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:00:00 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:00:00 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:00:01 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:00:01 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:00:01 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:00:01 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:00:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:00:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:00:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:00:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:00:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:00:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:00:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:00:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:00:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:00:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:00:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:00:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:00:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:00:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:00:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:00:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:29:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:29:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:29:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:29:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:29:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:29:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:29:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:29:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:30:37 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:30:37 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:30:37 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:30:37 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:54:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:54:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:54:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:54:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:54:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:54:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:54:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:54:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:55:00 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:55:00 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:55:00 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:55:00 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:55:01 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:55:01 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:55:01 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:55:01 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:58:26 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:58:26 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:58:26 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:58:26 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:58:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:58:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:58:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:58:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:58:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:58:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:58:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:58:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 16:58:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 16:58:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 16:58:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 16:58:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:01:14 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:01:14 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:01:14 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:01:14 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:01:41 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:01:41 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:01:41 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:01:41 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:02 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:02 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:02 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:02 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:04 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:04 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:04 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:04 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:09 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:09 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:09 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:09 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:22 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:22 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:22 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:22 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:27 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:06:27 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:06:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:06:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:06:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:10:22 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:10:22 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:10:22 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:10:22 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:10:25 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:10:25 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:10:25 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:10:25 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:10:29 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:10:29 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:10:29 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:10:29 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:10:29 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:10:29 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:10:29 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:10:29 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:12:56 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:12:56 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:12:56 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:12:56 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:12:58 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:12:58 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:12:58 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:12:58 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:13:01 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:13:01 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:13:01 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:13:01 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:03 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:03 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:03 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:03 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:05 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:05 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:05 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:05 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:09 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:09 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:09 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:09 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:09 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:09 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:09 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:09 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:33 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:33 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:33 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:33 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:15:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:15:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:15:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:15:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:13 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:13 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:13 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:13 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:43 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:43 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:43 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:43 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:45 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:45 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:45 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:45 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:25:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:25:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:25:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:25:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:35:51 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:35:51 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:35:51 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:35:51 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:35:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:35:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:35:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:35:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:35:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:35:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:35:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:35:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:35:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:35:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:35:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:35:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:36:47 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:36:47 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:36:47 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:36:47 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:36:49 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:36:49 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:36:49 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:36:49 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:36:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:36:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:36:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:36:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 17:36:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 17:36:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 17:36:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 17:36:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:21:26 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:21:26 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:21:26 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:21:26 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:21:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:21:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:21:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:21:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:21:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:21:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:21:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:21:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:21:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:21:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:21:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:21:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:22:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:22:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:22:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:22:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:22:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:22:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:22:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:22:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:22:14 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:22:14 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:22:14 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:22:14 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:22:15 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:22:15 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:22:15 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:22:15 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:25:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:25:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:25:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:25:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:25:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:25:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:25:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:25:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:25:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:25:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:25:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:25:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:25:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:25:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:25:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:25:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:31:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:31:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:31:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:31:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:31:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:31:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:31:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:31:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:31:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:31:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:31:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:31:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:31:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:31:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:31:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:31:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:32:04 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:32:04 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:32:04 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:32:04 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:32:06 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:32:06 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:32:06 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:32:06 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:32:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:32:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:32:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:32:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:32:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:32:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:32:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:32:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:35:06 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:35:06 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:35:06 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:35:06 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:35:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:35:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:35:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:35:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:35:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:35:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:35:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:35:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:35:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:35:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:35:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:35:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:35:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:35:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:35:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:35:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:35:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:35:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:35:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:35:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:36:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:36:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:36:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:36:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:36:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:36:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:36:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:36:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:36:45 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:36:45 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:36:45 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:36:45 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:36:45 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:36:45 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:36:45 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:36:45 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:36:49 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:36:49 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:36:49 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:36:49 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:36:52 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:36:52 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:36:52 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:36:52 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:40:37 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:40:37 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:40:37 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:40:37 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:40:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:40:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:40:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:40:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:40:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:40:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:40:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:40:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:40:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:40:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:40:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:40:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:41:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:41:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:41:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:41:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:41:21 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:41:21 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:41:21 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:41:21 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:41:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:41:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:41:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:41:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:41:24 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:41:24 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:41:24 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:41:24 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:41 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:41 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:41 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:41 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:49 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:49 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:49 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:49 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:51 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:51 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:51 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:51 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:49:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:49:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:49:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:49:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:52:44 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:52:44 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:52:44 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:52:44 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:52:47 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:52:47 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:52:47 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:52:47 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:52:49 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:52:49 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:52:49 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:52:49 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:52:49 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:52:49 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:52:49 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:52:49 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:52:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:52:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:52:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:52:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:52:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:52:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:52:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:52:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:53:00 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:53:00 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:53:00 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:53:00 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:53:00 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:53:00 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:53:00 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:53:00 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:54:07 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:54:07 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:54:07 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:54:07 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:54:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:54:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:54:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:54:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:54:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:54:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:54:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:54:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:54:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:54:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:54:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:54:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:56:51 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:56:51 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:56:51 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:56:51 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:56:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:56:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:56:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:56:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:56:56 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:56:56 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:56:56 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:56:56 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:56:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:56:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:56:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:56:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:57:05 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:57:05 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:57:05 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:57:05 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:57:07 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:57:07 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:57:07 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:57:07 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:57:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:57:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:57:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:57:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:57:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:57:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:57:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:57:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:41 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:41 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:41 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:41 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:43 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:43 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:43 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:43 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:47 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:47 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:47 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:47 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:47 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:47 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:47 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:47 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:51 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:51 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:51 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:51 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:52 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:52 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:52 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:52 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:56 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:56 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:56 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:56 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 18:58:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 18:58:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 18:58:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 18:58:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:21 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:21 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:21 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:21 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:03:21 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:03:21 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:03:21 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:03:21 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:09 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:09 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:09 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:09 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:29 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:29 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:29 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:29 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:08:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:08:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:08:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:08:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:14 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:14 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:14 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:14 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:17 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:17 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:17 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:17 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:17 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:17 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:17 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:17 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:52 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:52 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:52 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:52 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:17:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:17:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:17:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:17:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:37 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:37 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:37 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:37 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:41 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:41 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:41 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:41 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:52 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:52 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:52 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:52 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:20:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:20:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:20:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:20:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:23:52 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:23:52 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:23:52 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:23:52 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:23:54 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:23:54 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:23:54 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:23:54 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:23:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:23:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:23:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:23:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:23:57 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:23:57 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:23:57 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:23:57 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:24:13 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:24:13 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:24:13 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:24:13 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:24:15 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:24:15 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:24:15 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:24:15 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:24:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:24:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:24:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:24:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:24:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:24:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:24:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:24:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:09 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:09 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:09 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:09 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:14 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:14 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:14 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:14 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:14 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:14 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:14 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:14 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:25:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:25:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:25:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:25:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:28:18 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:28:18 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:28:18 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:28:18 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:28:20 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:28:20 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:28:20 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:28:20 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:28:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:28:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:28:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:28:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:28:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:28:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:28:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:28:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:33:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:33:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:33:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:33:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:33:41 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:33:41 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:33:41 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:33:41 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:33:43 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:33:43 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:33:43 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:33:43 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:33:43 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:33:43 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:33:43 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:33:43 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:33:56 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:33:56 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:33:56 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:33:56 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:33:59 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:33:59 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:33:59 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:33:59 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:34:06 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:34:06 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:34:06 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:34:06 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-19 19:34:06 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-19 19:34:06 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-19 19:34:06 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-19 19:34:06 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:32:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:32:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:32:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:32:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:32:52 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:32:52 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:32:52 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:32:52 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:32:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:32:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:32:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:32:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:32:55 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:32:55 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:32:55 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:32:55 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:33:40 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:33:40 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:33:40 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:33:40 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:33:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:33:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:33:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:33:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:33:44 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:33:44 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:33:44 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:33:44 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:33:44 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:33:44 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:33:44 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:33:44 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:43:45 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:43:45 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:43:45 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:43:45 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:43:47 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:43:47 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:43:47 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:43:47 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:43:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:43:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:43:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:43:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:47:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:47:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:47:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:47:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:47:44 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:47:44 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:47:44 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:47:44 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:47:46 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:47:46 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:47:46 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:47:46 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:51:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:51:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:51:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:51:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:51:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:51:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:51:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:51:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:51:33 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:51:33 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:51:33 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:51:33 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:56:02 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:56:02 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:56:02 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:56:02 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:56:03 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:56:03 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:56:03 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:56:03 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:56:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:56:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:56:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:56:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:56:30 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:56:30 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:56:30 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:56:30 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:56:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:56:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:56:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:56:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:56:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:56:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:56:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:56:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:57:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:57:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:57:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:57:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:57:25 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:57:25 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:57:25 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:57:25 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:57:27 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:57:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:57:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:57:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 09:57:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 09:57:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 09:57:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 09:57:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:02 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:02 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:02 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:02 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:05 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:05 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:05 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:05 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:17 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:17 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:17 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:17 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:22 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:22 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:22 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:22 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:12:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:12:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:12:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:12:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:17:44 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:17:44 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:17:44 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:17:44 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:17 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:17 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:17 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:17 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:30 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:30 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:30 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:30 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:19:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:19:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:19:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:19:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:30:43 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:30:43 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:30:43 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:30:43 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:30:45 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:30:45 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:30:45 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:30:45 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:30:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:30:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:30:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:30:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:30:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:30:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:30:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:30:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:46:05 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:46:05 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:46:05 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:46:05 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:46:07 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:46:07 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:46:07 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:46:07 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:46:11 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:46:11 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:46:11 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:46:11 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:46:12 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:46:12 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:46:12 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:46:12 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:48:16 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:48:16 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:48:16 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:48:16 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:48:17 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:48:17 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:48:17 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:48:17 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:48:22 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:48:22 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:48:22 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:48:22 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:48:22 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:48:22 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:48:22 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:48:22 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:51:15 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:51:15 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:51:15 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:51:15 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:52:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:52:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:52:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:52:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:52:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:52:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:52:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:52:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:52:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:52:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:52:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:52:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:53:33 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:53:33 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:53:33 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:53:33 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:53:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:53:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:53:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:53:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:53:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:53:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:53:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:53:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:53:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:53:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:53:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:53:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:13 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:13 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:13 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:13 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:13 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:13 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:13 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:13 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:29 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:29 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:29 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:29 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:33 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:33 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:33 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:33 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:54:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:54:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:54:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:54:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:56:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:56:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:56:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:56:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:56:37 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:56:37 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:56:37 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:56:37 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:56:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:56:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:56:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:56:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 10:56:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 10:56:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 10:56:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 10:56:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:00:36 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:00:36 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:00:36 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:00:36 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:00:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:00:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:00:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:00:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:00:42 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:00:42 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:00:42 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:00:42 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:02:20 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:02:20 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:02:20 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:02:20 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:02:21 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:02:21 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:02:21 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:02:21 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:02:24 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:02:24 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:02:24 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:02:24 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:02:24 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:02:24 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:02:24 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:02:24 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:03:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:03:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:03:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:03:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:03:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:03:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:03:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:03:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:03:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:03:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:03:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:03:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:03:38 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:03:38 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:03:38 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:03:38 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:04:02 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:04:02 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:04:02 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:04:02 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:04:04 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:04:04 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:04:04 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:04:04 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:04:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:04:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:04:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:04:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:04:08 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:04:08 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:04:08 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:04:08 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:05:17 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:05:17 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:05:17 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:05:17 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:05:19 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:05:19 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:05:19 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:05:19 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:05:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:05:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:05:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:05:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:05:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:05:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:05:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:05:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:07:31 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:07:31 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:07:31 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:07:31 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:07:33 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:07:33 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:07:33 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:07:33 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:07:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:07:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:07:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:07:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:07:39 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:07:39 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:07:39 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:07:39 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:12:27 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:12:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:12:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:12:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:12:30 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:12:30 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:12:30 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:12:30 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:12:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:12:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:12:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:12:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:12:35 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:12:35 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:12:35 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:12:35 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:13:56 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:13:56 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:13:56 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:13:56 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:13:58 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:13:58 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:13:58 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:13:58 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:14:03 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:14:03 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:14:03 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:14:03 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:14:03 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:14:03 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:14:03 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:14:03 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:14:48 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:14:48 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:14:48 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:14:48 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:14:50 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:14:50 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:14:50 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:14:50 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:14:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:14:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:14:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:14:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:14:53 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:14:53 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:14:53 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:14:53 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:16:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:16:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:16:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:16:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:16:30 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:16:30 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:16:30 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:16:30 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:16:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:16:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:16:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:16:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:16:34 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:16:34 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:16:34 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:16:34 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:23 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:23 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:23 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:23 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:25 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:25 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:25 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:25 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:26 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:26 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:26 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:26 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:27 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:27 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:27 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:27 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:27 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:27:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:27:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:27:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:27:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:04 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:04 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:04 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:04 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:06 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:06 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:06 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:06 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:10 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:10 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:10 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:10 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:26 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:26 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:26 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:26 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:28 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:28 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:28 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:28 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
+2025-11-20 11:28:32 - ai_model - DEBUG - ✅ AI模型初始化完成
+2025-11-20 11:28:32 - ai_model - DEBUG -    模型: deepseek-ai/DeepSeek-V3
+2025-11-20 11:28:32 - ai_model - DEBUG -    Base URL: https://api.siliconflow.cn/v1
+2025-11-20 11:28:32 - ai_model - DEBUG -    API Key: sk-gsaohhwdtofontqfo...rolhikfqmy
