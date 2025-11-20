@@ -307,7 +307,7 @@ def collect_entities_llm(
         user_text=user_text,
         class_profiles_text=class_profiles_text if class_profiles_text else "（无班级配置信息）"
     )
-
+    
     resp = model.client.chat.completions.create(
         model=model.model,
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -322,7 +322,11 @@ def collect_entities_llm(
     if start != -1 and end != -1 and end > start:
         try:
             parsed = json.loads(content[start : end + 1])
-        except Exception:
+            # 调试日志：记录解析后的JSON
+            logger.info("[PARAM_EXTRACTION] 解析后的JSON:")
+            logger.info(json.dumps(parsed, ensure_ascii=False, indent=2))
+        except Exception as e:
+            logger.error(f"[PARAM_EXTRACTION] JSON解析失败: {e}")
             parsed = {}
 
     # 根据意图类型决定提取哪些字段
@@ -452,7 +456,7 @@ def build_plan_messages(
             semantic_query = bool(params.get("semantic_query"))
             # 全员运动会：需要操场条件、年级、人数等信息
             if not params.get("semantic_query"):
-                missing_info.append("semantic_query")
+                missing_info.append("学生人数、年级、操场大小、跑道数量、操场条件")
         elif is_lesson_plan:
             # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
             has_grades = bool(params.get("grades_query"))
@@ -468,6 +472,7 @@ def build_plan_messages(
 
         # 加载引导语模板
         guidance_template = load_prompt_template("guidance_prompt")
+        # 格式化引导语提示词
         user_prompt = guidance_template.format(
             user_text=user_text,
             collected_info=collected_str,
