@@ -286,28 +286,30 @@ def collect_entities_llm(
         if history_lines:
             history_text = "\n".join(history_lines)
     
-    # 加载班级配置并生成班级配置文本
-    class_profiles = load_class_profiles()
-    class_profiles_text = ""
-    if class_profiles:
-        class_profiles_text = "如果用户提到以下班级，结合班级体测数据提取trained_weaknesses：\n"
-        for class_name, profile in class_profiles.items():
-            weaknesses = profile.get("trained_weaknesses", "")
-            description = profile.get("description", "")
-            class_profiles_text += f"## {class_name}核心薄弱维度：{weaknesses}\n"
-            if "weakness_details" in profile:
-                for weakness, detail in profile["weakness_details"].items():
-                    class_profiles_text += f"- {weakness}：{detail}\n"
-            class_profiles_text += "\n"
+
+    #冗余代码
+    # # 加载班级配置并生成班级配置文本
+    # class_profiles = load_class_profiles()
+    # class_profiles_text = ""
+    # if class_profiles:
+    #     class_profiles_text = "如果用户提到以下班级，结合班级体测数据提取trained_weaknesses：\n"
+    #     for class_name, profile in class_profiles.items():
+    #         weaknesses = profile.get("trained_weaknesses", "")
+    #         description = profile.get("description", "")
+    #         class_profiles_text += f"## {class_name}核心薄弱维度：{weaknesses}\n"
+    #         if "weakness_details" in profile:
+    #             for weakness, detail in profile["weakness_details"].items():
+    #                 class_profiles_text += f"- {weakness}：{detail}\n"
+    #         class_profiles_text += "\n"
     
     # 加载参数提取用户提示词模板
     user_template = load_prompt_template("param_extraction_user")
     user = user_template.format(
         history_text=history_text if history_text else "（无历史记录）",
         user_text=user_text,
-        class_profiles_text=class_profiles_text if class_profiles_text else "（无班级配置信息）"
+        # class_profiles_text=class_profiles_text if class_profiles_text else "（无班级配置信息）"
     )
-    
+
     resp = model.client.chat.completions.create(
         model=model.model,
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],

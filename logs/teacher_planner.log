@@ -1190,3 +1190,147 @@
   "grades_query": "",
   "top_k": 10
 }
+2025-11-20 15:52:27 - teacher_planner - INFO - [班级检测] 识别到班级: 五年级1班
+2025-11-20 15:52:27 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "5", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "五年级1班"}
+2025-11-20 15:52:27 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 15:52:27 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 15:52:27 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 15:52:27 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "5",
+  "trained_weaknesses": "速度、耐力",
+  "top_k": 10
+}
+2025-11-20 15:52:27 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 15:52:27 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果
+2025-11-20 15:55:11 - teacher_planner - INFO - [班级检测] 识别到班级: 六年级1班
+2025-11-20 15:55:11 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "6", "trained_weaknesses": "速度、耐力", "top_k": 10, "detected_class_name": "六年级1班"}
+2025-11-20 15:55:11 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 15:55:11 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 15:55:11 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 15:55:11 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "6",
+  "trained_weaknesses": "速度、耐力",
+  "top_k": 10
+}
+2025-11-20 15:55:12 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 15:55:12 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果
+2025-11-20 15:55:40 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-20 15:55:45 - teacher_planner - INFO - [PARAM_EXTRACTION] 解析后的JSON:
+2025-11-20 15:55:45 - teacher_planner - INFO - {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "",
+  "top_k": 10
+}
+2025-11-20 15:55:45 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 15:55:45 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 15:55:45 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 15:55:45 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "",
+  "top_k": 10
+}
+2025-11-20 15:55:45 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 15:55:45 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果
+2025-11-20 15:56:38 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-20 15:56:44 - teacher_planner - INFO - [PARAM_EXTRACTION] 解析后的JSON:
+2025-11-20 15:56:44 - teacher_planner - INFO - {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "",
+  "top_k": 10
+}
+2025-11-20 15:56:44 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 15:56:44 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 15:56:44 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 15:56:44 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "",
+  "top_k": 10
+}
+2025-11-20 15:56:44 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 15:56:44 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果
+2025-11-20 16:01:56 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-20 16:02:02 - teacher_planner - INFO - [PARAM_EXTRACTION] 解析后的JSON:
+2025-11-20 16:02:02 - teacher_planner - INFO - {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "",
+  "top_k": 10
+}
+2025-11-20 16:02:26 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-20 16:02:33 - teacher_planner - INFO - [PARAM_EXTRACTION] 解析后的JSON:
+2025-11-20 16:02:33 - teacher_planner - INFO - {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "速度",
+  "top_k": 10
+}
+2025-11-20 16:02:33 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 16:02:33 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 16:02:33 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 16:02:33 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "4",
+  "trained_weaknesses": "速度",
+  "top_k": 10
+}
+2025-11-20 16:02:33 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 16:02:33 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果
+2025-11-20 16:41:52 - teacher_planner - INFO - [班级检测] 识别到班级: 一年级一班
+2025-11-20 16:41:52 - teacher_planner - INFO - [班级检测] 自动填充参数: {"semantic_query": "", "count_query": "", "grades_query": "1", "trained_weaknesses": "速度、柔韧", "top_k": 10, "detected_class_name": "一年级一班"}
+2025-11-20 16:41:52 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 16:41:52 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 16:41:52 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 16:41:52 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "1",
+  "trained_weaknesses": "速度、柔韧",
+  "top_k": 10
+}
+2025-11-20 16:41:52 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 16:41:52 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果
+2025-11-20 17:16:40 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-20 17:16:45 - teacher_planner - INFO - [PARAM_EXTRACTION] 解析后的JSON:
+2025-11-20 17:16:45 - teacher_planner - INFO - {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "1",
+  "trained_weaknesses": "",
+  "top_k": 10
+}
+2025-11-20 17:17:11 - teacher_planner - INFO - [班级检测] 未识别到配置文件中的班级
+2025-11-20 17:17:17 - teacher_planner - INFO - [PARAM_EXTRACTION] 解析后的JSON:
+2025-11-20 17:17:17 - teacher_planner - INFO - {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "1",
+  "trained_weaknesses": "柔韧",
+  "top_k": 10
+}
+2025-11-20 17:17:17 - teacher_planner - INFO - [TEACHER] 🚀 检索接口请求
+2025-11-20 17:17:17 - teacher_planner - INFO -    URL: http://111.202.231.146:21014/extended-search/hybrid
+2025-11-20 17:17:17 - teacher_planner - INFO -    Timeout: 8.0秒
+2025-11-20 17:17:17 - teacher_planner - INFO -    Payload: {
+  "semantic_query": "",
+  "count_query": "",
+  "grades_query": "1",
+  "trained_weaknesses": "柔韧",
+  "top_k": 10
+}
+2025-11-20 17:17:17 - teacher_planner - INFO - [TEACHER] ✅ 检索接口响应: status_code=200
+2025-11-20 17:17:17 - teacher_planner - INFO - [TEACHER] 📊 检索返回 10 条结果

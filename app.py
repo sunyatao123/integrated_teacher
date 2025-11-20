@@ -242,7 +242,7 @@ def teacher_plan():
             # 课课练：需要班级或薄弱项，满足任一即可
             has_grades = bool(params.get("grades_query"))
             has_weaknesses = bool(params.get("trained_weaknesses"))
-            if not has_grades and not has_weaknesses:
+            if not has_grades or not has_weaknesses:
                 need_guidance = True
                 missing_fields.extend(["grades_query", "trained_weaknesses"])
 
@@ -389,7 +389,7 @@ def teacher_plan_stream():
                     logger.debug(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
                 has_grades = bool(grades_query)
                 has_weaknesses = bool(trained_weaknesses_value)
-                if not has_grades and not has_weaknesses:
+                if not has_grades or not has_weaknesses:
                     # 两个都没有，需要引导
                     missing_fields.append('grades_query_or_trained_weaknesses')
                 if missing_fields and os.getenv('DEBUG_AI','1')=='1':
