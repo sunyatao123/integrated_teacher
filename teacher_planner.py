@@ -315,8 +315,11 @@ def collect_entities_llm(
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
         max_tokens=400,
         temperature=0.2,
+        response_format={'type': 'json_object'},  #deepseek的json输出格式
     )
     content = resp.choices[0].message.content.strip()
+
+    logger.info(f"[PARAM_EXTRACTION] 原始响应内容: {repr(content)}")
     # JSON截取
     start = content.find("{")
     end = content.rfind("}")
@@ -325,46 +328,61 @@ def collect_entities_llm(
         try:
             parsed = json.loads(content[start : end + 1])
             # 调试日志：记录解析后的JSON
-            logger.info("[PARAM_EXTRACTION] 解析后的JSON:")
-            logger.info(json.dumps(parsed, ensure_ascii=False, indent=2))
+            # logger.info("[PARAM_EXTRACTION] 解析后的JSON:")
+            # logger.info(json.dumps(parsed, ensure_ascii=False, indent=2))
         except Exception as e:
             logger.error(f"[PARAM_EXTRACTION] JSON解析失败: {e}")
             parsed = {}
 
+    # try:
+    #     parsed = json.loads(content)  # ✅ 直接解析，无需截取
+    #     logger.info("[PARAM_EXTRACTION] 解析后的JSON:")
+    #     logger.info(json.dumps(parsed, ensure_ascii=False, indent=2))
+    # except Exception as e:
+    #     logger.error(f"[PARAM_EXTRACTION] JSON解析失败: {e}")
+    #     parsed = {}
+
     # 根据意图类型决定提取哪些字段
     if plan_type == "sports_meeting":
         # 全员运动会：提取操场条件、年级、人数
-        out = {
-            "semantic_query": parsed.get("semantic_query") or "",
-            "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
-            "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
-            "top_k": int(parsed.get("top_k") or 5),
-        }
+        # out = {
+        #     "semantic_query": parsed.get("semantic_query") or "",
+        #     "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
+        #     "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
+        #     "top_k": int(parsed.get("top_k") or 5),
+        # }
         missing: List[str] = []
-        for key in ["semantic_query", "count_query", "grades_query"]:
-            if not out.get(key):
-                missing.append(key)
+        if not parsed.get("semantic_query"):
+            missing.append("semantic_query")
     elif plan_type == "lesson_plan":
         # 课课练：提取所有字段
-        out = {
-            "semantic_query": parsed.get("semantic_query") or "",
-            "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
-            "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
-            "trained_weaknesses": parsed.get("trained_weaknesses") or "",
-            "top_k": int(parsed.get("top_k") or 5),
-        }
+        # out = {
+        #     "semantic_query": parsed.get("semantic_query") or "",
+        #     "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
+        #     "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
+        #     "trained_weaknesses": parsed.get("trained_weaknesses") or "",
+        #     "top_k": int(parsed.get("top_k") or 5),
+        # }
         missing: List[str] = []
-        for key in ["semantic_query", "count_query", "grades_query", "trained_weaknesses"]:
-            if not out.get(key):
-                missing.append(key)
+        if not parsed.get("grades_query") and not parsed.get("trained_weaknesses"):
+            missing.extend(["grades_query", "trained_weaknesses"])
+
+        elif not parsed.get("grades_query"):
+            missing.append("grades_query")
+
+        elif not parsed.get("trained_weaknesses"):
+            missing.append("trained_weaknesses")
     else:
         # 闲聊模式：不需要提取业务字段，不检查缺失
-        out = {
-            "top_k": int(parsed.get("top_k") or 5),
-        }
+        # out = {
+        #     "top_k": int(parsed.get("top_k") or 5),
+        # }
         missing: List[str] = []
 
-    return out, missing
+    logger.info(f"[PARAM_EXTRACTION] 信息收集: {parsed}")
+    logger.info(f"[PARAM_EXTRACTION] 缺失字段: {missing}")
+
+    return parsed, missing
 
 
 def _post_json(url: str, payload: Dict[str, Any], timeout: float = 8.0) -> List[Dict[str, Any]]:
@@ -408,7 +426,7 @@ def _post_json(url: str, payload: Dict[str, Any], timeout: float = 8.0) -> List[
     return []
 
 
-def call_hybrid_search(base_url, payload, timeout=8.0):
+def call_lesson_plan_search(base_url, payload, timeout=8.0):
     url = base_url + "/extended-search/hybrid"
     return _post_json(url, payload, timeout)
 
@@ -421,7 +439,9 @@ def call_sports_meeting_search(base_url, payload, timeout=8.0):
 def build_plan_messages(
     results: List[Dict[str, Any]],
     params: Dict[str, Any],
+    conversation_history: List[Dict[str, str]],
     user_text: str,
+    missing:List[str] = None,
     need_guidance: bool = False,
 ) -> List[Dict[str, str]]:
     """
@@ -439,46 +459,58 @@ def build_plan_messages(
 
     # 如果需要引导，生成引导提示
     if need_guidance:
-        collected_str = json.dumps({
-            "semantic_query": params.get("semantic_query") or "",
-            "count_query": params.get("count_query") or "",
-            "grades_query": params.get("grades_query") or "",
-            "trained_weaknesses": params.get("trained_weaknesses") or "",
-            "plan_type": params.get("plan_type") or "",
-        }, ensure_ascii=False, indent=2)
+        # collected_str = json.dumps({
+        #     "semantic_query": params.get("semantic_query") or "",
+        #     "count_query": params.get("count_query") or "",
+        #     "grades_query": params.get("grades_query") or "",
+        #     "trained_weaknesses": params.get("trained_weaknesses") or "",
+        #     "plan_type": params.get("plan_type") or "",
+        # }, ensure_ascii=False, indent=2)
 
-        # 根据意图类型和已收集的实体判断缺失字段
-        plan_type = params.get("plan_type")
-        is_sports_meeting = plan_type == "sports_meeting"
-        is_lesson_plan = plan_type == "lesson_plan"
+        # # 根据意图类型和已收集的实体判断缺失字段
+        # plan_type = params.get("plan_type")
+        # is_sports_meeting = plan_type == "sports_meeting"
+        # is_lesson_plan = plan_type == "lesson_plan"
 
-        # 判断缺失字段
+        # # 判断缺失字段
+        # missing_info = []
+        # if is_sports_meeting:
+        #     semantic_query = bool(params.get("semantic_query"))
+        #     # 全员运动会：需要操场条件、年级、人数等信息
+        #     if not params.get("semantic_query"):
+        #         missing_info.append("学生人数、年级、操场大小、跑道数量、操场条件")
+        # elif is_lesson_plan:
+        #     # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
+        #     has_grades = bool(params.get("grades_query"))
+        #     has_weaknesses = bool(params.get("trained_weaknesses"))
+        #     if not has_grades and not has_weaknesses:
+        #         missing_info.append("班级或薄弱项（如：速度、力量、柔韧等）")
+        #     elif not has_grades:
+        #         missing_info.append("班级信息")
+        #     elif not has_weaknesses:
+        #         missing_info.append("薄弱项（如：速度、力量、柔韧等）")
+
+        # missing_str = "、".join(missing_info) if missing_info else "无"
         missing_info = []
-        if is_sports_meeting:
-            semantic_query = bool(params.get("semantic_query"))
-            # 全员运动会：需要操场条件、年级、人数等信息
-            if not params.get("semantic_query"):
-                missing_info.append("学生人数、年级、操场大小、跑道数量、操场条件")
-        elif is_lesson_plan:
-            # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
-            has_grades = bool(params.get("grades_query"))
-            has_weaknesses = bool(params.get("trained_weaknesses"))
-            if not has_grades and not has_weaknesses:
-                missing_info.append("班级或薄弱项（如：速度、力量、柔韧等）")
-            elif not has_grades:
-                missing_info.append("班级信息")
-            elif not has_weaknesses:
-                missing_info.append("薄弱项（如：速度、力量、柔韧等）")
+        missing = missing or []
+        if "semantic_query" in missing:
+            missing_info.append("学生人数、年级、操场大小、跑道数量、操场条件") #运动会
+
+        if "grades_query" in missing and "trained_weaknesses" in missing:   #课课练
+            missing_info.append("年级和薄弱项（如：形态、耐力、力量、柔韧、速度、机能等）")
+        elif "grades_query" in missing:
+            missing_info.append("年级信息")
+        elif "trained_weaknesses" in missing:
+            missing_info.append("薄弱项（如：形态、耐力、力量、柔韧、速度、机能等）")
 
         missing_str = "、".join(missing_info) if missing_info else "无"
-
         # 加载引导语模板
         guidance_template = load_prompt_template("guidance_prompt")
         # 格式化引导语提示词
         user_prompt = guidance_template.format(
             user_text=user_text,
-            collected_info=collected_str,
-            plan_type=plan_type or "未确定",
+            collected_info=params,
+            plan_type=params.get("plan_type") or "未确定",
             missing_info=missing_str
         )
         return [
@@ -525,6 +557,7 @@ def build_plan_messages(
         template = load_prompt_template("plan_generation_sports_meeting")
         user_prompt = template.format(
             user_text=user_text,
+            conversation_history=conversation_history,
             meta=json.dumps(meta, ensure_ascii=False, indent=2),
             results_text=results_text,
             grades_query=meta.get("grades_query") or "根据用户输入确定",
@@ -589,12 +622,13 @@ def build_plan_messages(
                     class_analysis_text += "   - **重要**：请在方案开头展示上述学生分组情况，并根据分组为不同薄弱项的学生推荐不同的练习！\n"
 
         # 如果没有找到班级配置，生成提示信息
-        if not class_analysis_text and grades_query:
-            class_analysis_text = f"   - 由于配置中没有该班级的详细信息，本方案将基于{grades_query}年级的一般特点提供通用的练习推荐。\n   - **重要**：请在方案开头展示这个提示信息！\n"
+        # if not class_analysis_text and grades_query:
+        #     class_analysis_text = f"   - 由于配置中没有该班级的详细信息，本方案将基于{grades_query}年级的一般特点提供通用的练习推荐。\n   - **重要**：请在方案开头展示这个提示信息！\n"
 
         template = load_prompt_template("plan_generation_lesson_plan")
         user_prompt = template.format(
             user_text=user_text,
+            conversation_history=conversation_history,
             meta=json.dumps(meta, ensure_ascii=False, indent=2),
             results_text=results_text,
             class_analysis_text=class_analysis_text
@@ -602,7 +636,7 @@ def build_plan_messages(
     elif plan_type == "chat":
         # 闲聊：仅返回系统提示与原始输入
         messages = [{"role": "system", "content": TEACHER_SYSTEM_PROMPT}]
-        if conversation_history := params.get("conversation_history"):
+        if conversation_history:
             for msg in conversation_history[-6:]:
                 messages.append(msg)
         messages.append({"role": "user", "content": user_text})
@@ -616,7 +650,7 @@ def build_plan_messages(
 
     # 返回消息列表
     messages = [{"role": "system", "content": TEACHER_SYSTEM_PROMPT}]
-    if conversation_history := params.get("conversation_history"):
+    if conversation_history:
         for msg in conversation_history[-6:]:
             messages.append(msg)
     messages.append({"role": "user", "content": user_prompt})
@@ -626,7 +660,9 @@ def build_plan_messages(
 def generate_plan_stream(
     results: List[Dict[str, Any]],
     params: Dict[str, Any],
+    conversation_history: List[Dict[str, str]],
     user_text: str,
+    missing:List[str] = None,
     need_guidance: bool = False,
 ):
     """
@@ -641,8 +677,9 @@ def generate_plan_stream(
     返回：生成器，逐块返回生成的文本
     """
     model = OptimizedAIModel()
-    messages = build_plan_messages(results, params, user_text, need_guidance)
-
+    missing = missing or []
+    messages = build_plan_messages(results, params,conversation_history, user_text, missing, need_guidance)
+    logger.info(f"[TEACHER] 流式生成请求，messages={messages}")
     # 调试信息已移除（前端可见模型回复内容）
 
     try:
@@ -681,6 +718,7 @@ def generate_plan_stream(
 def generate_plan(
     results: List[Dict[str, Any]],
     params: Dict[str, Any],
+    conversation_history: List[Dict[str, str]],
     user_text: str,
     need_guidance: bool = False,
 ) -> str:
@@ -696,7 +734,7 @@ def generate_plan(
     返回：生成的文本
     """
     model = OptimizedAIModel()
-    messages = build_plan_messages(results, params, user_text, need_guidance)
+    messages = build_plan_messages(results, params,conversation_history, user_text, need_guidance)
 
     try:
         resp = model.client.chat.completions.create(

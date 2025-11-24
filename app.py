@@ -66,7 +66,7 @@ logger = setup_app_logger()
 from teacher_planner import (
     collect_entities_llm,
     detect_intent_llm,
-    call_hybrid_search,
+    call_lesson_plan_search,
     call_sports_meeting_search,
     generate_plan,
     generate_plan_stream,
@@ -194,7 +194,7 @@ def teacher_plan():
         try:
             params, missing = collect_entities_llm(user_text, conversation_history, plan_type)
             # 记录收集到的信息
-            logger.info(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
+            logger.debug(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
             if os.getenv('DEBUG_AI','1')=='1':
                 logger.info(f"[TEACHER] 实体抽取: params={params}, missing={missing}")
         except Exception as e:
@@ -202,7 +202,7 @@ def teacher_plan():
                 logger.error(f"[TEACHER] 实体抽取失败: {e}")
             return jsonify({'success': False, 'message': f'实体抽取失败: {e}'}), 500
 
-        # 应用显式覆盖
+        # 应用显式覆盖(?)
         for k in ['semantic_query', 'count_query', 'grades_query', 'trained_weaknesses', 'top_k']:
             if k in override_params and override_params[k] not in (None, ''):
                 params[k] = override_params[k]
@@ -265,7 +265,7 @@ def teacher_plan():
         try:
             if plan_type == "sports_meeting":
                 # 全员运动会检索
-                semantic_with_text = f"{params.get('semantic_query', '')} {user_text}".strip()
+                semantic_with_text = f"{params.get('semantic_query', '')} {params.get('project_name', '')} {user_text}".strip()
                 payload = {
                     "semantic_query": semantic_with_text,
                     "count_query": str(params.get("count_query") or ""),
@@ -275,14 +275,15 @@ def teacher_plan():
                 results = call_sports_meeting_search(SEARCH_BASE_URL, payload)
             else:
                 # 课课练检索
+                semantic_with_text2 = f"{params.get('semantic_query', '')} {params.get('project_name', '')} {user_text}".strip()
                 payload = {
-                    "semantic_query": params.get("semantic_query") or "",
+                    "semantic_query": semantic_with_text2,
                     "count_query": str(params.get("count_query") or ""),
                     "grades_query": str(params.get("grades_query") or ""),
                     "trained_weaknesses": params.get("trained_weaknesses") or "",
                     "top_k": int(params.get("top_k") or 5),
                 }
-                results = call_hybrid_search(SEARCH_BASE_URL, payload)
+                results = call_lesson_plan_search(SEARCH_BASE_URL, payload)
 
             if os.getenv('DEBUG_AI','1')=='1':
                 logger.debug(f"[TEACHER] 检索结果数量: {len(results)}")
@@ -349,7 +350,7 @@ def teacher_plan_stream():
         params, missing = collect_entities_llm(user_text, conversation_history, plan_type)
 
         # 记录收集到的信息
-        logger.info(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
+        logger.debug(f"[信息收集] 参数: {json.dumps(params, ensure_ascii=False)}")
 
         # 应用显式覆盖（可能没啥用？）
         for k in ['semantic_query', 'count_query', 'grades_query', 'trained_weaknesses', 'top_k']:
@@ -359,42 +360,44 @@ def teacher_plan_stream():
         # 添加意图类型到参数中
         params["plan_type"] = plan_type
         params["conversation_history"] = conversation_history
+        
 
-        # 如果是闲聊，直接生成友好回复（流式）
-        if plan_type == "chat":
-            if os.getenv('DEBUG_AI','1')=='1':
-                logger.debug("[TEACHER] 流式接口：识别为闲聊，直接生成回复")
-            need_guidance = False
-            missing_fields = []
-        else:
-            # 关键检查：根据场景判断是否需要更多信息
-            count_query = params.get('count_query')     #没用到
-            grades_query = params.get('grades_query')
-            semantic_query = params.get('semantic_query')
-            trained_weaknesses_value = params.get('trained_weaknesses')
+        need_guidance = bool(missing)
+        # # 如果是闲聊，直接生成友好回复（流式）
+        # if plan_type == "chat":
+        #     if os.getenv('DEBUG_AI','1')=='1':
+        #         logger.debug("[TEACHER] 流式接口：识别为闲聊，直接生成回复")
+        #     need_guidance = False
+        #     missing_fields = []
+        # else:
+        #     # 关键检查：根据场景判断是否需要更多信息
+        #     count_query = params.get('count_query')     #没用到
+        #     grades_query = params.get('grades_query')
+        #     semantic_query = params.get('semantic_query')
+        #     trained_weaknesses_value = params.get('trained_weaknesses')
 
-            missing_fields = []
-            if plan_type == "sports_meeting":
-                # 全员运动会：需要操场条件、年级、人数等信息
-                if os.getenv('DEBUG_AI','1')=='1':
-                    logger.debug(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}, grades={grades_query}, count={count_query}")
-                if not semantic_query:
-                    missing_fields.append('semantic_query')
+        #     missing_fields = []
+        #     if plan_type == "sports_meeting":
+        #         # 全员运动会：需要操场条件、年级、人数等信息
+        #         if os.getenv('DEBUG_AI','1')=='1':
+        #             logger.debug(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}, grades={grades_query}, count={count_query}")
+        #         if not semantic_query:
+        #             missing_fields.append('semantic_query')
 
-                if missing_fields and os.getenv('DEBUG_AI','1')=='1':
-                    logger.debug(f"[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失={missing_fields}")
-            elif plan_type == "lesson_plan":
-                # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
-                if os.getenv('DEBUG_AI','1')=='1':
-                    logger.debug(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
+        #         if missing_fields and os.getenv('DEBUG_AI','1')=='1':
+        #             logger.debug(f"[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失={missing_fields}")
+        #     elif plan_type == "lesson_plan":
+        #         # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
+        #         if os.getenv('DEBUG_AI','1')=='1':
+        #             logger.debug(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
                 
-                if not grades_query or not trained_weaknesses_value:
-                    missing_fields.append('grades_query_or_trained_weaknesses')
+        #         if not grades_query or not trained_weaknesses_value:
+        #             missing_fields.append('grades_query_or_trained_weaknesses')
 
-                if missing_fields and os.getenv('DEBUG_AI','1')=='1':
-                    logger.debug("[TEACHER] 流式接口：⚠️ 课课练场景信息不全（缺少班级或弱项），进入引导流程")
+        #         if missing_fields and os.getenv('DEBUG_AI','1')=='1':
+        #             logger.debug("[TEACHER] 流式接口：⚠️ 课课练场景信息不全（缺少班级或弱项），进入引导流程")
 
-            need_guidance = bool(missing_fields)
+        #     need_guidance = bool(missing_fields)
 
         # 如果是闲聊，直接生成友好回复（流式）
         if plan_type == "chat":
@@ -435,16 +438,16 @@ def teacher_plan_stream():
 
         if need_guidance:
             # 信息不全，使用generate_plan_stream生成引导语
-            collected_so_far = {
-                'semantic_query': params.get('semantic_query') or '',
-                'count_query': params.get('count_query') or '',
-                'grades_query': params.get('grades_query') or '',
-                'plan_type': params.get('plan_type') or '',
-                'top_k': int(params.get('top_k') or 5),
-            }
-                    # 只有课课练才需要薄弱项字段
-            if plan_type == "lesson_plan":
-                collected_so_far['trained_weaknesses'] = params.get('trained_weaknesses') or ''
+            # collected_so_far = {
+            #     'semantic_query': params.get('semantic_query') or '',
+            #     'count_query': params.get('count_query') or '',
+            #     'grades_query': params.get('grades_query') or '',
+            #     'plan_type': params.get('plan_type') or '',
+            #     'top_k': int(params.get('top_k') or 5),
+            # }
+            #         # 只有课课练才需要薄弱项字段
+            # if plan_type == "lesson_plan":
+            #     collected_so_far['trained_weaknesses'] = params.get('trained_weaknesses') or ''
 
             try:
                 if os.getenv('DEBUG_AI','1')=='1':
@@ -453,7 +456,7 @@ def teacher_plan_stream():
                 def guidance_stream():
                     ask_chunks = []
                     try:
-                        for chunk in generate_plan_stream([], params, user_text, need_guidance=True):
+                        for chunk in generate_plan_stream([], params,conversation_history, user_text,missing, need_guidance=True):
                             ask_chunks.append(chunk)
                             yield chunk
 
@@ -469,26 +472,26 @@ def teacher_plan_stream():
                 resp = Response(guidance_stream(), mimetype='text/plain; charset=utf-8')
                 resp.headers['X-Need-More-Info'] = '1'
                 # HTTP响应头只能使用ASCII字符，需要将中文转义为\uXXXX格式
-                resp.headers['X-Collected-Params'] = json.dumps(collected_so_far, ensure_ascii=True)
+                resp.headers['X-Collected-Params'] = json.dumps(params, ensure_ascii=True)
                 return resp
             except Exception as e:
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.error(f"[TEACHER] 流式接口：引导语流式生成失败，使用兜底提示。错误: {e}")
 
                 def fallback_stream():
-                    yield "请说明需要重点提升的薄弱项（如：速度/力量/柔韧/灵敏/耐力/核心稳定/协调/平衡）"
+                    yield "请说明需要重点提升的薄弱项（如：速度/力量/柔韧/耐力/机能/形态）"
 
                 resp = Response(fallback_stream(), mimetype='text/plain; charset=utf-8')
                 resp.headers['X-Need-More-Info'] = '1'
                 # HTTP响应头只能使用ASCII字符，需要将中文转义为\uXXXX格式
-                resp.headers['X-Collected-Params'] = json.dumps(collected_so_far, ensure_ascii=True)
+                resp.headers['X-Collected-Params'] = json.dumps(params, ensure_ascii=True)
                 return resp
 
         # 调用检索接口
         try:
             if plan_type == "sports_meeting":
                 # 全员运动会检索
-                semantic_with_text = f"{params.get('semantic_query', '')} {user_text}".strip()
+                semantic_with_text = f"{params.get('semantic_query', '')}{params.get('project_name', '')} {user_text}".strip()
                 payload = {
                     "semantic_query": semantic_with_text,
                     "count_query": str(params.get("count_query") or ""),
@@ -504,18 +507,21 @@ def teacher_plan_stream():
                     logger.info(json.dumps(results, ensure_ascii=False, indent=2))
                     logger.info("====== 检索结果结束 ======")
             elif plan_type == "lesson_plan":
+                trained_weaknesses = params.get("trained_weaknesses") or ""
+                if trained_weaknesses.strip() == "无要求":
+                    trained_weaknesses = ""
                 # 课课练检索
                 payload = {
                     "semantic_query": params.get("semantic_query") or "",
                     "count_query": str(params.get("count_query") or ""),
                     "grades_query": str(params.get("grades_query") or ""),
-                    "trained_weaknesses": params.get("trained_weaknesses") or "",
+                    "trained_weaknesses": trained_weaknesses,
                     "top_k": int(params.get("top_k") or 5),
                 }
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.debug(f"[TEACHER] 流式接口：调用检索 payload={payload}")
                     logger.debug(f"[TEACHER] 流式接口：🚀 开始调用检索接口 {SEARCH_BASE_URL}/extended-search/hybrid")
-                results = call_hybrid_search(SEARCH_BASE_URL, payload)
+                results = call_lesson_plan_search(SEARCH_BASE_URL, payload)
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.debug(f"[TEACHER] 流式接口：✅ 检索接口调用成功，返回 {len(results)} 条")
                     logger.info("====== 检索结果原始数据 ======")
@@ -531,7 +537,7 @@ def teacher_plan_stream():
         # 流式生成方案
         def generate():
             try:
-                for chunk in generate_plan_stream(results, params, user_text, need_guidance=False):
+                for chunk in generate_plan_stream(results, params,conversation_history, user_text, need_guidance=False):
                     yield chunk
             except Exception as e:
                 if os.getenv('DEBUG_AI','1')=='1':
