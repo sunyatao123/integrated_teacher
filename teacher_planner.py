@@ -263,7 +263,7 @@ def collect_entities_llm(
     """
     # 【新增】优先检测班级场景，如果检测到班级，直接返回预填充的参数
     # 注意：这里假设是lesson_plan意图，因为只有课课练才支持班级检测
-    is_class, class_params = detect_class_and_fill_params(user_text, intent="lesson_plan")
+    is_class, class_params = detect_class_and_fill_params(user_text, intent=plan_type)
     if is_class:
         # 检测到班级，直接返回预填充的参数，missing=[]
         return class_params, []
