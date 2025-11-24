@@ -6,15 +6,96 @@
 import pandas as pd
 import json
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Generator
 import io
 
-# 年级编号到年级名称的映射
+# 配置日志
+def setup_analyzer_logger():
+    """配置分析器日志系统"""
+    log_dir = Path(__file__).parent / "logs"
+    log_dir.mkdir(exist_ok=True)
+
+    logger = logging.getLogger("analyzer")
+    logger.setLevel(logging.DEBUG if os.getenv('DEBUG_AI', '1') == '1' else logging.INFO)
+
+    if logger.handlers:
+        return logger
+
+    log_file = log_dir / "analyzer.log"
+    file_handler = RotatingFileHandler(
+        log_file,
+        maxBytes=10*1024*1024,
+        backupCount=5,
+        encoding='utf-8'
+    )
+    file_handler.setLevel(logging.DEBUG)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+logger = setup_analyzer_logger()
+
+# 年级编号到年级名称的映射（已废弃，改为从班级名称提取）
 GRADE_MAPPING = {
     14: "1", 15: "2", 16: "3", 17: "4", 18: "5",
     19: "6", 20: "7", 21: "8", 22: "9"
 }
+
+def extract_grade_from_class_name(class_name: str) -> str:
+    """
+    从班级名称中提取年级
+
+    支持的格式：
+    - "五年级1班" → "5"
+    - "一年级1班" → "1"
+    - "3年级2班" → "3"
+    - "九年级1班" → "9"
+
+    参数:
+        class_name: 班级名称
+
+    返回:
+        年级字符串（如"1"、"5"），如果提取失败返回"1"
+    """
+    import re
+
+    # 中文数字到阿拉伯数字的映射
+    cn_num_map = {
+        '一': '1', '二': '2', '三': '3', '四': '4', '五': '5',
+        '六': '6', '七': '7', '八': '8', '九': '9'
+    }
+
+    # 先将中文数字转换为阿拉伯数字
+    normalized_name = class_name
+    for cn, num in cn_num_map.items():
+        normalized_name = normalized_name.replace(cn, num)
+
+    # 使用正则表达式提取年级
+    # 匹配模式：数字 + "年级"
+    match = re.search(r'(\d+)年级', normalized_name)
+    if match:
+        grade = match.group(1)
+        logger.debug(f"从班级名称 '{class_name}' 中提取到年级: {grade}")
+        return grade
+
+    # 如果没有匹配到，返回默认值
+    logger.warning(f"无法从班级名称 '{class_name}' 中提取年级，使用默认值 '1'")
+    return "1"
 
 # 数据库规定的6个薄弱维度
 ALLOWED_WEAKNESSES = ["形态", "耐力", "力量", "柔韧", "速度", "机能"]
@@ -27,7 +108,7 @@ WEAKNESS_MAPPING = {
     "一分钟仰卧起坐": "力量",
     "引体向上": "力量",
     "坐位体前屈": "柔韧",
-    "一分钟跳绳": "速度",
+    "一分钟跳绳": "机能",
     "立定跳远": "力量",
     "800米跑": "耐力",
     "1000米跑": "耐力",
@@ -306,9 +387,8 @@ def analyze_class_file(file_path: Path) -> Dict:
     df = pd.read_excel(file_path)
     class_name = file_path.stem  # 例如：一年级1班
 
-    # 获取年级编号
-    grade_code = df['年级编号'].iloc[0] if len(df) > 0 else 14
-    grade_query = GRADE_MAPPING.get(grade_code, "1")
+    # 从班级名称中提取年级（而不是从Excel文档内部的"年级编号"列）
+    grade_query = extract_grade_from_class_name(class_name)
 
     # 分析班级整体薄弱项
     weaknesses, weakness_details, weakness_test_items = analyze_class_weakness(df, class_name)
@@ -362,15 +442,15 @@ def generate_class_profiles(class_data_dir="class_data", output_file="prompts/cl
     if max_classes:
         class_files = class_files[:max_classes]
     
-    print(f"开始分析 {len(class_files)} 个班级...")
+    logger.info(f"开始分析 {len(class_files)} 个班级...")
     
     for idx, file_path in enumerate(class_files, 1):
         try:
             class_name, profile = analyze_class_file(file_path)
             profiles[class_name] = profile
-            print(f"[{idx}/{len(class_files)}] 分析完成: {class_name}")
+            logger.info(f"[{idx}/{len(class_files)}] 分析完成: {class_name}")
         except Exception as e:
-            print(f"[{idx}/{len(class_files)}] 分析失败: {file_path.name}, 错误: {e}")
+            logger.error(f"[{idx}/{len(class_files)}] 分析失败: {file_path.name}, 错误: {e}")
     
     # 保存到JSON文件
     output_path = Path(output_file)
@@ -379,7 +459,7 @@ def generate_class_profiles(class_data_dir="class_data", output_file="prompts/cl
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(profiles, f, ensure_ascii=False, indent=2)
     
-    print(f"\n生成完成！共分析 {len(profiles)} 个班级，保存到 {output_file}")
+    logger.info(f"\n生成完成！共分析 {len(profiles)} 个班级，保存到 {output_file}")
     return profiles
 
 
@@ -397,9 +477,8 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
     from ai_model_optimized import OptimizedAIModel
 
     try:
-        # 获取年级编号
-        grade_code = df['年级编号'].iloc[0] if len(df) > 0 else 14
-        grade_query = GRADE_MAPPING.get(grade_code, "1")
+        # 从班级名称中提取年级（而不是从Excel文档内部的"年级编号"列）
+        grade_query = extract_grade_from_class_name(class_name)
 
         yield f"📊 开始分析 {class_name} 的体测数据...\n\n"
         yield f"✅ 检测到年级：{grade_query}年级\n"
@@ -459,15 +538,50 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
             {"role": "user", "content": prompt}
         ]
 
-        response = model.client.chat.completions.create(
-            model=model.model,
-            messages=messages,
-            max_tokens=1000,
-            temperature=0.3
-        )
+        try:
+            response = model.client.chat.completions.create(
+                model=model.model,
+                messages=messages,
+                max_tokens=1000,
+                temperature=0.3
+            )
+            response_text = response.choices[0].message.content.strip()
+            yield f"AI分析结果：\n{response_text}\n\n"
+        except Exception as api_error:
+            # 记录详细的API错误信息
+            logger.error(f"AI模型API调用失败: {api_error}")
+            yield f"⚠️ AI分析失败（{str(api_error)}），使用传统方法分析...\n\n"
+            # 使用传统方法分析
+            weaknesses, weakness_details, _ = analyze_class_weakness(df, class_name)
+            weaknesses = [w for w in weaknesses if w in ALLOWED_WEAKNESSES][:2]
 
-        response_text = response.choices[0].message.content.strip()
-        yield f"AI分析结果：\n{response_text}\n\n"
+            yield f"✅ 识别到薄弱项：{', '.join(weaknesses)}\n\n"
+
+            # 分析学生个体薄弱项和分组
+            yield "👥 正在分析学生个体薄弱项...\n"
+            student_weaknesses = analyze_student_weaknesses(df)
+            yield f"✅ 已分析 {len(student_weaknesses)} 名学生的薄弱项\n\n"
+
+            yield f"📊 正在按班级薄弱项（{', '.join(weaknesses)}）对学生分组...\n"
+            student_groups = group_students_by_weakness(student_weaknesses, df, class_weaknesses=weaknesses)
+            yield f"✅ 已生成 {len(student_groups)} 个学生分组\n\n"
+
+            # 构建描述
+            description = f"{class_name}体质监测核心薄弱维度：" + "、".join(weaknesses) if weaknesses else f"{class_name}体质监测数据"
+
+            profile = {
+                "grades_query": grade_query,
+                "trained_weaknesses": "、".join(weaknesses) if weaknesses else "",
+                "count_query": "",
+                "semantic_query": "",
+                "description": description,
+                "weakness_details": weakness_details,
+                "student_groups": student_groups
+            }
+
+            yield "💾 正在保存配置...\n"
+            yield ("__PROFILE__", profile)
+            return
 
         # 解析JSON结果
         import re
@@ -514,6 +628,7 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
         yield ("__PROFILE__", profile)
 
     except Exception as e:
+        logger.error(f"分析失败: {e}", exc_info=True)
         yield f"❌ 分析失败：{str(e)}\n"
         raise e
 
@@ -534,9 +649,8 @@ def analyze_uploaded_file(file_content: bytes, class_name: str, output_file: str
         # 读取Excel文件
         df = pd.read_excel(io.BytesIO(file_content))
 
-        # 获取年级编号
-        grade_code = df['年级编号'].iloc[0] if len(df) > 0 else 14
-        grade_query = GRADE_MAPPING.get(grade_code, "1")
+        # 从班级名称中提取年级（而不是从Excel文档内部的"年级编号"列）
+        grade_query = extract_grade_from_class_name(class_name)
 
         # 分析班级整体薄弱项
         weaknesses, weakness_details, weakness_test_items = analyze_class_weakness(df, class_name)
