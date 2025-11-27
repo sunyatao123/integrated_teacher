@@ -406,12 +406,12 @@ def teacher_plan_stream():
                     model = OptimizedAIModel()
                     chat_messages = [
                         {"role": "system", "content": TEACHER_SYSTEM_PROMPT},
-                        {"role": "user", "content": f"用户说：{user_text}\n\n请用友好、简洁的方式回复用户。如果是询问功能，可以介绍你可以帮助生成课课练备课方案和全员运动会方案。"}
+                        {"role": "user", "content": f"{user_text}"}
                     ]
                     stream = model.client.chat.completions.create(
                         model=model.model,
                         messages=chat_messages,
-                        max_tokens=200,
+                        max_tokens=5000,
                         temperature=0.7,
                         stream=True,
                     )
