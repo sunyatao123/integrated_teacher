@@ -59,6 +59,23 @@ def setup_logger():
 # 初始化logger
 logger = setup_logger()
 
+# 长期记忆：累积参数存储（按意图类型分开）
+_accumulated_lesson_plan: Dict[str, Any] = {}
+_accumulated_sports_meeting: Dict[str, Any] = {}
+
+def reset_accumulated_params(plan_type: str = None):
+    """
+    重置累积参数（长期记忆）
+
+    参数：
+        plan_type: 指定重置哪个意图的记忆，None 表示全部重置
+    """
+    global _accumulated_lesson_plan, _accumulated_sports_meeting
+    if plan_type is None or plan_type == "lesson_plan":
+        _accumulated_lesson_plan.clear()
+    if plan_type is None or plan_type == "sports_meeting":
+        _accumulated_sports_meeting.clear()
+
 # 提示词模板加载函数
 def load_prompt_template(template_name: str) -> str:
     """从prompts文件夹加载提示词模板"""
@@ -261,12 +278,30 @@ def collect_entities_llm(
 
     返回：(提取的参数字典, 缺失的字段列表)
     """
+    global _accumulated_lesson_plan, _accumulated_sports_meeting
+
+    # 根据意图类型选择累积变量
+    if plan_type == "lesson_plan":
+        accumulated = _accumulated_lesson_plan
+    elif plan_type == "sports_meeting":
+        accumulated = _accumulated_sports_meeting
+    else:
+        accumulated = {}
+    
+    # 【新增】检测新会话：如果对话历史为空，清空累积变量
+    if not conversation_history or len(conversation_history) == 0:
+        accumulated.clear()
+        
     # 【新增】优先检测班级场景，如果检测到班级，直接返回预填充的参数
     # 注意：这里假设是lesson_plan意图，因为只有课课练才支持班级检测
     is_class, class_params = detect_class_and_fill_params(user_text, intent=plan_type)
     if is_class:
-        # 检测到班级，直接返回预填充的参数，missing=[]
-        return class_params, []
+        # 将班级参数合并到累积变量（非空才覆盖）
+        for key, value in class_params.items():
+            if value is not None and value != "":
+                accumulated[key] = value
+        logger.info(f"[班级检测] 累积变量：{accumulated}")
+        # 不直接返回，继续进行 LLM 实体抽取以提取用户输入中的其他信息
 
     model = OptimizedAIModel()
     system = load_prompt_template("param_extraction_system")
@@ -286,28 +321,11 @@ def collect_entities_llm(
         if history_lines:
             history_text = "\n".join(history_lines)
     
-
-    #冗余代码
-    # # 加载班级配置并生成班级配置文本
-    # class_profiles = load_class_profiles()
-    # class_profiles_text = ""
-    # if class_profiles:
-    #     class_profiles_text = "如果用户提到以下班级，结合班级体测数据提取trained_weaknesses：\n"
-    #     for class_name, profile in class_profiles.items():
-    #         weaknesses = profile.get("trained_weaknesses", "")
-    #         description = profile.get("description", "")
-    #         class_profiles_text += f"## {class_name}核心薄弱维度：{weaknesses}\n"
-    #         if "weakness_details" in profile:
-    #             for weakness, detail in profile["weakness_details"].items():
-    #                 class_profiles_text += f"- {weakness}：{detail}\n"
-    #         class_profiles_text += "\n"
-    
     # 加载参数提取用户提示词模板
     user_template = load_prompt_template("param_extraction_user")
     user = user_template.format(
         history_text=history_text if history_text else "（无历史记录）",
         user_text=user_text,
-        # class_profiles_text=class_profiles_text if class_profiles_text else "（无班级配置信息）"
     )
 
     resp = model.client.chat.completions.create(
@@ -319,7 +337,7 @@ def collect_entities_llm(
     )
     content = resp.choices[0].message.content.strip()
 
-    logger.info(f"[PARAM_EXTRACTION] 原始响应内容: {repr(content)}")
+    logger.info(f"[PARAM_EXTRACTION] 信息收集原始响应内容: {repr(content)}")
     # JSON截取
     start = content.find("{")
     end = content.rfind("}")
@@ -327,62 +345,41 @@ def collect_entities_llm(
     if start != -1 and end != -1 and end > start:
         try:
             parsed = json.loads(content[start : end + 1])
-            # 调试日志：记录解析后的JSON
-            # logger.info("[PARAM_EXTRACTION] 解析后的JSON:")
-            # logger.info(json.dumps(parsed, ensure_ascii=False, indent=2))
         except Exception as e:
             logger.error(f"[PARAM_EXTRACTION] JSON解析失败: {e}")
             parsed = {}
 
-    # try:
-    #     parsed = json.loads(content)  # ✅ 直接解析，无需截取
-    #     logger.info("[PARAM_EXTRACTION] 解析后的JSON:")
-    #     logger.info(json.dumps(parsed, ensure_ascii=False, indent=2))
-    # except Exception as e:
-    #     logger.error(f"[PARAM_EXTRACTION] JSON解析失败: {e}")
-    #     parsed = {}
+    # 将新抽取的参数合并到累积变量（非空才覆盖）
+    for key, value in parsed.items():
+        if value is not None and value != "":
+            accumulated[key] = value
 
-    # 根据意图类型决定提取哪些字段
+    # 根据意图类型决定提取哪些字段（基于累积变量判断缺失）
     if plan_type == "sports_meeting":
         # 全员运动会：提取操场条件、年级、人数
-        # out = {
-        #     "semantic_query": parsed.get("semantic_query") or "",
-        #     "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
-        #     "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
-        #     "top_k": int(parsed.get("top_k") or 5),
-        # }
         missing: List[str] = []
-        if not parsed.get("semantic_query"):
+        if not accumulated.get("semantic_query"):
             missing.append("semantic_query")
     elif plan_type == "lesson_plan":
         # 课课练：提取所有字段
-        # out = {
-        #     "semantic_query": parsed.get("semantic_query") or "",
-        #     "count_query": str(parsed.get("count_query")) if parsed.get("count_query") else "",
-        #     "grades_query": str(parsed.get("grades_query")) if parsed.get("grades_query") else "",
-        #     "trained_weaknesses": parsed.get("trained_weaknesses") or "",
-        #     "top_k": int(parsed.get("top_k") or 5),
-        # }
         missing: List[str] = []
-        if not parsed.get("grades_query") and not parsed.get("trained_weaknesses"):
+        if not accumulated.get("grades_query") and not accumulated.get("trained_weaknesses"):
             missing.extend(["grades_query", "trained_weaknesses"])
 
-        elif not parsed.get("grades_query"):
+        elif not accumulated.get("grades_query"):
             missing.append("grades_query")
 
-        elif not parsed.get("trained_weaknesses"):
+        elif not accumulated.get("trained_weaknesses"):
             missing.append("trained_weaknesses")
     else:
         # 闲聊模式：不需要提取业务字段，不检查缺失
-        # out = {
-        #     "top_k": int(parsed.get("top_k") or 5),
-        # }
         missing: List[str] = []
 
-    logger.info(f"[PARAM_EXTRACTION] 信息收集: {parsed}")
+    logger.info(f"[PARAM_EXTRACTION] 长期记忆信息收集: {accumulated}")
     logger.info(f"[PARAM_EXTRACTION] 缺失字段: {missing}")
 
-    return parsed, missing
+    # 返回副本，避免外部修改影响累积变量
+    return dict(accumulated), missing
 
 
 def _post_json(url: str, payload: Dict[str, Any], timeout: float = 8.0) -> List[Dict[str, Any]]:
