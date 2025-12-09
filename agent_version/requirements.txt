@@ -1,0 +1,25 @@
+# Agent版本依赖
+
+# Flask Web框架
+flask>=2.3.0
+
+# LangChain框架
+langchain>=0.1.0
+langchain-openai>=0.0.5
+
+# OpenAI客户端
+openai>=1.0.0
+
+# 数据处理
+pandas>=2.0.0
+openpyxl>=3.1.0
+
+# HTTP请求
+requests>=2.31.0
+
+# 环境变量
+python-dotenv>=1.0.0
+
+# Pydantic数据验证
+pydantic>=2.0.0
+

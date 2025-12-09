@@ -404,10 +404,15 @@ def teacher_plan_stream():
             def chat_stream():
                 try:
                     model = OptimizedAIModel()
-                    chat_messages = [
-                        {"role": "system", "content": TEACHER_SYSTEM_PROMPT},
-                        {"role": "user", "content": f"{user_text}"}
-                    ]
+                    # 构建包含历史记录的消息列表
+                    chat_messages = [{"role": "system", "content": TEACHER_SYSTEM_PROMPT}]
+                    # 添加历史对话记录
+                    if conversation_history:
+                        for msg in conversation_history[-6:]:  # 最多6轮历史
+                            chat_messages.append({"role": msg["role"], "content": msg["content"]})
+                    # 添加当前用户输入
+                    chat_messages.append({"role": "user", "content": user_text})
+
                     stream = model.client.chat.completions.create(
                         model=model.model,
                         messages=chat_messages,

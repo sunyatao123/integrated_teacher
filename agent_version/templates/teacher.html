@@ -1,0 +1,1334 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>备课助理</title>
+  <style>
+    :root {
+      --bg:#f7f8fa;
+      --card:#ffffff;
+      --text:#222;
+      --text-secondary:#555;
+      --muted:#666;
+      --primary:#2b6de9;
+      --primary-hover:#1e5dd8;
+      --bubble:#eef3ff;
+      --border:#e5e7eb;
+      --code-bg:#f4f6fa;
+      --success:#10b981;
+      --warning:#f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin:0;
+      background:var(--bg);
+      font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      color:var(--text);
+    }
+
+    header {
+      padding:16px 20px;
+      background:#fff;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    header h1 {
+      margin:0;
+      font-size:18px;
+      font-weight:600;
+      color:var(--primary);
+    }
+
+    .nav-link {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 16px;
+      background:var(--primary);
+      color:#fff;
+      text-decoration:none;
+      border-radius:8px;
+      font-size:13px;
+      font-weight:500;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      background:var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width:1000px;
+      margin:20px auto;
+      padding:0 16px;
+    }
+
+    .chat-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      height:80vh;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .toolbar {
+      padding:12px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      background:#fafbfc;
+    }
+
+    .chip {
+      border:1px solid #e2e7f3;
+      color:#3a64c6;
+      background:#f2f6ff;
+      padding:6px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:12px;
+      transition: all 0.2s;
+    }
+
+    .chip:hover {
+      background:#e8efff;
+      border-color:#d0ddf5;
+    }
+
+    .chip:disabled {
+      opacity:.6;
+      cursor:default;
+    }
+
+    .chat {
+      flex:1;
+      padding:20px;
+      overflow:auto;
+      background:linear-gradient(180deg,#fafbff, #fff);
+    }
+
+    .msg {
+      max-width:85%;
+      margin:12px 0;
+      display:flex;
+      gap:10px;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.assistant {
+      justify-content:flex-start;
+    }
+
+    .msg.user {
+      justify-content:flex-end;
+      margin-left:auto;
+    }
+
+    .bubble {
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      word-wrap: break-word;
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+
+    .assistant .bubble {
+      background:var(--bubble);
+      border-color:#dbe5ff;
+    }
+
+    .user .bubble {
+      background:#e8f5ff;
+      border-color:#cde8ff;
+    }
+
+    .inputbar {
+      border-top:1px solid var(--border);
+      padding:12px;
+      display:flex;
+      gap:10px;
+      background:#fafbfc;
+    }
+
+    .inputbar textarea {
+      flex:1;
+      resize:none;
+      height:52px;
+      padding:12px;
+      border-radius:8px;
+      border:1px solid var(--border);
+      outline:none;
+      font-size:14px;
+      transition: border-color 0.2s;
+    }
+
+    .inputbar textarea:focus {
+      border-color:var(--primary);
+    }
+
+    .btn {
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      padding:12px 20px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:500;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background:var(--primary-hover);
+    }
+
+    .hint {
+      color:#415a9a;
+      background:#eef3ff;
+      padding:10px 12px;
+      border-radius:8px;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .ask {
+      margin-top:8px;
+      padding-top:8px;
+      border-top:1px solid #dbe5ff;
+    }
+
+    .small {
+      font-size:12px;
+      color:#6b7280;
+    }
+
+    code {
+      background:var(--code-bg);
+      padding:2px 6px;
+      border-radius:4px;
+      font-size:12px;
+      font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    /* Markdown 内容样式优化 */
+    .bubble h1 {
+      font-size:18px;
+      font-weight:700;
+      margin:20px 0 12px 0;
+      color:#1f2937;
+      line-height:1.4;
+      display:block;
+      padding-bottom:8px;
+      border-bottom:2px solid #e5e7eb;
+    }
+
+    .bubble h1:first-child {
+      margin-top:0;
+    }
+
+    .bubble h2 {
+      font-size:16px;
+      font-weight:600;
+      margin:18px 0 10px 0;
+      color:#374151;
+      line-height:1.4;
+      display:block;
+      padding-left:8px;
+      border-left:3px solid #3b82f6;
+    }
+
+    .bubble h3 {
+      font-size:14px;
+      font-weight:600;
+      margin:14px 0 8px 0;
+      color:#4b5563;
+      line-height:1.4;
+      display:block;
+      background:#f9fafb;
+      padding:6px 10px;
+      border-radius:4px;
+    }
+
+    /* 标题中再次加粗时保持一致粗细，避免过于厚重 */
+    .bubble h1 strong, .bubble h1 b,
+    .bubble h2 strong, .bubble h2 b,
+    .bubble h3 strong, .bubble h3 b,
+    .bubble h4 strong, .bubble h4 b {
+      font-weight: inherit;
+    }
+
+
+    .bubble h4 {
+      font-size:13px;
+      font-weight:600;
+      margin:12px 0 6px 0;
+      color:#6b7280;
+      line-height:1.4;
+      display:block;
+    }
+
+    .bubble p {
+      margin:10px 0;
+      line-height:1.8;
+      font-size:13px;
+      display:block;
+      color:#374151;
+    }
+
+    .bubble ul, .bubble ol {
+      margin:12px 0;
+      padding-left:28px;
+      font-size:13px;
+      display:block;
+      line-height:1.7;
+    }
+
+    .bubble li {
+      margin:6px 0;
+      line-height:1.7;
+      display:list-item;
+      color:#4b5563;
+    }
+
+    .bubble li p {
+      margin:2px 0;
+      display:inline;
+    }
+
+    /* 禁用删除线样式 */
+    .bubble del, .bubble s {
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    /* 确保块级元素正确显示 */
+    .bubble > h1, .bubble > h2, .bubble > h3, .bubble > h4, .bubble > h5, .bubble > h6,
+    .bubble > p, .bubble > ul, .bubble > ol, .bubble > table, .bubble > hr, .bubble > blockquote {
+      display:block;
+    }
+
+    /* 加粗文本样式 */
+    .bubble strong, .bubble b {
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    /* 分隔线样式 */
+    .bubble hr {
+      border: none;
+      border-top: 2px solid #e5e7eb;
+      margin: 20px 0;
+    }
+
+    /* 引用块样式 */
+    .bubble blockquote {
+      border-left: 4px solid #3b82f6;
+      padding-left: 16px;
+      margin: 12px 0;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+
+
+    .bubble table {
+      width: fit-content;
+      max-width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13px;
+      background: white;
+      border: 1px solid #ddd;
+    }
+
+    .bubble th {
+      background: #f5f5f5;
+      color: #333;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #ddd;
+      font-size: 13px;
+    }
+
+    .bubble td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .bubble tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    /* 图片容器 */
+    .bubble .img-container {
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .bubble img {
+      display:block;
+      margin:8px auto;
+      max-width:260px;
+      width:auto;
+      height:auto;
+      max-height:180px;
+      object-fit:contain;
+      border-radius:8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    .bubble img[src=""], .bubble img:not([src]) {
+      display:none;
+    }
+
+    /* 图片名称 */
+    .bubble .img-name {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* 图片加载失败占位符 */
+    .img-placeholder {
+      padding: 12px;
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      border-radius: 6px;
+      color: #9ca3af;
+      font-size: 12px;
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    /* 优化横线样式 */
+    .bubble hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 16px 0;
+    }
+
+    /* JSON渲染专用样式 */
+    .plan-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 24px 0;
+      padding-bottom: 12px;
+      border-bottom: 3px solid #3b82f6;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #374151;
+      margin: 24px 0 16px 0;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border-radius: 6px;
+    }
+
+    .subsection {
+      margin: 16px 0;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .subsection-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0 0 10px 0;
+    }
+
+    .subsection-content {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+
+    .subsection-list {
+      margin: 8px 0;
+      padding-left: 24px;
+      list-style-type: disc;
+    }
+
+    .subsection-list li {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      margin: 4px 0;
+    }
+
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13px;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .plan-table th {
+      background: #3b82f6;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .plan-table td {
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+      color: #4b5563;
+    }
+
+    .plan-table tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    .plan-table tbody tr:hover {
+      background: #eff6ff;
+    }
+
+    .project-card {
+      margin: 16px 0;
+      padding: 16px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .project-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0 0 12px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .project-details {
+      margin: 12px 0;
+      padding-left: 20px;
+      list-style-type: none;
+    }
+
+    .project-details li {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 6px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .project-details li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #3b82f6;
+      font-weight: bold;
+    }
+
+    .project-image-container {
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .project-image {
+      display: inline-block;
+      max-width: 200px;
+      max-height: 150px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    .loading-hint {
+      padding: 20px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      background: #f9fafb;
+      border-radius: 6px;
+      border: 1px dashed #d1d5db;
+    }
+
+    .bubble blockquote {
+      border-left:2px solid #e5e7eb;
+      padding-left:12px;
+      margin:10px 0;
+      color:#6b7280;
+      font-style:italic;
+      background:#fafbff;
+      border-radius:4px;
+    }
+
+    .bubble pre {
+      background:var(--code-bg);
+      padding:12px;
+      border-radius:6px;
+      overflow-x:auto;
+      margin:8px 0;
+    }
+
+    .bubble pre code {
+      background:transparent;
+      padding:0;
+      font-size:12px;
+    }
+
+    .bubble hr {
+      border:none;
+      border-top:1px dashed #e5e7eb;
+      margin:14px 0;
+    }
+
+    .bubble strong {
+      font-weight:600;
+      color:var(--text);
+    }
+
+    .bubble em {
+      font-style:italic;
+      color:var(--text-secondary);
+    }
+
+    /* 滚动条样式 */
+    .chat::-webkit-scrollbar {
+      width:8px;
+    }
+
+    .chat::-webkit-scrollbar-track {
+      background:#f1f1f1;
+    }
+
+    .chat::-webkit-scrollbar-thumb {
+      background:#c1c1c1;
+      border-radius:4px;
+    }
+
+    .chat::-webkit-scrollbar-thumb:hover {
+      background:#a8a8a8;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 8px;
+        margin: 10px auto;
+      }
+
+      .chat-card {
+        height: 85vh;
+        border-radius: 8px;
+      }
+
+      .msg {
+        max-width: 90%;
+      }
+
+      .bubble {
+        padding: 10px 12px;
+      }
+
+      .bubble h1 {
+        font-size: 16px;
+      }
+
+      .bubble h2 {
+        font-size: 14px;
+      }
+
+      .toolbar {
+        padding: 8px;
+      }
+
+      .chip {
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+
+      header h1 {
+        font-size: 16px;
+      }
+
+      .inputbar textarea {
+        height: 44px;
+        font-size: 13px;
+      }
+
+      .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+    }
+
+    /* 打印样式 */
+    @media print {
+      header, .toolbar, .inputbar {
+        display: none;
+      }
+
+      .chat-card {
+        border: none;
+        box-shadow: none;
+        height: auto;
+      }
+
+      .chat {
+        overflow: visible;
+      }
+
+      .msg {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <h1>🎓 AI备课助理</h1>
+      <span class="small">智能对话 · 支持课课练与全员运动会方案生成</span>
+    </div>
+    <a href="/class_data_manager" class="nav-link">
+      📊 班级体测数据管理
+    </a>
+  </header>
+  <div class="container">
+    <div class="chat-card" id="card">
+      <div class="toolbar">
+        <button class="chip" id="btnInit">💬 开始对话</button>
+        <button class="chip" id="btnDemo1">📝 示例：课课练</button>
+        <button class="chip" id="btnDemo2">🏃 示例：全员运动会</button>
+      </div>
+      <div class="chat" id="chat"></div>
+      <div class="inputbar">
+        <textarea id="input" placeholder="请描述您的需求，例如：三年级球类运动会、一年级速度训练课课练..."></textarea>
+        <button class="btn" id="send">💬 发送</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/marked@12.0.2/marked.min.js"></script>
+  <script src="https://unpkg.com/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script>
+    const chatEl = document.getElementById('chat');
+    const inputEl = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    // 对话历史记录
+    let conversationHistory = [];
+    let chatRestored = false; // 标记是否恢复了对话
+
+    // 检查是否从班级管理系统返回
+    const returnFromClassManager = sessionStorage.getItem('returnFromClassManager');
+    if (returnFromClassManager === 'true') {
+      // 恢复对话历史
+      const savedHistory = sessionStorage.getItem('conversationHistory');
+      if (savedHistory) {
+        try {
+          conversationHistory = JSON.parse(savedHistory);
+          chatRestored = true;
+          console.log('✅ 已恢复对话历史，共', conversationHistory.length, '条记录');
+        } catch (e) {
+          console.error('恢复对话历史失败:', e);
+        }
+      }
+
+      // 恢复聊天界面
+      const savedChat = sessionStorage.getItem('chatHTML');
+      if (savedChat) {
+        chatEl.innerHTML = savedChat;
+        chatEl.scrollTop = chatEl.scrollHeight;
+        console.log('✅ 已恢复聊天界面');
+      }
+
+      // 清除标记
+      sessionStorage.removeItem('returnFromClassManager');
+    }
+
+    // 配置 marked.js
+    marked.setOptions({
+      breaks: true,        // 支持GFM换行（单个\n就换行）
+      gfm: true,          // 启用GitHub Flavored Markdown
+      headerIds: false,   // 禁用标题ID
+      mangle: false       // 禁用邮箱混淆
+    });
+
+    // 修复图片/链接的Markdown格式，避免URL被错误吞并后续符号（如###、中文标题等）
+    function fixImageMarkdown(text) {
+      if (!text) return text;
+
+      let fixed = text;
+      let totalFixes = 0;
+
+      // 0) 将“图片链接：URL”等文本规范为标准Markdown图片，并只截取到图片扩展名
+      const plainImgPattern = /(图片链接|图片|示意图|练习示意图)\s*[:：]\s*(https?:\/\/[^\s)]+?\.(?:png|jpe?g|gif|webp|svg))(?!\S)/gi;
+      fixed = fixed.replace(plainImgPattern, (_m, _label, url) => {
+        totalFixes++;
+        return `![练习示意图](${url})`;
+      });
+
+      // 0.1) 将“练习示意图](URL)”缺少!的错误语法修正为图片
+      const missingBangImg = /(^|[\s>])([^\[\n]{1,20})\]\((https?:\/\/[^\s)]+?\.(?:png|jpe?g|gif|webp|svg))\)/g;
+      fixed = fixed.replace(missingBangImg, (m, lead, alt, url) => {
+        totalFixes++;
+        return `${lead}![${alt}](${url})`;
+      });
+
+      // 0.2) 将裸露的图片URL包裹为Markdown图片（尽量保守，仅在行首或空白后出现时处理）
+      const bareImgUrl = /(\b|\s)(https?:\/\/[^\s)]+?\.(?:png|jpe?g|gif|webp|svg))(?!\S)/gim;
+      fixed = fixed.replace(bareImgUrl, (m, lead, url) => {
+        // 避免已在 () 或 [] 结构中再次包裹
+        if (/(\(|\]|\))$/.test(lead)) return m;
+        totalFixes++;
+        return `${lead}![练习示意图](${url})`;
+      });
+
+      // 0.3) 修复形如 “...jpg)%E4%B8%AD%E6%96%87%5D(https://...jpg)” 的串联：将编码的alt解码并生成新图片
+      const encodedAltConcat = /\)(%[0-9A-Fa-f]{2,}(?:%[0-9A-Fa-f]{2,})*?)\((https?:\/\/[^\s)]+?\.(?:png|jpe?g|gif|webp|svg))\)/g;
+      fixed = fixed.replace(encodedAltConcat, (m, encAlt, url) => {
+        let alt = '';
+        try { alt = decodeURIComponent(encAlt); } catch(_) { alt = encAlt; }
+        alt = alt.replace(/\]$/, '').trim() || '示意图';
+        totalFixes++;
+        return `)\n\n![${alt}](${url})`;
+      });
+
+      // 1) 图片紧邻图片：![...](...)![...](...)
+      const imageToImagePattern = /(!\[[^\]]*\]\([^)]+\))(!\[)/g;
+      const imageToImageFixes = (fixed.match(imageToImagePattern) || []).length;
+      if (imageToImageFixes > 0) {
+        fixed = fixed.replace(imageToImagePattern, '$1\n\n$2');
+        totalFixes += imageToImageFixes;
+      }
+
+      // 2) 图片后紧跟其他字符（包括#、中文等）
+      const imageToOtherPattern = /(!\[[^\]]*\]\([^)]+\))([^\s\n!])/g;
+      const imageToOtherFixes = (fixed.match(imageToOtherPattern) || []).length;
+      if (imageToOtherFixes > 0) {
+        fixed = fixed.replace(imageToOtherPattern, '$1\n\n$2');
+        totalFixes += imageToOtherFixes;
+      }
+
+      // 3) 链接相邻：[...]()![ / ... / 非空白]
+      const linkToImagePattern = /(\[[^\]]*\]\([^)]+\))(!\[)/g;
+      const linkToOtherPattern = /(\[[^\]]*\]\([^)]+\))([^\s\n\[])/g;
+      const linkFixes = (fixed.match(linkToImagePattern) || []).length + (fixed.match(linkToOtherPattern) || []).length;
+      if (linkFixes > 0) {
+        fixed = fixed.replace(linkToImagePattern, '$1\n\n$2');
+        fixed = fixed.replace(linkToOtherPattern, '$1\n\n$2');
+        totalFixes += linkFixes;
+      }
+
+      // 3.5) 紧贴的标题标记，确保标题起始在新行
+      const headingTight = /([^\n])(\#{1,6}\s)/g;
+      if (headingTight.test(fixed)) {
+        fixed = fixed.replace(headingTight, '$1\n\n$2');
+        totalFixes++;
+      }
+
+      // 4) 处理形如 “...jpg)### ...” 的情况：在 ) 与 # 之间插入空行
+      const closeParenToHeading = /(\)\s*)(?=\#{1,6})/g;
+      if (closeParenToHeading.test(fixed)) {
+        fixed = fixed.replace(closeParenToHeading, ')\n\n');
+        totalFixes++;
+      }
+
+      // 5) 尝试为表格行补充换行（保守）
+      const tableRowCompact = /([^\n])(\|[^\n]*\|[^\n]*\|)/g;
+      if (tableRowCompact.test(fixed)) {
+        fixed = fixed.replace(tableRowCompact, '$1\n$2');
+        totalFixes++;
+      }
+
+
+      // 6) 折叠重复的分隔线（---、***、___）
+      const hrBlockSeq = /\n(?:[ \t]*(?:[-*_]){3,}[ \t]*\n){2,}/g;
+      if (hrBlockSeq.test(fixed)) {
+        fixed = fixed.replace(hrBlockSeq, '\n---\n');
+        totalFixes++;
+      }
+
+      if (totalFixes > 0) {
+        console.log(`✅ 修复了 ${totalFixes} 处图片/链接/标题/表格格式问题`);
+      }
+
+      return fixed;
+    }
+
+    // 修复表格格式
+    function fixTableMarkdown(text) {
+      if (!text) return text;
+
+      // 修复表格中的换行问题
+      // 匹配模式：| 内容\n| 内容 | 内容 |
+      // 将其修复为：| 内容 | 内容 | 内容 |
+      let fixed = text;
+
+      // 查找所有可能的表格区域（以 | 开头的连续行）
+      const lines = fixed.split('\n');
+      const result = [];
+      let i = 0;
+
+      while (i < lines.length) {
+        const line = lines[i];
+
+        // 检查是否是表格行（以 | 开头或结尾）
+        if (line.trim().startsWith('|') || line.trim().endsWith('|')) {
+          // 检查下一行是否也是表格行但缺少开头的 |
+          if (i + 1 < lines.length) {
+            const nextLine = lines[i + 1].trim();
+            // 如果下一行以 | 开头，说明当前行可能不完整
+            if (nextLine.startsWith('|') && !line.includes('|', 1)) {
+              // 合并当前行和下一行
+              result.push(line.trim() + ' ' + nextLine);
+              i += 2;
+              continue;
+            }
+          }
+        }
+
+        result.push(line);
+        i++;
+      }
+
+      return result.join('\n');
+    }
+
+    function renderMarkdown(md) {
+      try {
+        if (!md) return '';
+
+        // 【关键】先修复图片格式
+        let fixedMd = fixImageMarkdown(md);
+
+        // 修复表格格式
+        fixedMd = fixTableMarkdown(fixedMd);
+
+        // 直接使用marked.parse
+        let html = marked.parse(fixedMd);
+
+        // 使用DOMPurify清理HTML
+        let sanitized = DOMPurify.sanitize(html, {
+          ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'b', 'i',
+                         'ul', 'ol', 'li', 'a', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
+                         'blockquote', 'code', 'pre', 'hr', 'div', 'span', 'del', 's'],
+          ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel']
+        });
+
+        // 处理图片：识别图片后面紧跟的文字作为图片名称
+        // 匹配模式：<p><img...></p> 后面紧跟 <p>图X ...</p>
+        sanitized = sanitized.replace(/<p><img([^>]+)><\/p>\s*<p>(图\d+[^<]+)<\/p>/g, (match, attrs, caption) => {
+          return `<div class="img-container">
+            <img${attrs}>
+            <div class="img-name">${caption.trim()}</div>
+          </div>`;
+        });
+
+        // 处理没有图注的图片（兜底）
+        // 只处理还在<p>标签中的图片
+        sanitized = sanitized.replace(/<p><img([^>]+)><\/p>/g, (match, attrs) => {
+          const altMatch = attrs.match(/alt="([^"]+)"/);
+          if (altMatch && altMatch[1]) {
+            return `<div class="img-container">
+              <img${attrs}>
+              <div class="img-name">${altMatch[1]}</div>
+            </div>`;
+          }
+          return `<div class="img-container">
+            <img${attrs}>
+          </div>`;
+        });
+
+        return sanitized;
+      } catch (e) {
+        console.error('Markdown渲染失败:', e);
+        return (md || '').replace(/\n/g, '<br/>');
+      }
+    }
+
+    // 渲染JSON格式的方案
+    function renderJSON(jsonData) {
+      try {
+        const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+
+        let html = '';
+
+        // 方案标题
+        if (data.title) {
+          html += `<h1 class="plan-title">${escapeHtml(data.title)}</h1>`;
+        }
+
+        // 遍历所有章节
+        if (data.sections && Array.isArray(data.sections)) {
+          data.sections.forEach(section => {
+            // 章节标题
+            html += `<h2 class="section-title">${escapeHtml(section.title)}</h2>`;
+
+            // 如果是项目章节（四、项目设置与规则）
+            if (section.projects && Array.isArray(section.projects)) {
+              section.projects.forEach((project, index) => {
+                html += `<div class="project-card">`;
+                html += `<h3 class="project-name">项目${index + 1}：${escapeHtml(project.name)}</h3>`;
+
+                if (project.details && Array.isArray(project.details)) {
+                  html += `<ul class="project-details">`;
+                  project.details.forEach(detail => {
+                    html += `<li>${escapeHtml(detail)}</li>`;
+                  });
+                  html += `</ul>`;
+                }
+
+                if (project.image && project.image !== 'null') {
+                  html += `<div class="project-image-container">`;
+                  html += `<img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.name)}" class="project-image" />`;
+                  html += `</div>`;
+                }
+
+                html += `</div>`;
+              });
+            }
+            // 如果是普通章节（有subsections）
+            else if (section.subsections && Array.isArray(section.subsections)) {
+              section.subsections.forEach(subsection => {
+                html += `<div class="subsection">`;
+                html += `<h3 class="subsection-title">${escapeHtml(subsection.subtitle)}</h3>`;
+
+                // 如果有表格
+                if (subsection.table) {
+                  html += `<table class="plan-table">`;
+                  html += `<thead><tr>`;
+                  subsection.table.headers.forEach(header => {
+                    html += `<th>${escapeHtml(header)}</th>`;
+                  });
+                  html += `</tr></thead>`;
+                  html += `<tbody>`;
+                  subsection.table.rows.forEach(row => {
+                    html += `<tr>`;
+                    row.forEach(cell => {
+                      html += `<td>${escapeHtml(cell)}</td>`;
+                    });
+                    html += `</tr>`;
+                  });
+                  html += `</tbody></table>`;
+                }
+                // 如果有列表
+                else if (subsection.list && Array.isArray(subsection.list)) {
+                  html += `<ul class="subsection-list">`;
+                  subsection.list.forEach(item => {
+                    html += `<li>${escapeHtml(item)}</li>`;
+                  });
+                  html += `</ul>`;
+                }
+                // 如果有文本内容
+                else if (subsection.content) {
+                  html += `<p class="subsection-content">${escapeHtml(subsection.content)}</p>`;
+                }
+
+                html += `</div>`;
+              });
+            }
+          });
+        }
+
+        return html;
+      } catch (e) {
+        console.error('JSON渲染失败:', e);
+        return `<div class="hint">JSON渲染失败：${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    function addMsg(role, text, isMarkdown = (role === 'assistant')) {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg ' + (role === 'assistant' ? 'assistant' : 'user');
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML = isMarkdown ? renderMarkdown(text) : (text || '').replace(/\n/g, '<br/>');
+
+      // 为所有图片添加加载错误处理
+      if (isMarkdown) {
+        const images = bubble.querySelectorAll('img');
+        images.forEach(img => {
+          img.onerror = function() {
+            this.style.display = 'none';
+            const placeholder = document.createElement('div');
+            placeholder.className = 'img-placeholder';
+            placeholder.textContent = '图片加载失败';
+            this.parentNode.insertBefore(placeholder, this.nextSibling);
+          };
+        });
+      }
+
+      wrap.appendChild(bubble);
+      chatEl.appendChild(wrap);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    // 初始系统提示（只在没有恢复对话时显示）
+    if (!chatRestored) {
+      addMsg('assistant', '您好！我是AI备课助理 🎓\n\n我可以帮您生成：\n- **课课练方案**：日常体育课训练计划\n- **全员运动会方案**：学校运动会组织方案\n\n请告诉我您的需求，我会引导您补充必要信息。');
+    }
+
+    document.getElementById('btnInit').onclick = () => {
+      const text = '你好，我想了解一下你能做什么？';
+      addMsg('user', text);
+      handlePlanStream(text);
+    };
+
+    document.getElementById('btnDemo1').onclick = () => {
+      const text = '帮我生成一份课课练方案，一年级一班，球类运动，双人配合，需要提升速度';
+      addMsg('user', text);
+      handlePlanStream(text);
+    };
+
+    document.getElementById('btnDemo2').onclick = () => {
+      const text = '帮我生成一个全员运动会方案，三年级，球类项目，100人参加';
+      addMsg('user', text);
+      handlePlanStream(text);
+    };
+
+    sendBtn.onclick = async () => {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      addMsg('user', text);
+      inputEl.value = '';
+      await handlePlanStream(text);
+    };
+
+    // 键盘快捷键：Enter发送，Shift+Enter换行
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+
+    async function handlePlan(message) {
+      try {
+        const res = await fetch('/api/teacher/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || '请求失败');
+        if (data.need_more_info) {
+          const ask = data.ask || '为更好生成方案，请补充缺失信息。';
+          addMsg('assistant', `<div class="hint">${ask}</div>`);
+          return;
+        }
+        // 优先显示模型Markdown方案
+        if (data.plan_markdown && data.plan_markdown.trim()) {
+          addMsg('assistant', data.plan_markdown, true);
+        } else {
+          // 结构化兜底方案
+          addMsg('assistant', `<div class="hint">模型未返回方案，请重试或补充更多关键信息。</div>`, false);
+        }
+      } catch (e) {
+        addMsg('assistant', `<span class="hint">备课生成失败：${e.message}</span>`);
+      }
+    }
+
+    async function handlePlanStream(message) {
+      try {
+        const res = await fetch('/api/teacher/plan/stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            conversation_history: conversationHistory
+          })
+        });
+
+        // 检查Content-Type和响应头
+        const contentType = res.headers.get('content-type') || '';
+        const needMoreInfo = res.headers.get('X-Need-More-Info');
+        const collectedParams = res.headers.get('X-Collected-Params');
+        console.log('响应Content-Type:', contentType, '状态:', res.status, 'X-Need-More-Info:', needMoreInfo);
+
+        if (contentType.includes('application/json')) {
+          try {
+            const data = await res.json();
+            console.log('解析到JSON数据:', data);
+            if (data.need_more_info) {
+              const ask = data.ask || '为更好生成方案，请补充缺失信息。';
+              addMsg('assistant', `<div class="hint">${ask}</div>`, false);
+              // 更新对话历史
+              if (data.conversation_history) {
+                conversationHistory = data.conversation_history;
+              }
+              return;
+            }
+            if (!data.success) {
+              addMsg('assistant', `<span class="hint">生成失败：${escapeHtml(data.message || '未知错误')}</span>`, false);
+              return;
+            }
+            // 处理无关输入或其他消息
+            if (data.message) {
+              addMsg('assistant', data.message, true);  // 使用markdown渲染
+              // 更新对话历史
+              if (data.conversation_history) {
+                conversationHistory = data.conversation_history;
+              }
+              return;
+            }
+            // 如果JSON解析成功但没有need_more_info，说明可能是其他JSON响应，不应该继续流式处理
+            console.warn('收到JSON响应但未处理:', data);
+            return;
+          } catch (jsonErr) {
+            // 如果不是有效JSON，继续流式处理
+            console.warn('JSON解析失败，尝试流式读取:', jsonErr);
+          }
+        }
+
+        if (!res.ok) {
+          const err = await res.text();
+          addMsg('assistant', `<span class="hint">流式生成失败：${escapeHtml(err)}</span>`, false);
+          return;
+        }
+
+        // 预置一个空的助手气泡，增量填充
+        const wrap = document.createElement('div');
+        wrap.className = 'msg assistant';
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = '';
+        wrap.appendChild(bubble);
+        chatEl.appendChild(wrap);
+        chatEl.scrollTop = chatEl.scrollHeight;
+
+        // 如果响应体已被消费（比如JSON解析），需要重新获取
+        if (res.bodyUsed) {
+          addMsg('assistant', `<span class="hint">响应已消费，无法读取流</span>`, false);
+          return;
+        }
+
+        console.log('开始读取流式数据...');
+	      const reader = res.body.getReader();
+	      const decoder = new TextDecoder('utf-8');
+	      let buf = '';  // 累积的实际内容（原始Markdown文本）
+	      let lastRenderedLength = 0;  // 已追加到气泡中的文本长度
+	      let sseBuffer = '';  // SSE数据缓冲区
+	      let chunkCount = 0;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            console.log('流式读取完成，总chunk数:', chunkCount, '总长度:', buf.length);
+            break;
+          }
+          chunkCount++;
+          const chunk = decoder.decode(value, { stream: true });
+          sseBuffer += chunk;
+
+          // 解析SSE格式的数据
+          const lines = sseBuffer.split('\n');
+          sseBuffer = lines.pop() || '';  // 保留不完整的行
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                console.log('收到[DONE]信号');
+                continue;
+              }
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.content) {
+                  buf += parsed.content;
+                }
+                if (parsed.error) {
+                  console.error('流式错误:', parsed.error);
+                  buf += `\n\n**错误**: ${parsed.error}`;
+                }
+              } catch (e) {
+                console.warn('SSE数据解析失败:', data, e);
+              }
+            }
+          }
+
+	          console.log(`收到chunk ${chunkCount}, 累计内容长度: ${buf.length}`);
+	          // 流式阶段先以纯文本方式增量追加，保证显示稳定与性能，结束后再整体做一次 Markdown 渲染
+	          if (buf.length > lastRenderedLength) {
+	            const newText = buf.slice(lastRenderedLength);
+	            lastRenderedLength = buf.length;
+	            bubble.textContent += newText;
+	            chatEl.scrollTop = chatEl.scrollHeight;
+	          }
+        }
+
+        if (buf.length === 0) {
+          console.warn('流式数据为空！');
+          bubble.innerHTML = '<span class="hint">未收到任何数据，请检查后端日志</span>';
+        } else {
+	          // 流式结束后，整体做一次 Markdown 渲染，修正纯文本阶段可能出现的显示问题
+	          if (needMoreInfo === '1') {
+	            console.log('✅ 收到引导语，需要更多信息');
+	            bubble.innerHTML = `<div class="hint">${renderMarkdown(buf)}</div>`;
+	          } else {
+	            bubble.innerHTML = renderMarkdown(buf);
+	          }
+
+          // 成功生成方案，更新对话历史
+          conversationHistory.push({ role: 'user', content: message });
+          conversationHistory.push({ role: 'assistant', content: buf });
+          // 只保留最近5轮对话
+          if (conversationHistory.length > 10) {
+            conversationHistory = conversationHistory.slice(-10);
+          }
+
+          // 保存对话历史和聊天界面到sessionStorage（用于从班级管理系统返回时恢复）
+          sessionStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+          sessionStorage.setItem('chatHTML', chatEl.innerHTML);
+        }
+      } catch (e) {
+        console.error('流式生成异常:', e);
+        addMsg('assistant', `<span class="hint">流式生成异常：${e.message}</span>`, false);
+      }
+    }
+
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  </script>
+</body>
+</html>
+
+
+
