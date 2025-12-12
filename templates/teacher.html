@@ -158,6 +158,66 @@
       border-color:#dbe5ff;
     }
 
+    /* 修复有序列表序号问题 - 支持多级嵌套列表 */
+    .bubble ol {
+      list-style: none;
+      padding-left: 0;
+      counter-reset: item;  /* 每个ol都重置自己的计数器 */
+    }
+
+    .bubble ol > li {
+      counter-increment: item;
+      padding-left: 2em;
+      position: relative;
+      margin-bottom: 0.8em;
+    }
+
+    .bubble ol > li::before {
+      content: counter(item) ". ";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    /* 二级有序列表 - 使用不同的编号样式 */
+    .bubble ol ol {
+      counter-reset: subitem;
+      margin-top: 0.5em;
+      margin-left: 1em;
+    }
+
+    .bubble ol ol > li {
+      counter-increment: subitem;
+    }
+
+    .bubble ol ol > li::before {
+      content: counter(subitem) ") ";
+      font-weight: normal;
+      color: #666;
+    }
+
+    /* 三级有序列表 */
+    .bubble ol ol ol {
+      counter-reset: subsubitem;
+    }
+
+    .bubble ol ol ol > li {
+      counter-increment: subsubitem;
+    }
+
+    .bubble ol ol ol > li::before {
+      content: counter(subsubitem, lower-alpha) ". ";
+      color: #888;
+    }
+
+    /* 修复链接和括号换行问题 */
+    .bubble a {
+      display: inline;
+      word-break: keep-all;
+    }
+    
+
     .user .bubble {
       background:#e8f5ff;
       border-color:#cde8ff;
@@ -211,6 +271,33 @@
       line-height:1.5;
     }
 
+    /* 加载提示样式 */
+    .loading-hint {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b5563;
+      padding: 16px 20px;
+      background: var(--bubble);
+      border-radius: 12px;
+      font-size: 14px;
+      border: 1px solid #dbe5ff;
+    }
+
+    .loading-spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     .ask {
       margin-top:8px;
       padding-top:8px;
@@ -228,6 +315,220 @@
       border-radius:4px;
       font-size:12px;
       font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    /* 检索结果容器样式 */
+    .retrieval-results {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* 检索结果卡片 */
+    .retrieval-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* 内部资源卡片样式 */
+    .retrieval-card.internal-resource {
+      border-left: 3px solid #3b82f6;
+    }
+
+    .retrieval-card.internal-resource .retrieval-header {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      color: #1e40af;
+    }
+
+    /* 外部资源卡片样式 */
+    .retrieval-card.external-resource {
+      border-left: 3px solid #f59e0b;
+    }
+
+    .retrieval-card.external-resource .retrieval-header {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      color: #92400e;
+    }
+
+    /* 卡片头部 */
+    .retrieval-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .retrieval-header:hover {
+      opacity: 0.9;
+    }
+
+    .retrieval-icon {
+      font-size: 18px;
+    }
+
+    .retrieval-title {
+      font-weight: 600;
+      font-size: 13px;
+      flex: 1;
+    }
+
+    .retrieval-count {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .retrieval-toggle {
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .retrieval-header.expanded .retrieval-toggle {
+      transform: rotate(180deg);
+    }
+
+    /* 卡片内容 */
+    .retrieval-content {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    }
+
+    .retrieval-content.expanded {
+      max-height: 5000px;
+      padding: 12px 14px;
+    }
+
+    /* 检索项 */
+    .retrieval-item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .retrieval-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .retrieval-item-label {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .retrieval-item-label.external {
+      background: #fed7aa;
+      color: #7c2d12;
+    }
+
+    .retrieval-item-content {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    /* 外部资源链接样式 */
+    .retrieval-link {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .retrieval-link a {
+      color: #2563eb;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .retrieval-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* 外部资源链接网格布局 */
+    .external-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    /* 外部资源链接卡片 */
+    .external-link-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .external-link-card:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .external-link-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .external-link-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .external-link-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1f2937;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .external-link-domain {
+      font-size: 11px;
+      color: #6b7280;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .external-link-arrow {
+      font-size: 16px;
+      color: #9ca3af;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .external-link-card:hover .external-link-arrow {
+      transform: translateX(4px);
+      color: #3b82f6;
     }
 
     /* Markdown 内容样式优化 */
@@ -340,13 +641,26 @@
       margin: 20px 0;
     }
 
-    /* 引用块样式 */
+    /* 引用块样式 - 优化为更简洁的样式 */
     .bubble blockquote {
-      border-left: 4px solid #3b82f6;
-      padding-left: 16px;
-      margin: 12px 0;
+      border-left: 2px solid #93c5fd;
+      padding: 8px 12px 8px 16px;
+      margin: 8px 0;
       color: #6b7280;
-      font-style: italic;
+      background: transparent;
+      border-radius: 0;
+      font-style: normal;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    
+    /* 外部资源提示样式优化 */
+    .bubble blockquote:first-child {
+      margin-top: 0;
+    }
+    
+    .bubble blockquote p {
+      margin: 0;
     }
 
 
@@ -581,24 +895,17 @@
       border: 1px solid #e5e7eb;
     }
 
-    .loading-hint {
-      padding: 20px;
-      text-align: center;
-      color: #6b7280;
-      font-size: 14px;
-      background: #f9fafb;
-      border-radius: 6px;
-      border: 1px dashed #d1d5db;
-    }
 
     .bubble blockquote {
-      border-left:2px solid #e5e7eb;
-      padding-left:12px;
-      margin:10px 0;
-      color:#6b7280;
-      font-style:italic;
-      background:#fafbff;
-      border-radius:4px;
+      border-left: 2px solid #93c5fd;
+      padding: 8px 12px 8px 16px;
+      margin: 8px 0;
+      color: #6b7280;
+      background: transparent;
+      border-radius: 0;
+      font-style: normal;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .bubble pre {
@@ -943,6 +1250,12 @@
         // 修复表格格式
         fixedMd = fixTableMarkdown(fixedMd);
 
+        // 【修复】链接和括号之间的换行问题
+        // 模式：（来源：[xxx](url)\n\n）→ （来源：[xxx](url)）
+        fixedMd = fixedMd.replace(/(\[([^\]]+)\]\([^)]+\))\s*\n+\s*([）\)])/g, '$1$3');
+        // 模式：（来源：[xxx](url)\n）→ （来源：[xxx](url)）
+        fixedMd = fixedMd.replace(/(\[([^\]]+)\]\([^)]+\))\n([）\)])/g, '$1$3');
+
         // 直接使用marked.parse
         let html = marked.parse(fixedMd);
 
@@ -1168,6 +1481,22 @@
     }
 
     async function handlePlanStream(message) {
+      // 先显示加载提示
+      const loadingWrap = document.createElement('div');
+      loadingWrap.className = 'msg assistant';
+      loadingWrap.id = 'loading-indicator';
+      const loadingBubble = document.createElement('div');
+      loadingBubble.className = 'bubble';
+      loadingBubble.innerHTML = `
+        <div class="loading-hint">
+          <span class="loading-spinner"></span>
+          <span>正在分析您的需求，请稍等</span>
+        </div>
+      `;
+      loadingWrap.appendChild(loadingBubble);
+      chatEl.appendChild(loadingWrap);
+      chatEl.scrollTop = chatEl.scrollHeight;
+
       try {
         const res = await fetch('/api/teacher/plan/stream', {
           method: 'POST',
@@ -1177,6 +1506,10 @@
             conversation_history: conversationHistory
           })
         });
+
+        // 移除加载提示
+        const loadingEl = document.getElementById('loading-indicator');
+        if (loadingEl) loadingEl.remove();
 
         // 检查Content-Type和响应头
         const contentType = res.headers.get('content-type') || '';
@@ -1257,8 +1590,9 @@
           const chunk = decoder.decode(value, { stream: true });
           buf += chunk;
           console.log(`收到chunk ${chunkCount}, 长度: ${chunk.length}, 累计: ${buf.length}`);
-          // 简单增量渲染（Markdown）
-          bubble.innerHTML = renderMarkdown(buf);
+          // 简单增量渲染（Markdown），但排除检索结果标记
+          const displayContent = buf.replace(/---RETRIEVAL_RESULTS_START---.*?---RETRIEVAL_RESULTS_END---/s, '');
+          bubble.innerHTML = renderMarkdown(displayContent);
           chatEl.scrollTop = chatEl.scrollHeight;
         }
 
@@ -1271,6 +1605,26 @@
             console.log('✅ 收到引导语，需要更多信息');
             // 显示引导语
             bubble.innerHTML = `<div class="hint">${renderMarkdown(buf)}</div>`;
+          } else {
+            // 解析检索结果
+            const retrievalResultsMatch = buf.match(/---RETRIEVAL_RESULTS_START---\s*\n(.*?)\n\s*---RETRIEVAL_RESULTS_END---/s);
+            let mainContent = buf;
+            let retrievalResultsHtml = '';
+            
+            if (retrievalResultsMatch) {
+              // 提取主内容和检索结果
+              mainContent = buf.replace(/---RETRIEVAL_RESULTS_START---.*?---RETRIEVAL_RESULTS_END---/s, '').trim();
+              const retrievalResultsText = retrievalResultsMatch[1].trim();
+              
+              // 渲染检索结果
+              retrievalResultsHtml = renderRetrievalResults(retrievalResultsText);
+              
+              // 更新主内容，并在下方添加检索结果区域
+              bubble.innerHTML = renderMarkdown(mainContent) + (retrievalResultsHtml || '');
+            } else {
+              // 没有检索结果，正常渲染
+              bubble.innerHTML = renderMarkdown(buf);
+            }
           }
 
           // 成功生成方案，更新对话历史
@@ -1286,12 +1640,147 @@
           sessionStorage.setItem('chatHTML', chatEl.innerHTML);
         }
       } catch (e) {
+        // 确保移除加载提示
+        const loadingEl = document.getElementById('loading-indicator');
+        if (loadingEl) loadingEl.remove();
+        
         console.error('流式生成异常:', e);
         addMsg('assistant', `<span class="hint">流式生成异常：${e.message}</span>`, false);
       }
     }
 
     function escapeHtml(s){ return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    // 解析检索结果文本
+    function parseRetrievalResults(resultsText) {
+      const result = {
+        internal: null,
+        external: null
+      };
+
+      // 使用正则表达式分割
+      const internalMatch = resultsText.match(/【内部资源检索结果】\s*\n(.*?)(?=【互联网资源检索结果】|$)/s);
+      const externalMatch = resultsText.match(/【互联网资源检索结果】\s*\n(.*?)$/s);
+
+      if (internalMatch) {
+        result.internal = internalMatch[1].trim();
+      }
+
+      if (externalMatch) {
+        result.external = externalMatch[1].trim();
+      }
+
+      return result;
+    }
+
+    // 渲染检索结果
+    function renderRetrievalResults(resultsText) {
+      const parsed = parseRetrievalResults(resultsText);
+      let html = '<div class="retrieval-results">';
+
+      // 渲染内部资源
+      if (parsed.internal) {
+        const internalItems = parsed.internal.split(/\n(?=\[内部资源\])/).filter(item => item.trim());
+        html += `
+          <div class="retrieval-card internal-resource">
+            <div class="retrieval-header" onclick="toggleRetrieval(this)">
+              <span class="retrieval-icon">📚</span>
+              <span class="retrieval-title">内部资源检索结果</span>
+              <span class="retrieval-count">(${internalItems.length}条)</span>
+              <span class="retrieval-toggle">▼</span>
+            </div>
+            <div class="retrieval-content collapsed">
+              ${internalItems.map(item => {
+                const content = item.replace(/^\[内部资源\]\s*/, '').trim();
+                return `
+                  <div class="retrieval-item">
+                    <div class="retrieval-item-label">[内部资源]</div>
+                    <div class="retrieval-item-content">${renderMarkdown(content)}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // 渲染外部资源（只显示链接，美化展示）
+      if (parsed.external) {
+        const externalItems = parsed.external.split(/\n(?=\[互联网资源\])/).filter(item => item.trim());
+        const links = [];
+        
+        // 提取所有链接
+        externalItems.forEach(item => {
+          const linkMatch = item.match(/📎\s*来源链接:\s*(.+)/);
+          if (linkMatch) {
+            const linkUrl = linkMatch[1].trim();
+            // 提取标题（如果有）
+            const titleMatch = item.match(/\[互联网资源\]\s*(.+?)(?:\n|📎)/s);
+            const title = titleMatch ? titleMatch[1].trim().substring(0, 50) : '';
+            links.push({ url: linkUrl, title: title });
+          }
+        });
+        
+        if (links.length > 0) {
+          html += `
+            <div class="retrieval-card external-resource">
+              <div class="retrieval-header" onclick="toggleRetrieval(this)">
+                <span class="retrieval-icon">🌐</span>
+                <span class="retrieval-title">互联网资源检索结果</span>
+                <span class="retrieval-count">(${links.length}条)</span>
+                <span class="retrieval-toggle">▼</span>
+              </div>
+              <div class="retrieval-content collapsed">
+                <div class="external-links-grid">
+                  ${links.map((link, index) => {
+                    const domain = extractDomain(link.url);
+                    return `
+                      <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="external-link-card">
+                        <div class="external-link-icon">🔗</div>
+                        <div class="external-link-content">
+                          <div class="external-link-title">${link.title ? escapeHtml(link.title) : `参考资源 ${index + 1}`}</div>
+                          <div class="external-link-domain">${domain ? escapeHtml(domain) : escapeHtml(link.url)}</div>
+                        </div>
+                        <div class="external-link-arrow">→</div>
+                      </a>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    // 切换检索结果展开/折叠
+    function toggleRetrieval(header) {
+      const content = header.nextElementSibling;
+      const isExpanded = content.classList.contains('expanded');
+      
+      if (isExpanded) {
+        content.classList.remove('expanded');
+        header.classList.remove('expanded');
+      } else {
+        content.classList.add('expanded');
+        header.classList.add('expanded');
+      }
+    }
+
+    // 提取域名
+    function extractDomain(url) {
+      try {
+        const urlObj = new URL(url);
+        return urlObj.hostname.replace(/^www\./, '');
+      } catch (e) {
+        // 如果不是有效URL，尝试简单提取
+        const match = url.match(/https?:\/\/([^\/]+)/);
+        return match ? match[1].replace(/^www\./, '') : '';
+      }
+    }
   </script>
 </body>
 </html>

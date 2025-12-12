@@ -16,6 +16,7 @@ from typing import List
 from pathlib import Path
 import pandas as pd
 from io import BytesIO
+import time
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -72,6 +73,11 @@ from teacher_planner import (
     generate_plan_stream,
     load_class_profiles,
     TEACHER_SYSTEM_PROMPT,
+    build_web_search_query,
+    call_tavily_search,
+    analyze_external_search_need,
+    generate_external_search_response,
+    generate_external_search_response_stream,
 )
 
 # 导入AI模型
@@ -227,6 +233,41 @@ def teacher_plan():
                 'is_chat': True
             })
 
+        # 如果是外部检索意图，直接调用互联网搜索
+        if plan_type == "external_search":
+            if os.getenv('DEBUG_AI','1')=='1':
+                logger.info("[TEACHER] 识别为外部检索意图，直接调用互联网搜索")
+            
+            web_search_enabled = os.getenv('WEB_SEARCH_ENABLED', '1') == '1'
+            web_results = []
+            
+            if web_search_enabled:
+                try:
+                    # 直接使用用户输入作为搜索查询词
+                    web_query = user_text
+                    web_results = call_tavily_search(web_query, min_results=20)
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.info(f"[TEACHER] 外部检索完成，返回 {len(web_results)} 条结果")
+                except Exception as e:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.error(f"[TEACHER] 外部检索失败: {e}")
+            
+            # 生成回答
+            response_text = generate_external_search_response(user_text, web_results, conversation_history)
+            conversation_history.append({"role": "user", "content": user_text})
+            conversation_history.append({"role": "assistant", "content": response_text})
+            
+            return jsonify({
+                'success': True,
+                'response': response_text,
+                'conversation_history': conversation_history,
+                'is_external_search': True,
+                'results': {
+                    'web_count': len(web_results),
+                    'source': 'web'
+                }
+            })
+
         # 判断是否需要引导
         need_guidance = False
         missing_fields = []
@@ -239,12 +280,21 @@ def teacher_plan():
                 need_guidance = True
                 missing_fields.append("semantic_query")
         elif plan_type == "lesson_plan":
-            # 课课练：需要班级或薄弱项，满足任一即可
+            # 课课练：需要年级 + (project_name 或 弱项)，满足其一即可
             has_grades = bool(params.get("grades_query"))
             has_weaknesses = bool(params.get("trained_weaknesses"))
-            if not has_grades or not has_weaknesses:
+            has_project_name = bool(params.get("project_name"))
+            
+            # 不需要引导的条件：有年级 且 (有project_name 或 有弱项)
+            info_complete = has_grades and (has_project_name or has_weaknesses)
+            
+            if not info_complete:
                 need_guidance = True
-                missing_fields.extend(["grades_query", "trained_weaknesses"])
+                # 记录缺失的字段
+                if not has_grades:
+                    missing_fields.append("grades_query")
+                if not has_project_name and not has_weaknesses:
+                    missing_fields.append("trained_weaknesses")  # 提示补充训练需求
 
         # 如果需要引导，生成引导语
         if need_guidance:
@@ -295,19 +345,65 @@ def teacher_plan():
                 logger.error(f"[TEACHER] 检索失败: {e}")
             results = []
 
-        # 生成方案
-        response_text = generate_plan(results, params, user_text, need_guidance=False)
+        # 智能判断是否需要外部检索补充（包含相关性审查）
+        web_results = []
+        web_search_enabled = os.getenv('WEB_SEARCH_ENABLED', '1') == '1'
+        if web_search_enabled and plan_type == "lesson_plan":
+            # 使用LLM智能判断是否需要外部检索（传入内部检索结果进行相关性审查）
+            need_external, relevant_indices = analyze_external_search_need(
+                user_text, results, params, conversation_history
+            )
+            
+            # 使用索引过滤相关结果
+            if relevant_indices:
+                results = [results[i] for i in relevant_indices if i < len(results)]
+            
+            if need_external:
+                try:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.info(f"[TEACHER] 需要外部检索补充")
+                    
+                    # 构建互联网搜索查询词
+                    web_query = build_web_search_query(user_text, params, plan_type)
+                    
+                    # 调用Tavily搜索，固定请求5个结果以加快响应速度
+                    # 注意：一个网站结果可能包含多个动作，所以请求数量与需要补充的动作数量没有直接关系
+                    web_results = call_tavily_search(web_query, min_results=5)
+                    
+                    if web_results:
+                        if os.getenv('DEBUG_AI','1')=='1':
+                            logger.info(f"[TEACHER] 互联网搜索成功，返回 {len(web_results)} 条结果")
+                    else:
+                        if os.getenv('DEBUG_AI','1')=='1':
+                            logger.warning("[TEACHER] 互联网搜索未返回结果")
+                except Exception as e:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.error(f"[TEACHER] 互联网搜索失败: {e}")
+
+        # 生成方案（分别传入内部和互联网结果）
+        response_text = generate_plan(results, params, user_text, need_guidance=False, web_results=web_results)
 
         # 更新对话历史
         conversation_history.append({"role": "user", "content": user_text})
         conversation_history.append({"role": "assistant", "content": response_text})
+
+        # 确定结果来源
+        has_internal = len(results) > 0
+        has_web = len(web_results) > 0
+        result_source = "internal" if has_internal else ("web" if has_web else "none")
 
         return jsonify({
             'success': True,
             'response': response_text,
             'conversation_history': conversation_history,
             'params': params,
-            'results_count': len(results)
+            'results': {
+                'internal_count': len(results) if results else 0,
+                'web_count': len(web_results) if web_results else 0,
+                'source': result_source,
+                'has_internal': has_internal,
+                'has_web': has_web
+            }
         })
 
     except Exception as e:
@@ -335,6 +431,9 @@ def teacher_plan_stream():
         if not user_text and not override_params:
             return jsonify({'success': False, 'message': '请提供message或override_params'}), 400
 
+        # 记录用户输入完成时间（开始计时）
+        request_start_time = time.time()
+        
         # 记录用户输入
         logger.info(f"[用户输入] {user_text}")
         if os.getenv('DEBUG_AI','1')=='1':
@@ -344,7 +443,7 @@ def teacher_plan_stream():
         plan_type = detect_plan_type(user_text, conversation_history)
 
         if os.getenv('DEBUG_AI','1')=='1':
-            logger.info(f"[TEACHER] 流式接口：意图识别: plan_type={plan_type}")
+            logger.debug(f"[TEACHER] 流式接口：意图识别: plan_type={plan_type}")
 
         # 实体抽取（内部会进行班级检测）
         params, missing = collect_entities_llm(user_text, conversation_history, plan_type)
@@ -363,45 +462,16 @@ def teacher_plan_stream():
         
 
         need_guidance = bool(missing)
-        # # 如果是闲聊，直接生成友好回复（流式）
-        # if plan_type == "chat":
-        #     if os.getenv('DEBUG_AI','1')=='1':
-        #         logger.debug("[TEACHER] 流式接口：识别为闲聊，直接生成回复")
-        #     need_guidance = False
-        #     missing_fields = []
-        # else:
-        #     # 关键检查：根据场景判断是否需要更多信息
-        #     count_query = params.get('count_query')     #没用到
-        #     grades_query = params.get('grades_query')
-        #     semantic_query = params.get('semantic_query')
-        #     trained_weaknesses_value = params.get('trained_weaknesses')
-
-        #     missing_fields = []
-        #     if plan_type == "sports_meeting":
-        #         # 全员运动会：需要操场条件、年级、人数等信息
-        #         if os.getenv('DEBUG_AI','1')=='1':
-        #             logger.debug(f"[TEACHER] 流式接口：全员运动会场景，检查必要字段 - semantic={semantic_query}, grades={grades_query}, count={count_query}")
-        #         if not semantic_query:
-        #             missing_fields.append('semantic_query')
-
-        #         if missing_fields and os.getenv('DEBUG_AI','1')=='1':
-        #             logger.debug(f"[TEACHER] 流式接口：⚠️ 全员运动会场景信息不全，进入引导流程，缺失={missing_fields}")
-        #     elif plan_type == "lesson_plan":
-        #         # 课课练：需要班级（grades_query）或弱项（trained_weaknesses），满足任一即可
-        #         if os.getenv('DEBUG_AI','1')=='1':
-        #             logger.debug(f"[TEACHER] 流式接口：课课练场景，检查必要字段 - grades={grades_query}, trained_weaknesses={trained_weaknesses_value}")
-                
-        #         if not grades_query or not trained_weaknesses_value:
-        #             missing_fields.append('grades_query_or_trained_weaknesses')
-
-        #         if missing_fields and os.getenv('DEBUG_AI','1')=='1':
-        #             logger.debug("[TEACHER] 流式接口：⚠️ 课课练场景信息不全（缺少班级或弱项），进入引导流程")
-
-        #     need_guidance = bool(missing_fields)
 
         # 如果是闲聊，直接生成友好回复（流式）
         if plan_type == "chat":
             def chat_stream():
+                # 记录开始流式输出的时间（闲聊场景）
+                stream_start_time = time.time()
+                time_to_stream = stream_start_time - request_start_time
+                if os.getenv('DEBUG_AI','1')=='1':
+                    logger.info(f"[TIME_DEBUG] 闲聊场景：从用户输入到开始流式输出耗时 {time_to_stream:.3f}秒 ({time_to_stream*1000:.1f}毫秒)")
+                
                 try:
                     model = OptimizedAIModel()
                     # 构建包含历史记录的消息列表
@@ -413,6 +483,14 @@ def teacher_plan_stream():
                     # 添加当前用户输入
                     chat_messages.append({"role": "user", "content": user_text})
 
+                    # 记录模型调用message
+                    logger.info(f"[MODEL_CALL] 闲聊回复(流式) - message:")
+                    logger.info(f"  模型: {model.model}")
+                    logger.info(f"  Messages: {json.dumps(chat_messages, ensure_ascii=False, indent=2)}")
+                    logger.info(f"  参数: max_tokens=5000, temperature=0.7, stream=True")
+                    start_time = time.time()
+                    full_response = ""
+
                     stream = model.client.chat.completions.create(
                         model=model.model,
                         messages=chat_messages,
@@ -420,11 +498,16 @@ def teacher_plan_stream():
                         temperature=0.7,
                         stream=True,
                     )
+                    ttfb_recorded = False
                     for event in stream:
                         try:
                             delta = event.choices[0].delta
                             content = getattr(delta, "content", None)
                             if content:
+                                if not ttfb_recorded:
+                                    ttfb_time = time.time() - start_time
+                                    ttfb_recorded = True
+                                full_response += content
                                 yield content
                         except Exception:
                             chunk = None
@@ -433,7 +516,20 @@ def teacher_plan_stream():
                             except Exception:
                                 pass
                             if chunk:
+                                if not ttfb_recorded:
+                                    ttfb_time = time.time() - start_time
+                                    ttfb_recorded = True
+                                full_response += chunk
                                 yield chunk
+                    
+                    # 记录模型调用Response
+                    total_time = time.time() - start_time
+                    logger.info(f"[MODEL_CALL] 闲聊回复(流式) - Response:{repr(full_response)}")
+                    if ttfb_recorded:
+                        logger.info(f"  首token: {ttfb_time:.3f}秒 ")
+                    logger.info(f"  总响应时间: {total_time:.3f}秒 ({total_time*1000:.1f}毫秒)")
+                    logger.info(f"  响应内容长度: {len(full_response)} 字符")
+                    logger.info(f"  响应内容: {repr(full_response)}")
                 except Exception as e:
                     if os.getenv('DEBUG_AI','1')=='1':
                         logger.error(f"[TEACHER] 流式接口：闲聊回复生成失败: {e}")
@@ -441,24 +537,61 @@ def teacher_plan_stream():
 
             return Response(chat_stream(), mimetype='text/plain; charset=utf-8')
 
-        if need_guidance:
-            # 信息不全，使用generate_plan_stream生成引导语
-            # collected_so_far = {
-            #     'semantic_query': params.get('semantic_query') or '',
-            #     'count_query': params.get('count_query') or '',
-            #     'grades_query': params.get('grades_query') or '',
-            #     'plan_type': params.get('plan_type') or '',
-            #     'top_k': int(params.get('top_k') or 5),
-            # }
-            #         # 只有课课练才需要薄弱项字段
-            # if plan_type == "lesson_plan":
-            #     collected_so_far['trained_weaknesses'] = params.get('trained_weaknesses') or ''
+        # 如果是外部检索意图，直接调用互联网搜索（流式）
+        if plan_type == "external_search":
+            if os.getenv('DEBUG_AI','1')=='1':
+                logger.info("[TEACHER] 流式接口：识别为外部检索意图，直接调用互联网搜索")
+            
+            web_search_enabled = os.getenv('WEB_SEARCH_ENABLED', '1') == '1'
+            web_results_external = []
+            
+            if web_search_enabled:
+                try:
+                    web_query = user_text
+                    web_results_external = call_tavily_search(web_query, min_results=20)
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.info(f"[TEACHER] 流式接口：外部检索完成，返回 {len(web_results_external)} 条结果")
+                except Exception as e:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.error(f"[TEACHER] 流式接口：外部检索失败: {e}")
+            
+            def external_search_stream():
+                # 记录开始流式输出的时间（外部检索场景）
+                stream_start_time = time.time()
+                time_to_stream = stream_start_time - request_start_time
+                if os.getenv('DEBUG_AI','1')=='1':
+                    logger.info(f"[TIME_DEBUG] 外部检索场景：从用户输入到开始流式输出耗时 {time_to_stream:.3f}秒 ({time_to_stream*1000:.1f}毫秒)")
+                
+                try:
+                    # 输出提示信息
+                    if web_results_external:
+                        
+                        yield "> 📝 以下内容综合互联网资源生成：\n\n---\n\n"
+                    else:
+                        yield "\n> ⚠️ 互联网搜索未找到相关结果，将根据专业知识回答\n\n---\n\n"
+                    
+                    # 流式生成回答
+                    for chunk in generate_external_search_response_stream(user_text, web_results_external, conversation_history):
+                        yield chunk
+                except Exception as e:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.error(f"[TEACHER] 流式接口：外部检索回答生成失败: {e}")
+                    yield f"\n\n生成失败: {str(e)}"
+            
+            return Response(external_search_stream(), mimetype='text/plain; charset=utf-8')
 
+        if need_guidance:
             try:
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.debug("[TEACHER] 流式接口：信息不全，调用generate_plan_stream生成引导语(流式)...")
 
                 def guidance_stream():
+                    # 记录开始流式输出的时间（引导语场景）
+                    stream_start_time = time.time()
+                    time_to_stream = stream_start_time - request_start_time
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.info(f"[TIME_DEBUG] 引导语场景：从用户输入到开始流式输出耗时 {time_to_stream:.3f}秒 ({time_to_stream*1000:.1f}毫秒)")
+                    
                     ask_chunks = []
                     try:
                         for chunk in generate_plan_stream([], params,conversation_history, user_text,missing, need_guidance=True):
@@ -516,8 +649,9 @@ def teacher_plan_stream():
                 if trained_weaknesses.strip() == "无要求":
                     trained_weaknesses = ""
                 # 课课练检索
+                semantic_with_text_lesson = f"{params.get('semantic_query', '')} {params.get('project_name', '')} {user_text}".strip()
                 payload = {
-                    "semantic_query": params.get("semantic_query") or "",
+                    "semantic_query": semantic_with_text_lesson,
                     "count_query": str(params.get("count_query") or ""),
                     "grades_query": str(params.get("grades_query") or ""),
                     "trained_weaknesses": trained_weaknesses,
@@ -539,11 +673,65 @@ def teacher_plan_stream():
                 logger.error(f"[TEACHER] 流式接口：检索失败，使用空结果兜底: {e}")
             results = []
 
-        # 流式生成方案
+        # 智能判断是否需要外部检索补充（流式接口）
+        web_results_local = []
+        web_search_enabled = os.getenv('WEB_SEARCH_ENABLED', '1') == '1'
+        need_web_search = False
+        
+        if web_search_enabled and plan_type == "lesson_plan":
+            # 使用LLM智能判断是否需要外部检索（传入内部检索结果进行相关性审查）
+            need_external, relevant_indices = analyze_external_search_need(
+                user_text, results, params, conversation_history
+            )
+            
+            # 使用索引过滤相关结果
+            if relevant_indices:
+                results = [results[i] for i in relevant_indices if i < len(results)]
+            
+            need_web_search = need_external
+            
+            if need_web_search:
+                try:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.debug(f"[TEACHER] 流式接口：需要外部检索补充")
+                    
+                    # 构建互联网搜索查询词
+                    web_query = build_web_search_query(user_text, params, plan_type)
+                    # 调用Tavily搜索，固定请求5个结果以加快响应速度
+                    # 注意：一个网站结果可能包含多个动作，所以请求数量与需要补充的动作数量没有直接关系
+                    web_results_local = call_tavily_search(web_query, min_results=5)
+                    
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        if web_results_local:
+                            logger.info(f"[TEACHER] 流式接口：互联网搜索成功，返回 {len(web_results_local)} 条结果")
+                        else:
+                            logger.warning("[TEACHER] 流式接口：互联网搜索未返回结果")
+                except Exception as e:
+                    if os.getenv('DEBUG_AI','1')=='1':
+                        logger.error(f"[TEACHER] 流式接口：互联网搜索失败: {e}")
+                    web_results_local = []
+        
+        # 流式生成方案（纯文本流式输出，与原有逻辑保持一致）
         def generate():
+            # 记录开始流式输出的时间（正常生成场景）
+            stream_start_time = time.time()
+            time_to_stream = stream_start_time - request_start_time
+            if os.getenv('DEBUG_AI','1')=='1':
+                logger.info(f"[TIME_DEBUG] 正常生成场景：从用户输入到开始流式输出耗时 {time_to_stream:.3f}秒 ")
+            
             try:
-                for chunk in generate_plan_stream(results, params,conversation_history, user_text, need_guidance=False):
+                # 如果使用了联网搜索，先输出提示信息
+                if need_web_search:
+                    if web_results_local:
+                        
+                        yield "> 📝 以下内容综合互联网资源生成：\n\n---\n\n"
+                    else:
+                        yield "\n> ⚠️ 联网搜索未找到相关结果，将生成通用方案\n\n---\n\n"
+                
+                # 流式生成方案内容
+                for chunk in generate_plan_stream(results, params, conversation_history, user_text, need_guidance=False, web_results=web_results_local):
                     yield chunk
+                
             except Exception as e:
                 if os.getenv('DEBUG_AI','1')=='1':
                     logger.error(f"[TEACHER] 流式生成失败: {e}")

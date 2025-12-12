@@ -7,6 +7,7 @@ import pandas as pd
 import json
 import os
 import logging
+import time
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Generator
@@ -539,13 +540,29 @@ def analyze_with_llm(df: pd.DataFrame, class_name: str) -> Generator[str, None, 
         ]
 
         try:
+            # 记录模型调用message
+            logger.info(f"[MODEL_CALL] 班级数据分析 - message:")
+            logger.info(f"  模型: {model.model}")
+            logger.info(f"  Messages: {json.dumps(messages, ensure_ascii=False, indent=2)}")
+            logger.info(f"  参数: max_tokens=1000, temperature=0.3")
+            start_time = time.time()
+            
             response = model.client.chat.completions.create(
                 model=model.model,
                 messages=messages,
                 max_tokens=1000,
                 temperature=0.3
             )
+            
+            elapsed_time = time.time() - start_time
             response_text = response.choices[0].message.content.strip()
+            
+            # 记录模型调用Response
+            logger.info(f"[MODEL_CALL] 班级数据分析 - Response:")
+            logger.info(f"  响应时间: {elapsed_time:.3f}秒 ({elapsed_time*1000:.1f}毫秒)")
+            logger.info(f"  响应内容长度: {len(response_text)} 字符")
+            logger.info(f"  响应内容: {repr(response_text)}")
+            
             yield f"AI分析结果：\n{response_text}\n\n"
         except Exception as api_error:
             # 记录详细的API错误信息
