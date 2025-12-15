@@ -1047,6 +1047,8 @@ def build_plan_messages(
     internal_text = format_results_text(results, source="internal", top_k=internal_count if internal_count > 0 else top_k)
     web_text = format_results_text(web_results or [], source="web", top_k=web_count if web_count > 0 else top_k)
     
+    logger.info(f"[build_plan_messages] internal_text: {internal_text}")
+    logger.info(f"[build_plan_messages] web_text: {web_text}")
     # 组合结果文本
     results_parts = []
     if internal_text:
@@ -1150,7 +1152,9 @@ def build_plan_messages(
             user_text=user_text,
             conversation_history=conversation_history,
             meta=json.dumps(meta, ensure_ascii=False, indent=2),
-            results_text=results_text,
+            internal_text=internal_text,
+            web_text=web_text,
+            # results_text=results_text,
             class_analysis_text=class_analysis_text,
             internal_count=internal_count,
             web_count=web_count,
